@@ -543,12 +543,14 @@ menu = gg.choice({
 	 "狙击类",
 	 "漏洞类",
 	 "其他类",
+	 "乐谱取物",
 }, nil, "无")
 if menu == 1 then CAZT() end
 if menu == 2 then PVP() end
 if menu == 3 then VAPE() end
 if menu == 4 then LD() end
 if menu == 5 then QT() end
+if menu == 6 then QW() end
 FX1=0
 end
 
@@ -799,7 +801,7 @@ SN = gg.multiChoice({
 	 "平飞",
 	 "人物加速",
      "高跳",
-	 "滑翔",
+	 "滑翔(等修复)",
 	 "远程放置",
 	 "死亡隐身",
 	 "飞行加速",
@@ -1133,6 +1135,72 @@ gg.alert("")
 QT()
 end
 
+function QW()
+menu = gg.choice({
+"注入按钮",
+"自定义取物",
+"------------------快捷方式------------------",
+"地形编辑器",
+"黑龙火球",
+"破坏方块",
+"马桶",
+"复制方块",
+"返回上一页",
+}, nil, "ace.zhatu1.xyz")
+if menu == 1 then Q1() end
+if menu == 2 then Q2() end
+if menu == 3 then CA1() end
+if menu == 4 then Q4() end
+if menu == 5 then Q5() end
+if menu == 6 then Q6() end
+if menu == 7 then Q7() end
+if menu == 8 then Q8() end
+if menu == 9 then CA1() end
+FX1=0
+end
+
+function Q1()
+gg.toast(so({"注入按钮",-1024458752,4,4},{{1142292480,-4,4},{16777216,-0x5C,4},{1110179840,-0x1C,4}},{{16777472,-0x5C,4,1}}))
+gg.toast("按钮已注入")
+CA1()
+end
+
+function Q2()
+gg.prompt({"11551-破坏方块15054-黑龙火球10500-地形编辑器"},{[1]=11551},{[1]="number"})[1]
+gg.toast(so({"乐谱修改",4683671800612126720,4,32},{{13975404208,4,32}},{{e1,-0x10,64,1}}))
+gg.toast("乐谱已修改为["..e1.."]")
+CA1()
+end
+
+function Q4()
+gg.toast(so({"乐谱修改",4683671800612126720,4,32},{{13975404208,4,32}},{{10500,-0x10,64,1}}))
+gg.toast("乐谱已修改为[地形编辑器]")
+CA1()
+end
+
+function Q5()
+gg.toast(so({"乐谱修改",4683671800612126720,4,32},{{13975404208,4,32}},{{15054,-0x10,64,1}}))
+gg.toast("乐谱已修改为[黑龙火球]")
+CA1()
+end
+
+function Q6()
+gg.toast(so({"乐谱修改",4683671800612126720,4,32},{{13975404208,4,32}},{{11551,-0x10,64,1}}))
+gg.toast("乐谱已修改为[破坏方块]")
+CA1()
+end
+
+function Q7()
+gg.toast(so({"乐谱修改",4683671800612126720,4,32},{{13975404208,4,32}},{{1605,-0x10,64,1}}))
+gg.toast("乐谱已修改为[马桶]")
+CA1()
+end
+
+function Q8()
+gg.toast(so({"乐谱修改",4683671800612126720,4,32},{{13975404208,4,32}},{{1000,-0x10,64,1}}))
+gg.toast("乐谱已修改为[方块复制器]")
+CA1()
+end
 
 while true do
 sj = os.date("\n%c")

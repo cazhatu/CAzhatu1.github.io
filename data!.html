@@ -505,7 +505,7 @@ function getso(So_name)
 end
 cnm={"-"}
 --jf
-F=gg.alert("是否开启过检测", "YES", "️NO")
+F=gg.alert("是否开启过检测(登录页面开启)\n取消可能会导致您的游戏闪退!", "开启", "️取消")
 if F ~= 1 and F ~= 2 then
 gg.toast("你未选择开关默认取消")
 gg.toast("你未选择｛开 关｝")
@@ -519,16 +519,16 @@ gg.setValues({
 {address = ttt, flags = 4, value = 0},
 {address = ttt+4, flags = 4, value = 0}
 })
+gg.toast("防检测开启成功")
 elseif F==2 then
 end
-gg.toast("防检测开启成功")
 ---主页面
 function CA1()
 SJ = os.date("%Y年%m月%d日%H时%M分")
 menu = gg.choice({
 	 "开始炸图",
 	 "退出炸图",
-}, nil, "当前时间:"..SJ.."\n版本号:1")
+}, nil, "当前时间:"..SJ.."\n版本号:1.10.4.0")
 if menu == 1 then CAZY() end
 if menu == 2 then TC() end
 if menu == 3 then FS() end
@@ -1126,7 +1126,7 @@ FX1=0
 end
 
 function qitaa()
-gg.alert("ACE版本号:1\n更新日期:3.06\n适配迷你世界版本:1.23.10")
+gg.alert("ACE版本号:1.10.4.0\n更新日期:3.10\n适配迷你世界版本:1.23.10")
 QT()
 end
 
@@ -1139,7 +1139,7 @@ function QW()
 menu = gg.choice({
 "注入按钮",
 "自定义取物",
-"------------------快捷方式------------------",
+"--------快捷方式---------",
 "地形编辑器",
 "黑龙火球",
 "破坏方块",
@@ -1166,10 +1166,7 @@ CA1()
 end
 
 function Q2()
-gg.prompt({"11551-破坏方块15054-黑龙火球10500-地形编辑器"},{[1]=11551},{[1]="number"})[1]
-gg.toast(so({"乐谱修改",4683671800612126720,4,32},{{13975404208,4,32}},{{e1,-0x10,64,1}}))
-gg.toast("乐谱已修改为["..e1.."]")
-CA1()
+SC3()
 end
 
 function Q4()

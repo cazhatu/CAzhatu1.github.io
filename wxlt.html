@@ -1,7 +1,0 @@
-function readPointer(name,offset,i) local re=gg.getRangesList(name) local x64=gg.getTargetInfo().x64 local va={[true]=32,[false]=4} if re[i or 1] then local addr=re[i or 1].start+offset[1] for i=2,#offset do addr=gg.getValues({{address=addr,flags=va[x64]}}) if not x64 then addr[1].value=addr[1].value&0xFFFFFFFF end addr=addr[1].value+offset[i] end return addr end end function gg.edits(addr,Table,name) local Table1={{},{}} for k,v in ipairs(Table) do local value={address=addr+v[3],value=v[1],flags=v[2],freeze=v[4]} if v[4] then Table1[2][#Table1[2]+1]=value else Table1[1][#Table1[1]+1]=value end end gg.addListItems(Table1[2]) gg.setValues(Table1[1]) gg.toast((name or '') .. '无限连跳开启成功, 共修改'..#Table..'个值') end 
-function GETValue(a) b=gg.getValues({{address=a,flags=4}})[1].value return b end 
-local mnh=readPointer('libAppPlayJNI.so:bss',{0x62C4B0, 0x338, 0x268, 0x1C})
-local mnh=GETValue(mnh) 
-if not a then end local so_bss="libAppPlayJNI.so:bss"
-local addr=readPointer(so_bss, {0x62C4B0, 0x338, 0x268, 0x1C},1)
-gg.edits(addr, {{mnh,4,0,true}}) 

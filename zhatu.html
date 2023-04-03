@@ -530,7 +530,7 @@ SJ = os.date("%Y年%m月%d日%H时%M分")
 menu = gg.choice({
 	 "开始炸图",
 	 "退出炸图",
-}, nil, "当前时间:"..SJ.."\n版本号:1.11.0.0\n大部分功能开启后均不可关闭(懒)")
+}, nil, "当前时间:"..SJ.."\n版本号:1.11.0.1\n大部分功能开启后均不可关闭(懒)")
 if menu == 1 then CAZY() end
 if menu == 2 then os.exit() end
 FX1=0
@@ -662,12 +662,13 @@ menu = gg.choice({
 	 "玩法改创造",
 	 "狙击枪改子弹",
 	 "乐谱取物",
+	 "刷怪方块生物修改为远古巨人",
 	 "返回上一页",
 }, nil, "")
 if menu == 1 then SC1() end
 if menu == 2 then SC2() end
 if menu == 3 then SC3() end
-if menu == 4 then CA1() end
+if menu == 4 then SC4() end
 if menu == 5 then CA1() end
 FX1=0
 end
@@ -711,7 +712,7 @@ F=gg.alert("乐谱取物","乐谱修改","添加按钮")if F ~= 1 and F ~= 2 the
 
 function SC4()
 gg.toast(so({"刷怪方块生物修改为远古巨人",3514,4,64},{{1084920320,20,4}},{{xgdm,0,64}}))
-gg.toast("方块内生物已修改为[远古巨人]")
+gg.toast("方块内生物已修改为["远古巨人"]")
 end
 ------生存
 
@@ -725,7 +726,7 @@ SN = gg.multiChoice({
      "高跳",
 	 "视角透视",
 	 "吸人",
-	 "飞行速度",
+	 "无限连跳",
 	 "返回上一页",
 }, nil, "部分功能已修复并重新添加.")
  if SN == nil then else
@@ -836,7 +837,11 @@ CA1()
 end
 
 function PVP7()
-gg.toast(so({"飞行速度",778462837,16384,4},{{-1109160391,-0x28,4}},{{20,-0x2c,16,2}}))
+local t = {"libAppPlayJNI.so:bss", "Cb"}
+local tt = {0x62C620, 0x5A8, 0x1C}
+local ttt = S_Pointer(t, tt, true)
+gg.addListItems({{address = ttt, flags = 4, value = -1, freeze = true}})
+gg.toast("无限连跳开启成功")
 CA1()
 end
 
@@ -1029,7 +1034,7 @@ QT()
 end
 
 function GX()
-gg.alert("修复部分bug\n修复部分功能并重新上架\n新增飞行速度")
+gg.alert("修复部分bug\n修复无限连跳")
 QT()
 end
 

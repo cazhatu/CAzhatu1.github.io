@@ -662,14 +662,12 @@ menu = gg.choice({
 	 "玩法改创造",
 	 "狙击枪改子弹",
 	 "乐谱取物",
-	 "刷怪方块生物修改为远古巨人",
 	 "返回上一页",
 }, nil, "")
 if menu == 1 then SC1() end
 if menu == 2 then SC2() end
 if menu == 3 then SC3() end
-if menu == 4 then SC4() end
-if menu == 5 then CA1() end
+if menu == 4 then CA1() end
 FX1=0
 end
 
@@ -710,10 +708,7 @@ end
 function SC3()
 F=gg.alert("乐谱取物","乐谱修改","添加按钮")if F ~= 1 and F ~= 2 then else end if F==1 then e1 = gg.prompt({"11551-破坏方块15054-黑龙火球10500-地形编辑器"},{[1]=11551},{[1]="number"})[1]gg.toast(so({"乐谱修改",4683671800612126720,4,32},{{13975404208,4,32}},{{e1,-0x10,64,1}}))gg.toast("乐谱已修改为["..e1.."]")CA1()elseif F==2 then gg.toast(so({"添加按钮",-1024458752,4,4},{{1142292480,-4,4},{16777216,-0x5C,4},{1110179840,-0x1C,4}},{{16777472,-0x5C,4,1}}))gg.toast("添加按钮已注入")CA1()end end
 
-function SC4()
-gg.toast(so({"刷怪方块生物修改为远古巨人",3514,4,64},{{1084920320,20,4}},{{xgdm,0,64}}))
-gg.toast("方块内生物已修改为["远古巨人"]")
-end
+
 ------生存
 
 --------------PVP

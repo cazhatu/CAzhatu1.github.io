@@ -246,69 +246,10 @@ function xe(name,offset,i) local re=gg.getRangesList(name) local x64=gg.getTarge
 function gg.edits(addr,Table,name) local Table1 = {{}, {}} for k, v in ipairs(Table) do local value={address=addr+v[3],value=v[1],flags=v[2],freeze=v[4]}if v[4] then Table1[2][#Table1[2]+1]=value else Table1[1][#Table1[1]+1]=value end end gg.addListItems(Table1[2])gg.setValues(Table1[1]) gg.toast((name or "") .. "开启成功") end
 function gg.Hjkl(value) local GT=gg.getListItems() local t={} for i,v in pairs(GT) do if v.value==value then table.insert(t,v) end end gg.removeListItems(t) end
 function hqmz(a) local b='' for i=1,999 do local c=gg.getValues({{address=a+(i-1)*1,flags=1}})[1].value if c==0 then break end b=b..string.char(c<0 and 256+c or c) end if b=='' then local b else return b end end
-
-function WX(qmnb,qmxg)gg.setVisible(false)gg.clearResults()qmnbv=qmnb[3]["value"]or qmnb[3][1]qmnbt=qmnb[3]["type"]or qmnb[3][2]qmnbn=qmnb[2]["name"]or qmnb[2][1]gg.setRanges(qmnb[1]["memory"]or qmnb[1][1])gg.searchNumber(qmnbv,qmnbt)gg.refineNumber(qmnbv,qmnbt)sz=gg.getResultCount()if sz==0 then gg.toast(qmnbn.."开启失败，请尝试更换房间")else sl=gg.getResults(999999)for i=1,sz do pdsz=true for v=4,#qmnb do if pdsz==true then pysz={{}}pysz[1].address=sl[i].address+(qmnb[v]["offset"]or qmnb[v][2])pysz[1].flags=qmnb[v]["type"]or qmnb[v][3]szpy=gg.getValues(pysz)tzszpd=tostring(qmnb[v]["lv"]or qmnb[v][1]):gsub(",","")pyszpd=tostring(szpy[1].value):gsub(",","")if tzszpd==pyszpd then pdjg=true pdsz=true else pdjg=false pdsz=false end end end if pdjg==true then szpy=sl[i].address for x=1,#qmxg do xgsz=qmxg[x]["value"]or qmxg[x][1]xgpy=szpy+(qmxg[x]["offset"]or qmxg[x][2])xglx=qmxg[x]["type"]or qmxg[x][3]xgdj=qmxg[x]["freeze"]or qmxg[x][4]xg={{address=xgpy,flags=xglx,value=xgsz}}if xgdj==true then xg[1].freeze=xgdj gg.addListItems(xg)else gg.setValues(xg)end end xgjg=true end end if xgjg==true then gg.toast(qmnbn.."开启成功，请切换一下物品\n          共注入 1 条冻结数据")else gg.toast(qmnbn.."开启失败，请尝试更换房间")end end end
-function XE(qmnb,qmxg)gg.setVisible(false)gg.clearResults()qmnbv=qmnb[3]["value"]or qmnb[3][1]qmnbt=qmnb[3]["type"]or qmnb[3][2]qmnbn=qmnb[2]["name"]or qmnb[2][1]gg.setRanges(qmnb[1]["memory"]or qmnb[1][1])gg.searchNumber(qmnbv,qmnbt)gg.refineNumber(qmnbv,qmnbt)sz=gg.getResultCount()if sz==0 then gg.toast(qmnbn.."开启失败，请尝试重启游戏")else sl=gg.getResults(999999)for i=1,sz do pdsz=true for v=4,#qmnb do if pdsz==true then pysz={{}}pysz[1].address=sl[i].address+(qmnb[v]["offset"]or qmnb[v][2])pysz[1].flags=qmnb[v]["type"]or qmnb[v][3]szpy=gg.getValues(pysz)tzszpd=tostring(qmnb[v]["lv"]or qmnb[v][1]):gsub(",","")pyszpd=tostring(szpy[1].value):gsub(",","")if tzszpd==pyszpd then pdjg=true pdsz=true else pdjg=false pdsz=false end end end if pdjg==true then szpy=sl[i].address for x=1,#qmxg do xgsz=qmxg[x]["value"]or qmxg[x][1]xgpy=szpy+(qmxg[x]["offset"]or qmxg[x][2])xglx=qmxg[x]["type"]or qmxg[x][3]xgdj=qmxg[x]["freeze"]or qmxg[x][4]xg={{address=xgpy,flags=xglx,value=xgsz}}if xgdj==true then xg[1].freeze=xgdj gg.addListItems(xg)else gg.setValues(xg)end end xgjg=true end end if xgjg==true then gg.toast(qmnbn.."开启成功\n          共注入 1 条数据")else gg.toast(qmnbn.."开启失败，请尝试重启游戏")end end end
 function CA(qmnb,qmxg)gg.setVisible(false)gg.clearResults()qmnbv=qmnb[3]["value"]or qmnb[3][1]qmnbt=qmnb[3]["type"]or qmnb[3][2]qmnbn=qmnb[2]["name"]or qmnb[2][1]gg.setRanges(qmnb[1]["memory"]or qmnb[1][1])gg.searchNumber(qmnbv,qmnbt)gg.refineNumber(qmnbv,qmnbt)sz=gg.getResultCount()if sz==0 then gg.toast(qmnbn.."开启失败，请尝试重启游戏")else sl=gg.getResults(999999)for i=1,sz do pdsz=true for v=4,#qmnb do if pdsz==true then pysz={{}}pysz[1].address=sl[i].address+(qmnb[v]["offset"]or qmnb[v][2])pysz[1].flags=qmnb[v]["type"]or qmnb[v][3]szpy=gg.getValues(pysz)tzszpd=tostring(qmnb[v]["lv"]or qmnb[v][1]):gsub(",","")pyszpd=tostring(szpy[1].value):gsub(",","")if tzszpd==pyszpd then pdjg=true pdsz=true else pdjg=false pdsz=false end end end if pdjg==true then szpy=sl[i].address for x=1,#qmxg do xgsz=qmxg[x]["value"]or qmxg[x][1]xgpy=szpy+(qmxg[x]["offset"]or qmxg[x][2])xglx=qmxg[x]["type"]or qmxg[x][3]xgdj=qmxg[x]["freeze"]or qmxg[x][4]xg={{address=xgpy,flags=xglx,value=xgsz}}if xgdj==true then xg[1].freeze=xgdj gg.addListItems(xg)else gg.setValues(xg)end end xgjg=true end end if xgjg==true then gg.toast(qmnbn.."开启成功\n          共注入 1 条数据")else gg.toast(qmnbn.."开启失败，请尝试重启游戏")end end end
 function split(szFullString, szSeparator) local nFindStartIndex = 1 local nSplitIndex = 1 local nSplitArray = {} while true do local nFindLastIndex = string.find(szFullString, szSeparator, nFindStartIndex) if not nFindLastIndex then nSplitArray[nSplitIndex] = string.sub(szFullString, nFindStartIndex, string.len(szFullString)) break end nSplitArray[nSplitIndex] = string.sub(szFullString, nFindStartIndex, nFindLastIndex - 1) nFindStartIndex = nFindLastIndex + string.len(szSeparator) nSplitIndex = nSplitIndex + 1 end return nSplitArray end function xgxc(szpy, qmxg) for x = 1, #(qmxg) do xgpy = szpy + qmxg[x]['offset'] xglx = qmxg[x]['type'] xgsz = qmxg[x]['value'] xgdj = qmxg[x]['freeze'] if xgdj == nil or xgdj == '' then gg.setValues({[1] = {address = xgpy, flags = xglx, value = xgsz}}) else gg.addListItems({[1] = {address = xgpy, flags = xglx, freeze = xgdj, value = xgsz}}) end xgsl = xgsl + 1 xgjg = true end end function xqmnb(qmnb) gg.clearResults() gg.setRanges(qmnb[1]['memory']) gg.searchNumber(qmnb[3]['value'], qmnb[3]['type']) if gg.getResultCount() == 0 then gg.toast(''..qmnb[2]['name'] .. '修改失败') else gg.refineNumber(qmnb[3]['value'], qmnb[3]['type']) gg.refineNumber(qmnb[3]['value'], qmnb[3]['type']) gg.refineNumber(qmnb[3]['value'], qmnb[3]['type']) if gg.getResultCount() == 0 then gg.toast('id'..qmnb[2]['name'] .. '开启失败') else sl = gg.getResults(999999) sz = gg.getResultCount() xgsl = 0 if sz > 999999 then sz = 999999 end for i = 1, sz do pdsz = true for v = 4, #(qmnb) do if pdsz == true then pysz = {} pysz[1] = {} pysz[1].address = sl[i].address + qmnb[v]['offset'] pysz[1].flags = qmnb[v]['type'] szpy = gg.getValues(pysz) pdpd = qmnb[v]['lv'] .. ';' .. szpy[1].value szpd = split(pdpd, ';') tzszpd = szpd[1] pyszpd = szpd[2] if tzszpd == pyszpd then pdjg = true pdsz = true else pdjg = false pdsz = false end end end if pdjg == true then szpy = sl[i].address xgxc(szpy, qmxg) end end if xgjg == true then gg.toast('云端:\n'..qmnb[2]['name']..'成功共修改' .. xgsl .. '条数据') else gg.toast('云端:\n'..qmnb[2]['name'] .. '开启失败') end end end end
 --[[配置1]]function js(address,flags,value) local jz={} jz[1]={} jz[1].address=address jz[1].flags=flags jz[1].value=value gg.setValues(jz) end
 --[[配置2]]function jz(py,xl,xgsz) flags=xl value=xgsz so=gg.getRangesList(''..name..'')[1].start js(so+py,xl,xgsz) end
-function S_Pointer(t_So, t_Offset, _bit)
-	local function getRanges()
-		local ranges = {}
-		local t = gg.getRangesList('^/data/*.so*$')
-		for i, v in pairs(t) do
-			if v.type:sub(2, 2) == 'w' then
-				table.insert(ranges, v)
-			end
-		end
-		return ranges
-	end
-	local function Get_Address(N_So, Offset, ti_bit)
-		local ti = gg.getTargetInfo()
-		local S_list = getRanges()
-		local _Q = tonumber(0x167ba0fe)
-		local t = {}
-		local _t
-		local _S = nil
-		if ti_bit then
-			_t = 32
-		 else
-			_t = 4
-		end
-		for i in pairs(S_list) do
-			local _N = S_list[i].internalName:gsub('^.*/', '')
-			if N_So[1] == _N and N_So[2] == S_list[i].state then
-				_S = S_list[i]
-				break
-			end
-		end
-		if _S then
-			t[#t + 1] = {}
-			t[#t].address = _S.start + Offset[1]
-			t[#t].flags = _t
-			if #Offset ~= 1 then
-				for i = 2, #Offset do
-					local S = gg.getValues(t)
-					t = {}
-					for _ in pairs(S) do
-						if not ti.x64 then
-							S[_].value = S[_].value & 0xFFFFFFFF
-						end
-						t[#t + 1] = {}
-						t[#t].address = S[_].value + Offset[i]
-						t[#t].flags = _t
-					end
-				end
-			end
-			_S = t[#t].address
-			print(string.char(231,190,164,58).._Q)
-		end
-		return _S
-	end
-	local _A = string.format('0x%X', Get_Address(t_So, t_Offset, _bit))
-	return _A
-end
 recover=gg.getResults(100000)  function AppSearch(SSNR,XGNR,BCNR,notWrite)  gg.clearResults()  gg.setRanges(SSNR["M"])  gg.searchNumber(SSNR[1]["mv"],SSNR[1]["lx"],false,gg.SIGN_EQUAL,(SSNR[1]["addr"] or nil),(SSNR[1]["toAddr"] or nil))  jg=gg.getResults(100000)  local base=(SSNR[1]["offs"] or 0)  local data={}  if #jg==0 then  gg.alert("功能名:"..(SSNR.name or "无").."\n".."修改失败\n"..(SSNR["error"] or ""))  gg.loadResults(recover)  return nil  end  for i=1,#jg do  jg[i].Useful=true  end  for k=2,#SSNR do  if not SSNR[k] then  break  end  local content={}  local offset=SSNR[k]["offs"]-base  local value=SSNR[k]["sv"]  local type=SSNR[k]["lx"]  local to=(SSNR[k]["to"] or value)  local num={}  if to<value then  to,value=value,to  end    for i=1,#jg do  if jg[i].Useful==true then  table.insert(content,{})  content[#content].address=jg[i].address+offset  content[#content].flags=type  num[#num+1]=i  end  end      if #content==0 then gg.alert("功能名:"..(SSNR.name or "无").."\n".."修改失败\n"..(SSNR["error"] or "")) gg.loadResults(recover) return nil end  content=gg.getValues(content)      for i,v in pairs(content) do  if tonumber(v.value)<tonumber(value) or tonumber(v.value)>tonumber(to) then  jg[num[i]].Useful=false  end  end    end  for j=1,#jg do  if jg[j].Useful==true then  data[#data+1]=jg[j].address  end  end  if #data==0 then  gg.alert("功能名:"..(SSNR.name or "无").."\n".."修改失败\n"..(SSNR["error"] or ""))  gg.loadResults(recover)  return nil  end  if notWrite==true then  gg.loadResults(recover)  return data  end  if XGNR then  local write={}  for i=1,#data do  for j=1,#XGNR do  write[#write+1]={}  write[#write].address=data[i]+(XGNR[j][2]-base)  write[#write].flags=XGNR[j][3]  write[#write].value=XGNR[j][1]  write[#write].freeze=XGNR[j][4]  write[#write].name=XGNR[j][5] or nil  if write[#write].freeze==true then  gg.addListItems({[1]=write[#write]})  else  gg.setValues({[1]=write[#write]})  end  if XGNR[j][6]==true then  gg.addListItems({[1]=write[#write]})  end  end  end  end  if BCNR then  local bc={}  for j=1,#data do  for i=1,#BCNR do  bc[#bc+1]={}  bc[#bc].address=data[j]+(BCNR[i][1]-base)  bc[#bc].flags=BCNR[i][2]  bc[#bc].name=BCNR[i][3]  end  end  gg.addListItems(bc)  end  gg.toast("功能名:"..(SSNR.name or "无").."\n".."修改成功")  gg.loadResults(recover)  end
 
 recover=gg.getResults(100000)
@@ -530,7 +471,7 @@ SJ = os.date("%Y年%m月%d日%H时%M分")
 menu = gg.choice({
 	 "开始炸图",
 	 "退出炸图",
-}, nil, "当前时间:"..SJ.."\n版本号:1.11.0.1\n大部分功能开启后均不可关闭(懒)")
+}, nil, "当前时间:"..SJ.."\n版本号:1.11.0.3\n大部分功能开启后均不可关闭(懒)")
 if menu == 1 then CAZY() end
 if menu == 2 then os.exit() end
 FX1=0
@@ -736,13 +677,18 @@ if SN[8]==true then CA1() end end
 FX1=0 end
 
 function PVP1()
-gg.clearResults()
-gg.setRanges(gg.REGION_C_ALLOC)
-gg.searchNumber("16,777,216;1,117,782,016;1,118,306,304;-1,046,478,848;-1,020,002,304",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
-gg.searchNumber("16777216", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
-gg.getResults(100)
-gg.editAll("16777472",gg.TYPE_DWORD)
-gg.toast("云服飞天开启成功")
+qmnb = {
+{["memory"] = 4},
+{["name"] = "云服飞天"},
+{["value"] = 1117782016, ["type"] = 4},
+{["lv"] = 1118306304, ["offset"] = 4, ["type"] = 4},
+{["lv"] = -1046478848, ["offset"] = 28, ["type"] = 4},
+{["lv"] = -1020002304, ["offset"] = 32, ["type"] = 4},
+}
+qmxg = {
+{["value"] = 16777472, ["offset"] = -60, ["type"] = 4, ["freeze"] = true},
+}
+xqmnb(qmnb)
 CA1()
 end
 
@@ -811,7 +757,7 @@ xqmnb(qmnb)
 CA1()
 end
 
-function PVP7()
+function PVP6()
 qmnb = {
 {["memory"] = 4},
 {["name"] = "吸人"},
@@ -1024,12 +970,12 @@ FX1=0
 end
 
 function XX()
-gg.alert("CA炸图辅助版本号:1.11.0.2\n更新日期:4.3")
+gg.alert("CA炸图辅助版本号:1.11.0.3\n更新日期:4.3")
 QT()
 end
 
 function GX()
-gg.alert("修复部分bug\n修复无限连跳")
+gg.alert("优化云服飞天")
 QT()
 end
 

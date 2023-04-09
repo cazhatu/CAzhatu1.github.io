@@ -500,25 +500,26 @@ function video()
 menu = gg.choice({
 	 "循环表情[易闪退]",
 	 "返回上一页",
-}, nil, "")
+}, nil, "循环表情用不懂的去bbs.zhatu.fun的ca炸图辅助板块找教程")
 if menu == 1 then video1() end
 if menu == 2 then CA1() end
 FX1=0
 end
 
 function video1()
-	 gg.clearResults()
-	 gg.setRanges(262207)
-	 gg.searchNumber("1,065,353,216;1,065,353,216;1,065,353,216;1,117,126,656;10", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1)
-	 gg.searchNumber("10", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1)
-	 jg=gg.getResults(100)
-	 sl=gg.getResultCount()
-	 for i = 1, sl do
-	 	 dzy=jg[i].address
-	 	 gg.addListItems({[1] = {address = dzy,flags = gg.TYPE_DWORD,freeze = true,value = 12}})
-	 end
-	 gg.toast("循环表情开启成功")
-	 gg.clearResults()
+qmnb = {
+{["memory"] = 4},
+{["name"] = "循环表情"},
+{["value"] = 1117126656, ["type"] = 4},
+{["lv"] = 1065353216, ["offset"] = -16, ["type"] = 4},
+{["lv"] = 1065353216, ["offset"] = -24, ["type"] = 4},
+{["lv"] = 1065353216, ["offset"] = -28, ["type"] = 4},
+}
+qmxg = {
+{["value"] = 12, ["offset"] = 132, ["type"] = 4, ["freeze"] = true},
+}
+xqmnb(qmnb)
+gg.clearResults()
 CA1()
 end
 

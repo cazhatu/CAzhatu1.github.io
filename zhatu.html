@@ -631,7 +631,7 @@ menu = gg.choice({
 	 "狙击枪改子弹",
 	 "乐谱取物",
 	 "编辑器物品改炸弹",
-	 "编辑器物品改污染方块",
+	 "编辑器物品改污染核心",
 	 "返回上一页",
 }, nil, "")
 if menu == 1 then SC1() end
@@ -697,8 +697,8 @@ gg.setRanges(gg.REGION_C_ALLOC)
 gg.searchNumber("439;1,065,353,216;1,298,491,246",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
 gg.searchNumber("439", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
 gg.getResults(100)
-gg.editAll("138",gg.TYPE_DWORD)
-gg.toast("编辑器物品改污染方块开启成功")
+gg.editAll("1049",gg.TYPE_DWORD)
+gg.toast("编辑器物品改污染核心开启成功")
 CA1()
 end
 ------生存

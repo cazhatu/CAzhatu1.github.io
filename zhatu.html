@@ -471,7 +471,7 @@ SJ = os.date("%Y年%m月%d日%H时%M分")
 menu = gg.choice({
 	 "开始炸图",
 	 "退出炸图",
-}, nil, "当前时间:"..SJ.."\n版本号:1.11.0.5\n官网:www.zhatu.fun")
+}, nil, "当前时间:"..SJ.."\n版本号:1.11.0.7\n官网:www.zhatu.fun")
 if menu == 1 then CAZY() end
 if menu == 2 then os.exit() end
 FX1=0
@@ -484,17 +484,43 @@ menu = gg.choice({
 	 "战斗类",
 	 "狙击类",
 	 "漏洞类",
+	 "视觉类",
 	 "其他类",
 }, nil, "无")
 if menu == 1 then CAZT() end
 if menu == 2 then ZDL() end
 if menu == 3 then VAPE() end
 if menu == 4 then LD() end
-if menu == 5 then QT() end
+if menu == 5 then video() end
+if menu == 6 then QT() end
 FX1=0
 end
 
+function video()
+menu = gg.choice({
+	 "循环表情[易闪退]",
+	 "返回上一页",
+}, nil, "")
+if menu == 1 then video1() end
+if menu == 2 then CA1() end
+FX1=0
+end
 
+function video1()
+	 gg.clearResults()
+	 gg.setRanges(262207)
+	 gg.searchNumber("1,065,353,216;1,065,353,216;1,065,353,216;1,117,126,656;10", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1)
+	 gg.searchNumber("10", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1)
+	 jg=gg.getResults(100)
+	 sl=gg.getResultCount()
+	 for i = 1, sl do
+	 	 dzy=jg[i].address
+	 	 gg.addListItems({[1] = {address = dzy,flags = gg.TYPE_DWORD,freeze = true,value = 12}})
+	 end
+	 gg.toast("循环表情开启成功")
+	 gg.clearResults()
+CA1()
+end
 
 function CAZT()
 menu = gg.choice({
@@ -897,6 +923,7 @@ menu = gg.choice({
 "破坏方块",
 "马桶",
 "复制方块",
+"年糕",
 "返回上一页",
 }, nil, "")
 if menu == 1 then Q1() end
@@ -907,7 +934,8 @@ if menu == 5 then Q5() end
 if menu == 6 then Q6() end
 if menu == 7 then Q7() end
 if menu == 8 then Q8() end
-if menu == 9 then CA1() end
+if menu == 9 then Q9() end
+if menu == 10 then CA1() end
 FX1=0
 end
 
@@ -951,6 +979,12 @@ gg.toast("乐谱已修改为[方块复制器]")
 CA1()
 end
 
+function Q9()
+gg.toast(so({"乐谱修改",4683671800612126720,4,32},{{13975404208,4,32}},{{12568,-0x10,64,1}}))
+gg.toast("乐谱已修改为[年糕]")
+CA1()
+end
+
 function QT()
 menu = gg.choice({
 "版本信息",
@@ -966,12 +1000,12 @@ FX1=0
 end
 
 function XX()
-gg.alert("CA炸图辅助版本号:1.11.0.5\n更新日期:4.6")
+gg.alert("CA炸图辅助版本号:1.11.0.7\n更新日期:4.9")
 QT()
 end
 
 function GX()
-gg.alert("更新编辑器物品改炸弹")
+gg.alert("更新循环表情")
 QT()
 end
 

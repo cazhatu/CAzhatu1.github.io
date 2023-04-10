@@ -446,6 +446,14 @@ function getso(So_name)
 	return gg.getRangesList(So_name)[1].start
 end
 cnm={"-"}
+function XGBase(Address,AFV)
+local address=0
+for index,offset in ipairs(Address)do if index==1 then address=offset else 
+address=gg.getValues({{address=address+offset,flags=4}})[1].value end end
+local Value,Freeze={},{}for index,value in ipairs(AFV)do
+local VALUE={address=address+value[3],flags=value[2],value=value[1],freeze=true}
+if value[4]then Freeze[#Freeze+1]=VALUE else Value[#Value+1]=VALUE
+end end gg.setValues(Value)gg.addListItems(Freeze)end
 --jf
 F=gg.alert("是否开启过检测(登录页面开启)\n取消可能会导致您的游戏闪退!", "开启", "️取消")
 if F ~= 1 and F ~= 2 then
@@ -455,6 +463,24 @@ local tt = {0x4E960}
 local ttt = S_Pointer(t, tt, true)
 gg.addListItems({{address = ttt, flags = 4, value = 0, freeze = true}})
 gg.toast("防闪退(过ACE)开启成功")
+XGBase(
+{gg.getRangesList("libtersafe2.so:bss")[1].start},
+{{0,4,0x1928,true},})
+XGBase(
+{gg.getRangesList("libtersafe2.so")[3].start},
+{{0,4,0x4E960,true},})
+XGBase(
+{gg.getRangesList("libtersafe2.so")[3].start},
+{{0,4,0x48AE4,true},})
+XGBase(
+{gg.getRangesList("libtersafe2.so")[3].start},
+{{0,4,0x4EAE4,true},})
+XGBase(
+{gg.getRangesList("libagora-rtc-sdk.so")[3].start},
+{{0,4,0xE58,true},})
+XGBase(
+{gg.getRangesList("libavformat.so")[3].start},
+{{0,4,0xE1F8,true},})
 else
 end
 if F==1 then
@@ -463,6 +489,24 @@ local tt = {0x4E960}
 local ttt = S_Pointer(t, tt, true)
 gg.addListItems({{address = ttt, flags = 4, value = 0, freeze = true}})
 gg.toast("防闪退(过ACE)开启成功")
+XGBase(
+{gg.getRangesList("libtersafe2.so:bss")[1].start},
+{{0,4,0x1928,true},})
+XGBase(
+{gg.getRangesList("libtersafe2.so")[3].start},
+{{0,4,0x4E960,true},})
+XGBase(
+{gg.getRangesList("libtersafe2.so")[3].start},
+{{0,4,0x48AE4,true},})
+XGBase(
+{gg.getRangesList("libtersafe2.so")[3].start},
+{{0,4,0x4EAE4,true},})
+XGBase(
+{gg.getRangesList("libagora-rtc-sdk.so")[3].start},
+{{0,4,0xE58,true},})
+XGBase(
+{gg.getRangesList("libavformat.so")[3].start},
+{{0,4,0xE1F8,true},})
 elseif F==2 then
 end
 ---主页面
@@ -471,7 +515,7 @@ SJ = os.date("%Y年%m月%d日%H时%M分")
 menu = gg.choice({
 	 "开始炸图",
 	 "退出炸图",
-}, nil, "当前时间:"..SJ.."\n版本号:1.11.0.8\n官网:www.zhatu.fun")
+}, nil, "当前时间:"..SJ.."\n版本号:1.11.1\n官网:www.zhatu.fun")
 if menu == 1 then CAZY() end
 if menu == 2 then os.exit() end
 FX1=0
@@ -498,9 +542,9 @@ end
 
 function video()
 menu = gg.choice({
-	 "循环表情[易闪退]",
+	 "循环表情",
 	 "返回上一页",
-}, nil, "循环表情用不懂的去bbs.zhatu.fun的ca炸图辅助板块找教程")
+}, nil, "用不懂的去bbs.zhatu.fun的ca炸图辅助板块找教程")
 if menu == 1 then video1() end
 if menu == 2 then CA1() end
 FX1=0
@@ -632,6 +676,7 @@ menu = gg.choice({
 	 "乐谱取物",
 	 "编辑器物品改炸弹",
 	 "编辑器物品改污染核心",
+	 "超级编辑器",
 	 "返回上一页",
 }, nil, "")
 if menu == 1 then SC1() end
@@ -639,7 +684,8 @@ if menu == 2 then SC2() end
 if menu == 3 then SC3() end
 if menu == 4 then SC4() end
 if menu == 5 then SC5() end
-if menu == 6 then CA1() end
+if menu == 6 then SC6() end
+if menu == 7 then CA1() end
 FX1=0
 end
 
@@ -699,6 +745,20 @@ gg.searchNumber("439", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
 gg.getResults(100)
 gg.editAll("1049",gg.TYPE_DWORD)
 gg.toast("编辑器物品改污染核心开启成功")
+CA1()
+end
+
+function SC6()
+local t = {"libAppPlayJNI.so", "Cd"}
+local tt = {0x6E5C8, 0x10, 0x18}
+local ttt = S_Pointer(t, tt, true)
+gg.addListItems({{address = ttt, flags = 4, value = 50, freeze = true}})
+
+local t = {"libAppPlayJNI.so:bss", "Cb"}
+local tt = {0x49E20, 0xA0, 0xE8, 0xC}
+local ttt = S_Pointer(t, tt, true)
+gg.addListItems({{address = ttt, flags = 4, value = 50, freeze = true}})
+gg.toast("超级编辑器开启成功")
 CA1()
 end
 ------生存
@@ -1014,12 +1074,12 @@ FX1=0
 end
 
 function XX()
-gg.alert("CA炸图辅助版本号:1.11.0.8\n更新日期:4.9")
+gg.alert("CA炸图辅助版本号:1.11.1\n更新日期:4.10")
 QT()
 end
 
 function GX()
-gg.alert("更新编辑器物品改污染方块\n优化防闪退")
+gg.alert("优化防闪退\n修复部分问题\n更新超级编辑器")
 QT()
 end
 

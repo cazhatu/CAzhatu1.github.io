@@ -512,11 +512,10 @@ elseif F==2 then
 end
 ---主页面
 function CA1()
-SJ = os.date("%Y年%m月%d日%H时%M分")
 menu = gg.choice({
 	 "开始炸图",
 	 "退出炸图",
-}, nil, "当前时间:"..SJ.."\n版本号:1.11.3\n官网:www.zhatu.fun")
+}, nil, "版本号:1.11.4\n官网:www.zhatu.fun")
 if menu == 1 then CAZY() end
 if menu == 2 then os.exit() end
 FX1=0
@@ -586,52 +585,66 @@ end
 ------创造
 function CZCA()
 SN = gg.multiChoice({
+     "瓶装牛奶改球体",
+	 "生牛排改黑龙火球",
+	 "烤牛排改远古巨人",
+	 "香溢蔬菜煲改卡图道具",
+	 "香溢薯条改黑龙",
 	 "召唤虚空幻影1",
 	 "召唤虚空幻影2",
 	 "召唤虚空幻影3",
-	 "香溢蔬菜煲改中心长方体",
-	 "瓶装牛奶改球体",
+	 "烤嘟嘟鸟改驯服的叮叮",
+	 "水果拼盘改驯服的猴子",
+	 "香溢香肠改虚空幻影讯",
+	 "香溢‘蟹棒’腿改虚空幻影猛",
 	 "返回上一页",
-}, nil, "稳定性大大提升")
+}, nil, "")
  if SN == nil then else
 if SN[1]==true then ZT1() end
 if SN[2]==true then ZT2() end
 if SN[3]==true then ZT3() end
 if SN[4]==true then ZT4() end
 if SN[5]==true then ZT5() end
-if SN[6]==true then CA1() end end
+if SN[6]==true then ZT6() end
+if SN[7]==true then ZT7() end
+if SN[8]==true then ZT8() end
+if SN[9]==true then ZT9() end
+if SN[10]==true then ZT10() end
+if SN[11]==true then ZT11() end
+if SN[12]==true then ZT12() end
+if SN[13]==true then CA1() end end
 FX1=0 end
 
 function ZT1()
 gg.clearResults()
 gg.setRanges(gg.REGION_C_ALLOC)
-gg.searchNumber("11001",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
-gg.searchNumber("11001", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.searchNumber("12509",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("12509", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
 gg.getResults(100)
-gg.editAll("140",gg.TYPE_DWORD)
-gg.toast("召唤虚空幻影第1步开启成功")
+gg.editAll("15524",gg.TYPE_DWORD)
+gg.toast("瓶装牛奶改球体开启成功")
 CAZY()
 end
 
 function ZT2()
 gg.clearResults()
 gg.setRanges(gg.REGION_C_ALLOC)
-gg.searchNumber("11002",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
-gg.searchNumber("11002", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.searchNumber("12516",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("12516", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
 gg.getResults(100)
-gg.editAll("141",gg.TYPE_DWORD)
-gg.toast("召唤虚空幻影第2步开启成功")
+gg.editAll("15054",gg.TYPE_DWORD)
+gg.toast("生牛排改黑龙火球开启成功")
 CAZY()
 end
 
 function ZT3()
 gg.clearResults()
 gg.setRanges(gg.REGION_C_ALLOC)
-gg.searchNumber("11003",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
-gg.searchNumber("11003", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.searchNumber("12517",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("12517", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
 gg.getResults(100)
-gg.editAll("142",gg.TYPE_DWORD)
-gg.toast("召唤虚空幻影第3步开启成功")
+gg.editAll("13514",gg.TYPE_DWORD)
+gg.toast("烤牛排改远古巨人开启成功")
 CAZY()
 end
 
@@ -649,12 +662,87 @@ end
 function ZT5()
 gg.clearResults()
 gg.setRanges(gg.REGION_C_ALLOC)
-gg.searchNumber("12509",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
-gg.searchNumber("12509", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.searchNumber("12551",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("12551", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
 gg.getResults(100)
-gg.editAll("15524",gg.TYPE_DWORD)
-gg.toast("瓶装牛奶改球体开启成功")
+gg.editAll("13502",gg.TYPE_DWORD)
+gg.toast("香溢薯条改黑龙开启成功")
 CAZY()
+end
+
+function ZT6()
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("11001",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("11001", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("140",gg.TYPE_DWORD)
+gg.toast("召唤虚空幻影第1步开启成功")
+CAZY()
+end
+
+function ZT7()
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("11002",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("11002", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("141",gg.TYPE_DWORD)
+gg.toast("召唤虚空幻影第2步开启成功")
+CAZY()
+end
+
+function ZT8()
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("11003",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("11003", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("142",gg.TYPE_DWORD)
+gg.toast("召唤虚空幻影第3步开启成功")
+CAZY()
+end
+
+function ZT9()
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("12558",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("12558", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("13436",gg.TYPE_DWORD)
+gg.toast("烤羊腿改驯服的当当开启成功")
+CAZY()
+end
+
+function ZT10()
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("12501",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("12501", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("13433",gg.TYPE_DWORD)
+gg.toast("水果拼盘改驯服的猴子开启成功")
+CAZY()
+end
+
+function ZT11()
+  gg.clearResults()
+  gg.setRanges(4)
+  gg.searchNumber("12561", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1)
+  gg.getResults(100)
+  gg.editAll("13515", gg.TYPE_DWORD)
+  gg.toast("香溢香肠改虚空幻影讯开启成功")
+  gg.clearResults()
+end
+
+function ZT12()
+   gg.clearResults()
+  gg.setRanges(4)
+  gg.searchNumber("12563", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1)
+  gg.getResults(100)
+  gg.editAll("13516", gg.TYPE_DWORD)
+  gg.toast("香溢‘蟹棒’腿改虚空幻影猛开启成功")
+  gg.clearResults()
 end
 
 function KF()

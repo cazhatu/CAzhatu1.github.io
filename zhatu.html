@@ -456,6 +456,7 @@ local VALUE={address=address+value[3],flags=value[2],value=value[1],freeze=true}
 if value[4]then Freeze[#Freeze+1]=VALUE else Value[#Value+1]=VALUE
 end end gg.setValues(Value)gg.addListItems(Freeze)end
 --jf
+
 F=gg.alert("是否开启过检测(登录页面开启)\n取消可能会导致您的游戏闪退!", "开启", "️取消")
 if F ~= 1 and F ~= 2 then
 gg.toast("你未选择开关默认开启")
@@ -515,7 +516,7 @@ function CA1()
 menu = gg.choice({
 	 "开始炸图",
 	 "退出炸图",
-}, nil, "版本号:1.11.4\n官网:www.zhatu.fun")
+}, nil, "版本号:1.11.4\n官网:www.zhatu.fun\n安卓12及以上机型无法使用，harmonyOS请忽略。")
 if menu == 1 then CAZY() end
 if menu == 2 then os.exit() end
 FX1=0
@@ -524,66 +525,24 @@ end
 ------第二菜单
 function CAZY()
 menu = gg.choice({
-	 "炸图类",
-	 "战斗类",
-	 "狙击类",
+	 "创造类",
+	 "PVP类",
+	 "生存类",
 	 "漏洞类",
 	 "视觉类",
 	 "其他类",
 }, nil, "无")
-if menu == 1 then CAZT() end
-if menu == 2 then ZDL() end
-if menu == 3 then VAPE() end
-if menu == 4 then LD() end
-if menu == 5 then video() end
-if menu == 6 then QT() end
+if menu == 1 then A() end
+if menu == 2 then B() end
+if menu == 3 then C() end
+if menu == 4 then D() end
+if menu == 5 then E() end
+if menu == 6 then F() end
 FX1=0
 end
 
-function video()
-menu = gg.choice({
-	 "循环表情",
-	 "返回上一页",
-}, nil, "用不懂的去bbs.zhatu.fun的ca炸图辅助板块找教程")
-if menu == 1 then video1() end
-if menu == 2 then CA1() end
-FX1=0
-end
-
-function video1()
-qmnb = {
-{["memory"] = 4},
-{["name"] = "循环表情"},
-{["value"] = 1117126656, ["type"] = 4},
-{["lv"] = 1065353216, ["offset"] = -16, ["type"] = 4},
-{["lv"] = 1065353216, ["offset"] = -24, ["type"] = 4},
-{["lv"] = 1065353216, ["offset"] = -28, ["type"] = 4},
-}
-qmxg = {
-{["value"] = 12, ["offset"] = 132, ["type"] = 4, ["freeze"] = true},
-}
-xqmnb(qmnb)
-gg.clearResults()
-CA1()
-end
-
-function CAZT()
-menu = gg.choice({
-	 "创造炸图",
-	 "生存炸图",
-	 "乐器卡房",
-	 "乐谱取物",
-	 "返回主页",
-}, nil, "")
-if menu == 1 then CZCA() end
-if menu == 2 then SCCA() end
-if menu == 3 then KF() end
-if menu == 4 then QW() end
-if menu == 5 then CAZY() end
-FX1=0
-end
 ------创造
-function CZCA()
+function A()
 SN = gg.multiChoice({
      "瓶装牛奶改球体",
 	 "生牛排改黑龙火球",
@@ -612,7 +571,7 @@ if SN[9]==true then ZT9() end
 if SN[10]==true then ZT10() end
 if SN[11]==true then ZT11() end
 if SN[12]==true then ZT12() end
-if SN[13]==true then CA1() end end
+if SN[13]==true then CAZY() end end
 FX1=0 end
 
 function ZT1()
@@ -745,20 +704,161 @@ function ZT12()
   gg.clearResults()
 end
 
-function KF()
-gg.alert("开启成功后拿出喷漆即可")
+
+-----创造
+--------------PVP
+
+function B()
+SN = gg.multiChoice({
+	 "无限连跳",
+	 "平飞",
+	 "人物加速",
+     "高跳",
+	 "视角透视",
+	 "吸人",
+	 "狙击连发",
+	 "狙击连发(全局)",
+	 "返回上一页",
+}, nil, "部分功能已修复并重新添加.")
+ if SN == nil then else
+if SN[1]==true then B1() end
+if SN[2]==true then B2() end
+if SN[3]==true then B3() end
+if SN[4]==true then B4() end
+if SN[5]==true then B5() end
+if SN[6]==true then B6() end
+if SN[7]==true then B7() end
+if SN[8]==true then B8() end
+if SN[9]==true then B9() end
+if SN[10]==true then CAZY() end end
+FX1=0 end
+
+function B1()
+qmnb = {
+{["memory"] = 4},
+{["name"] = "无限连跳"},
+{["value"] =180, ["type"] = 32},
+{["lv"] = -1082130432, ["offset"] = -0xC, ["type"] = 4},
+}
+qmxg = {
+{["value"]=-1,["offset"]=-0x3C,["type"]=4,["freeze"] = true},
+}
+xqmnb(qmnb)
+CA1()
+end
+
+function B2()
+qmnb = {
+{["memory"] = 4},
+{["name"] = "平飞"},
+{["value"] = 515396075740, ["type"] = 32},
+{["lv"] = 60, ["offset"] = -16, ["type"] = 4},
+{["lv"] = 180, ["offset"] = -12, ["type"] = 4},
+{["lv"] = 120, ["offset"] = -4, ["type"] = 4},
+}
+qmxg = {
+{["value"] = 1, ["offset"] = 64, ["type"] = 4, ["freeze"] = true},
+}
+xqmnb(qmnb)
+CA1()
+end
+
+function B3()
+so({("人物加速"),4812096202965778432,4,32},{{1065353216,0xD8,4}},{{50,0x84,16,1}})
+CA1()
+end
+
+function B4()
+gg.alert("开启后如果想恢复，退出房间重新进即可")
 gg.clearResults()
 gg.setRanges(gg.REGION_C_ALLOC)
-gg.searchNumber("12239",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
-gg.searchNumber("12239", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.searchNumber("-1;10;-1;945804460D", gg.TYPE_FLOAT, false, gg.SIGN_EQUAL, 0, -1)
+gg.searchNumber("-1", gg.TYPE_FLOAT, false, gg.SIGN_EQUAL, 0, -1)
+gg.getResults(20)
+gg.toast("nil")
 gg.getResults(100)
-gg.editAll("11907",gg.TYPE_DWORD)
-gg.toast("喷漆罐改琵琶开启成功")
-CAZY()
+v = gg.prompt({i='输入跳跃倍数(60等于2.3倍，自己算)，0～1000   默认150'}, {i='150'})--这个就是弹出一个输入框
+gg.editAll(v['i'], 16)
+gg.toast("开启成功")
+CA1()
 end
------创造
+
+function B5()
+qmnb = {
+{["memory"] = 4},
+{["name"] = "平飞"},
+{["value"] = 515396075740, ["type"] = 32},
+{["lv"] = 60, ["offset"] = -16, ["type"] = 4},
+{["lv"] = 180, ["offset"] = -12, ["type"] = 4},
+{["lv"] = 120, ["offset"] = -4, ["type"] = 4},
+}
+qmxg = {
+{["value"] = 2, ["offset"] = 64, ["type"] = 4, ["freeze"] = true},
+}
+xqmnb(qmnb)
+CA1()
+end
+
+function B6()
+qmnb = {
+{["memory"] = 4},
+{["name"] = "视角透视"},
+{["value"] = 1189765120, ["type"] = 4},
+{["lv"] = 1065353216, ["offset"] = -28, ["type"] = 4},
+{["lv"] = 10.0, ["offset"] = -4, ["type"] = 16}}
+qmxg = {
+{["value"] = 99999, ["offset"] = 0, ["type"] = 4}}
+xqmnb(qmnb)
+CA1()
+end
+
+function B7()
+qmnb = {
+{["memory"] = 4},
+{["name"] = "吸人"},
+{["value"] = 220, ["type"] = 4},
+{["lv"] = 60, ["offset"] = -16, ["type"] = 4},
+{["lv"] = 180, ["offset"] = -12, ["type"] = 4},
+{["lv"] = 120, ["offset"] = -4, ["type"] = 4},
+{["lv"] = 120, ["offset"] = 4, ["type"] = 4},
+}
+qmxg = {
+{["value"] = 0, ["offset"] = 8, ["type"] = 4, ["freeze"] = true},
+{["value"] = 0, ["offset"] = 16, ["type"] = 4, ["freeze"] = true},
+
+}
+xqmnb(qmnb)
+gg.clearResults()
+CA1()
+end
+
+function B8()
+ gg.toast(so({("狙击枪连发"),15003,4,2,2},{{("15000~15009"),-136}},{{1,-4},{0,-66},{0,-56,16},{0,-40},{1,-28},{0,-52,16},{32000,-0x3e}}))
+end
+
+function B9()
+qmnb = 
+{{["memory"] = 4},
+{["name"] = "全局连发"},
+{["value"] = 1155186688, ["type"] = 4},
+{["lv"] = 1152319488, ["offset"] = 4, ["type"] = 4},
+{["lv"] = 1137836032, ["offset"] = 8, ["type"] = 4},}
+qmxg = 
+{{["value"] = 15510, ["offset"] = 24, ["type"] = 4},
+{["value"] = 1, ["offset"] = 20, ["type"] = 4},
+{["value"] = 0, ["offset"] = -28, ["type"] = 16},
+{["value"] = 0, ["offset"] = -44, ["type"] = 16},}
+xqmnb(qmnb)
+CA1()
+end
+
+function B10()
+gg.toast(so({"狙击准星",15003,4,4},{{40,-32,4}},{{1,-28,4}}))
+CA1()
+end
+----PVP
 -----生存
-function SCCA()
+function C()
 menu = gg.choice({
 	 "玩法改创造",
 	 "狙击枪改子弹",
@@ -774,7 +874,7 @@ if menu == 3 then SC3() end
 if menu == 4 then SC4() end
 if menu == 5 then SC5() end
 if menu == 6 then SC6() end
-if menu == 7 then CA1() end
+if menu == 7 then CAZY() end
 FX1=0
 end
 
@@ -852,354 +952,101 @@ CA1()
 end
 ------生存
 
---------------PVP
 
-function ZDL()
-SN = gg.multiChoice({
-	 "云服飞天",
-	 "平飞",
-	 "人物加速",
-     "高跳",
-	 "视角透视",
-	 "吸人",
-	 "无限连跳",
-	 "返回上一页",
-}, nil, "部分功能已修复并重新添加.")
- if SN == nil then else
-if SN[1]==true then PVP1() end
-if SN[2]==true then PVP2() end
-if SN[3]==true then PVP3() end
-if SN[4]==true then PVP4() end
-if SN[5]==true then PVP5() end
-if SN[6]==true then PVP6() end
-if SN[7]==true then PVP7() end
-if SN[8]==true then CA1() end end
-FX1=0 end
-
-function PVP1()
-qmnb = {
-{["memory"] = 4},
-{["name"] = "云服飞天"},
-{["value"] = 1117782016, ["type"] = 4},
-{["lv"] = 1118306304, ["offset"] = 4, ["type"] = 4},
-{["lv"] = -1046478848, ["offset"] = 28, ["type"] = 4},
-{["lv"] = -1020002304, ["offset"] = 32, ["type"] = 4},
-}
-qmxg = {
-{["value"] = 16777472, ["offset"] = -60, ["type"] = 4, ["freeze"] = true},
-}
-xqmnb(qmnb)
-CA1()
-end
-
-function PVP2()
-qmnb = {
-{["memory"] = 4},
-{["name"] = "平飞"},
-{["value"] = 515396075740, ["type"] = 32},
-{["lv"] = 60, ["offset"] = -16, ["type"] = 4},
-{["lv"] = 180, ["offset"] = -12, ["type"] = 4},
-{["lv"] = 120, ["offset"] = -4, ["type"] = 4},
-}
-qmxg = {
-{["value"] = 1, ["offset"] = 64, ["type"] = 4, ["freeze"] = true},
-}
-xqmnb(qmnb)
-CA1()
-end
-
-function PVP3()
-so({("人物加速"),4812096202965778432,4,32},{{1065353216,0xD8,4}},{{50,0x84,16,1}})
-CA1()
-end
-
-function PVP4()
-gg.alert("开启后如果想恢复，退出房间重新进即可")
-gg.clearResults()
-gg.setRanges(gg.REGION_C_ALLOC)
-gg.searchNumber("-1;10;-1;945804460D", gg.TYPE_FLOAT, false, gg.SIGN_EQUAL, 0, -1)
-gg.searchNumber("-1", gg.TYPE_FLOAT, false, gg.SIGN_EQUAL, 0, -1)
-gg.getResults(20)
-gg.toast("nil")
-gg.getResults(100)
-v = gg.prompt({i='输入跳跃倍数(60等于2.3倍，自己算)，0～1000   默认150'}, {i='150'})--这个就是弹出一个输入框
-gg.editAll(v['i'], 16)
-gg.toast("开启成功")
-CA1()
-end
-
-function PVP5()
-qmnb = {
-{["memory"] = 4},
-{["name"] = "平飞"},
-{["value"] = 515396075740, ["type"] = 32},
-{["lv"] = 60, ["offset"] = -16, ["type"] = 4},
-{["lv"] = 180, ["offset"] = -12, ["type"] = 4},
-{["lv"] = 120, ["offset"] = -4, ["type"] = 4},
-}
-qmxg = {
-{["value"] = 2, ["offset"] = 64, ["type"] = 4, ["freeze"] = true},
-}
-xqmnb(qmnb)
-CA1()
-end
-
-function PVP6()
-qmnb = {
-{["memory"] = 4},
-{["name"] = "视角透视"},
-{["value"] = 1189765120, ["type"] = 4},
-{["lv"] = 1065353216, ["offset"] = -28, ["type"] = 4},
-{["lv"] = 10.0, ["offset"] = -4, ["type"] = 16}}
-qmxg = {
-{["value"] = 99999, ["offset"] = 0, ["type"] = 4}}
-xqmnb(qmnb)
-CA1()
-end
-
-function PVP6()
-qmnb = {
-{["memory"] = 4},
-{["name"] = "吸人"},
-{["value"] = 220, ["type"] = 4},
-{["lv"] = 60, ["offset"] = -16, ["type"] = 4},
-{["lv"] = 180, ["offset"] = -12, ["type"] = 4},
-{["lv"] = 120, ["offset"] = -4, ["type"] = 4},
-{["lv"] = 120, ["offset"] = 4, ["type"] = 4},
-}
-qmxg = {
-{["value"] = 0, ["offset"] = 8, ["type"] = 4, ["freeze"] = true},
-{["value"] = 0, ["offset"] = 16, ["type"] = 4, ["freeze"] = true},
-
-}
-xqmnb(qmnb)
-gg.clearResults()
-CA1()
-end
-
-function PVP7()
-qmnb = {
-{["memory"] = 4},
-{["name"] = "无限连跳"},
-{["value"] =180, ["type"] = 32},
-{["lv"] = -1082130432, ["offset"] = -0xC, ["type"] = 4},
-}
-qmxg = {
-{["value"]=-1,["offset"]=-0x3C,["type"]=4,["freeze"] = true},
-}
-xqmnb(qmnb)
-CA1()
-end
-
----pvp
-
-
-function VAPE()
-menu = gg.choice({
-	 "狙击枪无后座连发",
-	 "秒换子弹",
-	 "狙击枪无后座连发(开第一个闪退的开这个)",
-	 "狙击准心",
-	 "返回上一页",
-}, nil, "")
-if menu == 1 then V1() end
-if menu == 2 then V2() end
-if menu == 3 then V3() end
-if menu == 4 then V4() end
-if menu == 5 then CA1() end
-FX1=0
-end
-
-function V1()
- gg.toast(so({("狙击枪无后座连发"),15003,4,2,2},{{("15000~15009"),-136}},{{1,-4},{0,-66},{0,-56,16},{0,-40},{1,-28},{0,-52,16},{32000,-0x3e}}))
- end
- 
-function V2()
-qmnb = {
-{["memory"] = 4},
-{["name"] = "秒换子弹"},
-{["value"] =15003 , ["type"] = 4},
-{["lv"] = 15004, ["offset"] = -136, ["type"] = 4},
-}
-qmxg = {
-{["value"] = 0, ["offset"] = -24,["type"] = 16},
-}
-xqmnb(qmnb)
-CA1()
-end
-
- function V3()
-qmnb = 
-{{["memory"] = 4},
-{["name"] = "狙击枪改子弹"},
-{["value"] = 1155186688, ["type"] = 4},
-{["lv"] = 1152319488, ["offset"] = 4, ["type"] = 4},
-{["lv"] = 1137836032, ["offset"] = 8, ["type"] = 4},}
-qmxg = 
-{{["value"] = 15510, ["offset"] = 24, ["type"] = 4},
-{["value"] = 1, ["offset"] = 20, ["type"] = 4},
-{["value"] = 0, ["offset"] = -28, ["type"] = 16},
-{["value"] = 0, ["offset"] = -44, ["type"] = 16},}
-xqmnb(qmnb)
-CA1()
-end
-
-function V4()
-gg.toast(so({"狙击准星",15003,4,4},{{40,-32,4}},{{1,-28,4}}))
-CA1()
-end
-
-function LD()
+function D()
 menu = gg.choice({
    	 "伪房主[关]",
      "伪房主[开]",
-     "观战控制",
+     "乐谱卡房",
 	 "返回上一页",
 }, nil, "")
-if menu == 1 then LD1() end
-if menu == 2 then LD2() end
-if menu == 3 then LD3() end
-if menu == 4 then CA1() end
-if menu == 5 then CA1() end
+if menu == 1 then D1() end
+if menu == 2 then D2() end
+if menu == 3 then KF() end
+if menu == 4 then CAZY() end
 FX1=0
 end
 
-function LD1()
-a = gg.prompt({"请输入房主迷你号(;3不要删):"},
-{[1]=114514;3--[[编辑框文字]]},
-{[1]="number"})[1]
-qmnb = {
-{["memory"] = 4},
-{["name"] = "伪房主[关]"},
-{["value"] = a, ["type"] = 4},
-{["lv"] = 3, ["offset"] = 0, ["type"] = 4},
-}
-qmxg = {
-{["value"] = 5, ["offset"] = 0, ["type"] = 4},
-}
-xqmnb(qmnb)
+function D1()
+local t = {"libAppPlayJNI.so", "Cd"}
+local tt = {0x6E588, 0x880}
+local ttt = S_Pointer(t, tt, true)
+gg.addListItems({{address = ttt, flags = 4, value = 2, freeze = true}})
 CA1()
 end
 
-function LD2()
-a = gg.prompt({"请输入房主迷你号(;2不要删):"},
-{[1]=114514;2--[[编辑框文字]]},
-{[1]="number"})[1]
-qmnb = {
-{["memory"] = 4},
-{["name"] = "伪房主[开]"},
-{["value"] = a, ["type"] = 4},
-{["lv"] = 2, ["offset"] = 0, ["type"] = 4},
-}
-qmxg = {
-{["value"] = 3, ["offset"] = 0, ["type"] = 4},
-}
-xqmnb(qmnb)
+function D2()
+local t = {"libAppPlayJNI.so", "Cd"}
+local tt = {0x6E588, 0x880}
+local ttt = S_Pointer(t, tt, true)
+gg.addListItems({{address = ttt, flags = 4, value = 3, freeze = true}})
 CA1()
 end
 
-function LD3()
-nc_offset(getso("libil2cpp.so"),{{-516948194,4,0xd93420},})
+function KF()
+gg.alert("开启成功后拿出喷漆即可")
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("12239",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("12239", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("11907",gg.TYPE_DWORD)
+gg.toast("喷漆罐改琵琶开启成功")
+CAZY()
 end
 
-
-function QW()
+function E()
 menu = gg.choice({
-"注入按钮",
-"自定义取物",
-"--------快捷方式---------",
-"地形编辑器",
-"黑龙火球",
-"破坏方块",
-"马桶",
-"复制方块",
-"年糕",
-"返回上一页",
-}, nil, "")
-if menu == 1 then Q1() end
-if menu == 2 then Q2() end
-if menu == 3 then CA1() end
-if menu == 4 then Q4() end
-if menu == 5 then Q5() end
-if menu == 6 then Q6() end
-if menu == 7 then Q7() end
-if menu == 8 then Q8() end
-if menu == 9 then Q9() end
-if menu == 10 then CA1() end
+	 "循环表情",
+	 "返回上一页",
+}, nil, "用不懂的去bbs.zhatu.fun的ca炸图辅助板块找教程")
+if menu == 1 then E1() end
+if menu == 2 then CAZY() end
 FX1=0
 end
 
-function Q1()
-gg.toast(so({"注入按钮",-1024458752,4,4},{{1142292480,-4,4},{16777216,-0x5C,4},{1110179840,-0x1C,4}},{{16777472,-0x5C,4,1}}))
-gg.toast("按钮已注入")
+function E1()
+qmnb = {
+{["memory"] = 4},
+{["name"] = "循环表情"},
+{["value"] = 1117126656, ["type"] = 4},
+{["lv"] = 1065353216, ["offset"] = -16, ["type"] = 4},
+{["lv"] = 1065353216, ["offset"] = -24, ["type"] = 4},
+{["lv"] = 1065353216, ["offset"] = -28, ["type"] = 4},
+}
+qmxg = {
+{["value"] = 12, ["offset"] = 132, ["type"] = 4, ["freeze"] = true},
+}
+xqmnb(qmnb)
+gg.clearResults()
 CA1()
 end
 
-function Q2()
-SC3()
-end
-
-function Q4()
-gg.toast(so({"乐谱修改",4683671800612126720,4,32},{{13975404208,4,32}},{{10500,-0x10,64,1}}))
-gg.toast("乐谱已修改为[地形编辑器]")
-CA1()
-end
-
-function Q5()
-gg.toast(so({"乐谱修改",4683671800612126720,4,32},{{13975404208,4,32}},{{15054,-0x10,64,1}}))
-gg.toast("乐谱已修改为[黑龙火球]")
-CA1()
-end
-
-function Q6()
-gg.toast(so({"乐谱修改",4683671800612126720,4,32},{{13975404208,4,32}},{{11551,-0x10,64,1}}))
-gg.toast("乐谱已修改为[破坏方块]")
-CA1()
-end
-
-function Q7()
-gg.toast(so({"乐谱修改",4683671800612126720,4,32},{{13975404208,4,32}},{{1605,-0x10,64,1}}))
-gg.toast("乐谱已修改为[马桶]")
-CA1()
-end
-
-function Q8()
-gg.toast(so({"乐谱修改",4683671800612126720,4,32},{{13975404208,4,32}},{{1000,-0x10,64,1}}))
-gg.toast("乐谱已修改为[方块复制器]")
-CA1()
-end
-
-function Q9()
-gg.toast(so({"乐谱修改",4683671800612126720,4,32},{{13975404208,4,32}},{{12568,-0x10,64,1}}))
-gg.toast("乐谱已修改为[年糕]")
-CA1()
-end
-
-function QT()
+function F()
 menu = gg.choice({
 "版本信息",
 "更新内容",
 "帮助",
 "返回上一页",
 }, nil, "")
-if menu == 1 then XX() end
-if menu == 2 then GX() end
-if menu == 3 then BZ() end
-if menu == 4 then CA1() end
+if menu == 1 then F1() end
+if menu == 2 then F2() end
+if menu == 3 then F3() end
+if menu == 4 then CAZY() end
 FX1=0
 end
 
-function XX()
-gg.alert("CA炸图辅助版本号:1.11.3\n更新日期:4.21")
+function F1()
+gg.alert("CA炸图辅助版本号:1.11.4\n更新日期:4.23")
 QT()
 end
 
-function GX()
-gg.alert("修复伪房主")
+function F2()
+gg.alert("优化UI")
 QT()
 end
 
-function BZ()
+function F3()
 F=gg.alert("问:为什么我的辅助全部功能都开启失败\n答:进程选错了或您的设备是安卓12、13或harmonyOS3,由于谷歌对aosp的封闭导致部分无法使用。\n-\n问:为什么我开防闪退会提示退出辅助\n答:没选进程或你是32位设备(典型的有:华为畅享10e,20e，红米9A)，请更换为64位设备再试。\n-\n问:生存改创造怎么用?\n答:输入房主迷你号。","知道了", "️我还不明白")
 if F ~= 1 and F ~= 2 then
 gg.toast("你未选择开关默认返回")

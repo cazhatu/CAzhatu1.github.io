@@ -516,7 +516,7 @@ function CA1()
 menu = gg.choice({
 	 "开始炸图",
 	 "退出炸图",
-}, nil, "版本号:残缺版\n官网:www.zhatu.fun\n安卓12及以上机型无法使用，harmonyOS请忽略。")
+}, nil, "版本号:1.0.0\n官网:www.zhatu.fun\n安卓12及以上机型无法使用，harmonyOS请忽略。")
 if menu == 1 then CAZY() end
 if menu == 2 then os.exit() end
 FX1=0
@@ -730,10 +730,32 @@ if SN[7]==true then CAZY() end end
 FX1=0 end
 
 function B1()
+qmnb = {
+{["memory"] = 4},
+{["name"] = "无限连跳"},
+{["value"] =180, ["type"] = 32},
+{["lv"] = -1082130432, ["offset"] = -0xC, ["type"] = 4},
+}
+qmxg = {
+{["value"]=-1,["offset"]=-0x3C,["type"]=4,["freeze"] = true},
+}
+xqmnb(qmnb)
 CA1()
 end
 
 function B2()
+qmnb = {
+{["memory"] = 4},
+{["name"] = "平飞"},
+{["value"] = 515396075740, ["type"] = 32},
+{["lv"] = 60, ["offset"] = -16, ["type"] = 4},
+{["lv"] = 180, ["offset"] = -12, ["type"] = 4},
+{["lv"] = 120, ["offset"] = -4, ["type"] = 4},
+}
+qmxg = {
+{["value"] = 1, ["offset"] = 64, ["type"] = 4, ["freeze"] = true},
+}
+xqmnb(qmnb)
 CA1()
 end
 
@@ -941,7 +963,7 @@ FX1=0
 end
 
 function F1()
-gg.alert("CA炸图辅助版本号:1.11.4\n更新日期:4.23")
+gg.alert("CA炸图辅助版本号:1.0.0\n更新日期:5.6")
 QT()
 end
 

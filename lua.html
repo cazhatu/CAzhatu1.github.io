@@ -1,0 +1,15 @@
+gg.toast("正在启动中\n正在链接验证服务器中")
+gg.sleep(1000)
+gg.toast("正在启动中\n正在验证启动合法性中")
+gg.sleep(1000)
+gg.toast("正在启动中\n正在连接脚本服务器中")
+gg.sleep(2000)
+F=gg.alert("连接失败！\n错误原因:未开服", "️退出")
+if F ~= 1 and F ~= 2 then
+gg.toast("你未选择开关默认开启")
+os.exit()
+else
+end
+if F==1 then
+os.exit()
+end

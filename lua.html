@@ -516,7 +516,7 @@ function CA1()
 menu = gg.choice({
 	 "开始炸图",
 	 "退出炸图",
-}, nil, "版本号:20.0.0")
+}, nil, "版本号:20.1.0")
 if menu == 1 then CAZY() end
 if menu == 2 then os.exit() end
 FX1=0
@@ -706,15 +706,17 @@ end
 
 function B()
 SN = gg.multiChoice({
-	 "无限连跳",
-	 "平飞",
-	 "人物加速",
-     "视角透视",
-	 "狙击连发",
-	 "全局连发",
-	 "狙击准心",
-	 "能量杀戮",
-	 "返回上一页",
+	 "无限连跳",--1
+	 "平飞",--2
+	 "人物加速",--3
+     "视角透视",--4
+	 "狙击连发",--5
+	 "全局连发",--6
+	 "狙击准心",--7
+	 "能量杀戮",--8
+	 "无限火力(300子弹开)",--9
+	 "滑翔",--10
+	 "返回上一页",--11
 }, nil, "部分功能已修复并重新添加.")
  if SN == nil then else
 if SN[1]==true then B1() end
@@ -722,9 +724,12 @@ if SN[2]==true then B2() end
 if SN[3]==true then B3() end
 if SN[4]==true then B4() end
 if SN[5]==true then B5() end
-if SN[6]==true then B7() end
-if SN[7]==true then B8() end
-if SN[8]==true then CAZY() end end
+if SN[6]==true then B6() end
+if SN[7]==true then B7() end
+if SN[8]==true then B8() end
+if SN[9]==true then B9() end
+if SN[10]==true then B10() end
+if SN[11]==true then CAZY() end end
 FX1=0 end
 
 function B1()
@@ -820,6 +825,25 @@ gg.toast(so({"第二步",12005,4,4},{{1084227584,76,4}},{{0,76,4}}))
 gg.toast("第二步开启成功")
 end
 
+function B9()
+ gg.clearResults()
+	 gg.setRanges(262207)
+	 gg.searchNumber("1,065,353,216;-1,082,130,432;300", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1)
+	 gg.searchNumber("300", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1)
+	 jg=gg.getResults(100)
+	 sl=gg.getResultCount()
+	 for i = 1, sl do
+	 	 dzy=jg[i].address
+	 	 gg.addListItems({[1] = {address = dzy,flags = gg.TYPE_DWORD,freeze = true,value = 300}})
+	 end
+	 gg.toast("[独家]无限火力开启成功")
+	 gg.clearResults()
+end
+
+function B10()
+gg.toast(so({"滑翔[全局]",4.0,16384,16},{{8.0,-4,16}},{{0.6,-4,16,1}}))
+gg.toast("滑翔开启成功")
+end
 
 ----PVP
 -----生存
@@ -933,10 +957,20 @@ FX1=0
 end
 
 function D1()
+local t = {"libAppPlayJNI.so", "Cd"}
+local tt = {0x6E578, 0x880}
+local ttt = S_Pointer(t, tt, true)
+gg.addListItems({{address = ttt, flags = 4, value = 2, freeze = true}})
+gg.toast("伪房主关闭成功")
 CA1()
 end
 
 function D2()
+local t = {"libAppPlayJNI.so", "Cd"}
+local tt = {0x6E578, 0x880}
+local ttt = S_Pointer(t, tt, true)
+gg.addListItems({{address = ttt, flags = 4, value = 3, freeze = true}})
+gg.toast("伪房主开启成功")
 CA1()
 end
 

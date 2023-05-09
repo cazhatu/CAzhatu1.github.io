@@ -517,7 +517,7 @@ function CA1()
 menu = gg.choice({
 	 "开始炸图",
 	 "退出炸图",
-}, nil, "版本号:20.1.0")
+}, nil, "版本号:20.2.0")
 if menu == 1 then CAZY() end
 if menu == 2 then os.exit() end
 FX1=0
@@ -553,6 +553,7 @@ SN = gg.multiChoice({
 	 "水果拼盘改驯服的猴子",
 	 "香溢香肠改虚空幻影讯",
 	 "香溢‘蟹棒’腿改虚空幻影猛",
+	 "剧毒瓶无蓄力",
 	 "返回上一页",
 }, nil, "")
  if SN == nil then else
@@ -568,7 +569,8 @@ if SN[9]==true then ZT9() end
 if SN[10]==true then ZT10() end
 if SN[11]==true then ZT11() end
 if SN[12]==true then ZT12() end
-if SN[13]==true then CAZY() end end
+if SN[13]==true then ZT13() end
+if SN[14]==true then CAZY() end end
 FX1=0 end
 
 function ZT1()
@@ -698,6 +700,16 @@ function ZT12()
   gg.getResults(100)
   gg.editAll("13516", gg.TYPE_DWORD)
   gg.toast("香溢‘蟹棒’腿改虚空幻影猛开启成功")
+  gg.clearResults()
+end
+
+function ZT13()
+   gg.clearResults()
+  gg.setRanges(4)
+  gg.searchNumber("11,630;1,065,353,216", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1)
+  gg.getResults(100)
+  gg.editAll("1,065,353,216", gg.TYPE_DWORD)
+  gg.toast("[独家]剧毒瓶无蓄力开启成功")
   gg.clearResults()
 end
 
@@ -959,7 +971,7 @@ end
 
 function D1()
 local t = {"libAppPlayJNI.so", "Cd"}
-local tt = {0x6E578, 0x880}
+local tt = {0x6E588, 0x880}
 local ttt = S_Pointer(t, tt, true)
 gg.addListItems({{address = ttt, flags = 4, value = 2, freeze = true}})
 gg.toast("伪房主关闭成功")
@@ -968,7 +980,7 @@ end
 
 function D2()
 local t = {"libAppPlayJNI.so", "Cd"}
-local tt = {0x6E578, 0x880}
+local tt = {0x6E588, 0x880}
 local ttt = S_Pointer(t, tt, true)
 gg.addListItems({{address = ttt, flags = 4, value = 3, freeze = true}})
 gg.toast("伪房主开启成功")

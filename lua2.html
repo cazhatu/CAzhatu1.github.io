@@ -1,32 +1,6 @@
 uper ='1'i='退出辅助!(-109)'print(i)
 t=1
 
-for i = 5,00,5 do
-jd=math.random(i,i+4)
-if i==100 then jd=i end
-    gg.toast('正在注入中'..jd..'%\n'..('■'):rep(t)..('□'):rep(20-t))
-    t=t+1
-    gg.sleep(60)
-end
-
-function CA1()
-menu = gg.choice({
-	 "无限火力(开启时不要开炮)",
-	 "退出炸图",
-}, nil, "版本号:0.0.1\n更新日期:5月23日")
-if menu == 1 then gn1() end
-if menu == 2 then os.exit() end
-FX1=0
-end
-
-function gn1()
-	  gg.clearResults()
-	 gg.setRanges(32)
-	 gg.searchNumber("1,070,386,381;1,070,386,381;3", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1)
-	 gg.searchNumber("3", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1)
-	 gg.getResults(100)uper ='1'i='退出辅助!(-109)'print(i)
-t=1
-
 for i = 5,100,5 do
 jd=math.random(i,i+4)
 if i==100 then jd=i end
@@ -83,18 +57,4 @@ sj = os.date("\n%c")
     CA1()
   end
 end
-	 gg.editAll("9999", gg.TYPE_DWORD)
-	 gg.toast("开启成功！请尽情奔放！")
-	 gg.clearResults()
-end
-
-while true do
-sj = os.date("\n%c")
-  if gg.isVisible(true) then
-    FX1 = nil
-    gg.setVisible(false)
-  end
-  if FX1 == nil then
-    CA1()
-  end
-end
+	 

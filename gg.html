@@ -464,24 +464,6 @@ local tt = {0x4E960}
 local ttt = S_Pointer(t, tt, true)
 gg.addListItems({{address = ttt, flags = 4, value = 0, freeze = true}})
 gg.toast("防闪退(过ACE)开启成功")
-XGBase(
-{gg.getRangesList("libtersafe2.so:bss")[1].start},
-{{0,4,0x1928,true},})
-XGBase(
-{gg.getRangesList("libtersafe2.so")[3].start},
-{{0,4,0x4E960,true},})
-XGBase(
-{gg.getRangesList("libtersafe2.so")[3].start},
-{{0,4,0x48AE4,true},})
-XGBase(
-{gg.getRangesList("libtersafe2.so")[3].start},
-{{0,4,0x4EAE4,true},})
-XGBase(
-{gg.getRangesList("libagora-rtc-sdk.so")[3].start},
-{{0,4,0xE58,true},})
-XGBase(
-{gg.getRangesList("libavformat.so")[3].start},
-{{0,4,0xE1F8,true},})
 else
 end
 if F==1 then
@@ -490,24 +472,6 @@ local tt = {0x4E960}
 local ttt = S_Pointer(t, tt, true)
 gg.addListItems({{address = ttt, flags = 4, value = 0, freeze = true}})
 gg.toast("防闪退(过ACE)开启成功")
-XGBase(
-{gg.getRangesList("libtersafe2.so:bss")[1].start},
-{{0,4,0x1928,true},})
-XGBase(
-{gg.getRangesList("libtersafe2.so")[3].start},
-{{0,4,0x4E960,true},})
-XGBase(
-{gg.getRangesList("libtersafe2.so")[3].start},
-{{0,4,0x48AE4,true},})
-XGBase(
-{gg.getRangesList("libtersafe2.so")[3].start},
-{{0,4,0x4EAE4,true},})
-XGBase(
-{gg.getRangesList("libagora-rtc-sdk.so")[3].start},
-{{0,4,0xE58,true},})
-XGBase(
-{gg.getRangesList("libavformat.so")[3].start},
-{{0,4,0xE1F8,true},})
 elseif F==2 then
 end
 ---主页面

@@ -480,7 +480,7 @@ SJ = os.date("%Y年%m月%d日%H时%M分")
 menu = gg.choice({
 	 "开始炸图",
 	 "退出炸图",
-}, nil, "当前时间:"..SJ.."\n版本号:12.1.4\n官网:www.zhatu.fun")
+}, nil, "当前时间:"..SJ.."\n版本号:12.1.5\n官网:www.zhatu.fun")
 if menu == 1 then CAZY() end
 if menu == 2 then os.exit() end
 FX1=0
@@ -508,10 +508,12 @@ end
 function video()
 menu = gg.choice({
 	 "全损音质",
+	 "循环坐下",
 	 "返回上一页",
 }, nil, "用不懂的去bbs.zhatu.fun的ca炸图辅助板块找教程")
 if menu == 1 then video1() end
-if menu == 2 then CA1() end
+if menu == 2 then video2() end
+if menu == 3 then CA1() end
 FX1=0
 end
 
@@ -531,6 +533,23 @@ xqmnb(qmnb)
 gg.clearResults()
 CA1()
 end
+
+function video2()
+     gg.clearResults()
+	 gg.setRanges(4)
+	 gg.searchNumber("1117126656;-1;100100", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1)
+	 gg.searchNumber("-1", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1)
+	 jg=gg.getResults(100)
+	 sl=gg.getResultCount()
+	 if sl>100 then sl=100 end
+	 for i = 1, sl do
+	 	 dzy=jg[i].address
+	 	 gg.addListItems({[1] = {address = dzy,flags = gg.TYPE_DWORD,freeze = true,value = 14}})
+	 end
+	 gg.toast("开启功能，退出房间就闪退")
+	 gg.clearResults()
+end
+
 
 
 function test1()
@@ -881,13 +900,12 @@ function PVP1()
 qmnb = {
 {["memory"] = 4},
 {["name"] = "添加飞行按钮"},
-{["value"] = 1117782016, ["type"] = 4},
-{["lv"] = 1118306304, ["offset"] = 4, ["type"] = 4},
-{["lv"] = -1046478848, ["offset"] = 28, ["type"] = 4},
-{["lv"] = -1020002304, ["offset"] = 32, ["type"] = 4},
+{["value"] = 1804300274, ["type"] = 4},
+{["lv"] = 256, ["offset"] = -8, ["type"] = 4},
+{["lv"] = -1, ["offset"] = -28, ["type"] = 4},
 }
 qmxg = {
-{["value"] = 16777472, ["offset"] = -60, ["type"] = 4, ["freeze"] = true},
+{["value"] = 8, ["offset"] = -36, ["type"] = 4, ["freeze"] = true},
 }
 xqmnb(qmnb)
 CA1()

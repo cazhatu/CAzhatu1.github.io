@@ -480,7 +480,7 @@ SJ = os.date("%Y年%m月%d日%H时%M分")
 menu = gg.choice({
 	 "开始炸图",
 	 "退出炸图",
-}, nil, "当前时间:"..SJ.."\n版本号:12.1.6\n官网:www.zhatu.fun")
+}, nil, "当前时间:"..SJ.."\n版本号:12.1.8\n官网:www.zhatu.fun")
 if menu == 1 then CAZY() end
 if menu == 2 then os.exit() end
 FX1=0
@@ -1077,14 +1077,13 @@ function LD()
 menu = gg.choice({
    	 "伪房主[关]",
      "伪房主[开]",
-     "观战控制",
+     "坐骑卡房(云服测试性功能)",
 	 "返回上一页",
 }, nil, "")
 if menu == 1 then LD1() end
 if menu == 2 then LD2() end
 if menu == 3 then LD3() end
 if menu == 4 then CA1() end
-if menu == 5 then CA1() end
 FX1=0
 end
 
@@ -1121,8 +1120,7 @@ end
 
 
 function LD3()
-nc_offset(getso("libil2cpp.so"),{{-516948194,4,0xd93420},})
-end
+gg.toast(so({"测试性功能",1050253722,4,4},{{1127481344,-0x138,4},{1106247680,-0x118,4},{1065353216,-0x140,4}},{{3823,-0xC,4,1},{257,-0xDC,4,1}}))
 
 
 function QW()

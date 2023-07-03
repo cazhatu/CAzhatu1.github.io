@@ -480,7 +480,7 @@ SJ = os.date("%Y年%m月%d日%H时%M分")
 menu = gg.choice({
 	 "开始炸图",
 	 "退出炸图",
-}, nil, "当前时间:"..SJ.."\n版本号:12.1.8\n官网:www.zhatu.fun")
+}, nil, "当前时间:"..SJ.."\n版本号:12.1.9\n官网:www.zhatu.fun")
 if menu == 1 then CAZY() end
 if menu == 2 then os.exit() end
 FX1=0
@@ -599,6 +599,7 @@ SN = gg.multiChoice({
 	 "烤牛排改寒冰炸弹",
 	 "生牛排改黑龙火球",
 	 "能量剑改新BOSS",
+	 "[独家]喷射塞子拉高",
 	 "返回上一页",
 }, nil, "稳定性大大提升")
  if SN == nil then else
@@ -612,7 +613,8 @@ if SN[7]==true then ZT7() end
 if SN[8]==true then ZT8() end
 if SN[9]==true then ZT9() end
 if SN[10]==true then ZT10() end
-if SN[11]==true then CA1() end end
+if SN[11]==true then ZT11() end
+if SN[12]==true then CA1() end end
 FX1=0 end
 
 function ZT1()
@@ -727,6 +729,17 @@ gg.searchNumber("12005", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
 gg.getResults(100)
 gg.editAll("13197",gg.TYPE_DWORD)
 gg.toast("能量剑改新BOSS开启成功")
+CAZY()
+end
+
+function ZT11()
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("1.75;1,065,353,216D;700",  gg.TYPE_FLOAT,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("1.75", gg.TYPE_FLOAT,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("-100",gg.TYPE_FLOAT)
+gg.toast("喷射塞子拉长开启成功")
 CAZY()
 end
 

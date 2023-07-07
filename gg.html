@@ -446,6 +446,7 @@ end
 function getso(So_name)
 	return gg.getRangesList(So_name)[1].start
 end
+	function so(a,b,c) local csn=gg.getRanges() gg.setVisible(false) lde.srg(a[3]) lde.crs() lde.sbr(a[2],a[4]) local js=gg.getResultCount() local count=lde.gre(js) lde.crs() if #count~=0 then local lode,lope,lobe={},{},{} for p=1,#b do lode[p]={} for i=1,#count do lode[p][i]={} lode[p][i].address=count[i].address+b[p][2] if not b[p][3]then b[p][3]=a[4]end lode[p][i].flags=b[p][3]end lode[p]=gg.getValues(lode[p]) db=bv(b[p][1],"~") if not db[2]then db[2]=db[1]end for i=1,#lode[p] do if tonumber(lode[p][i].value)>=tonumber(db[1]) and tonumber(lode[p][i].value)<=tonumber(db[2]) then lope[#lope+1]={} lope[#lope]=count[i] end end if #lope==0 then lde.srg(csn)if p>11 then p=11 end return "开启失败" end count=lope lope={}end for i=1,#c do for n=1,#count do lope[#lope+1]={} lope[#lope].address=count[n].address+c[i][2] if not c[i][3]then c[i][3]=a[4]end lope[#lope].flags=c[i][3] if c[i][1] then lope[#lope].value=c[i][1] else lope[#lope].value=gg.getValues(lope)[#lope].value end if c[i][4] then lobe[#lobe+1]={} lobe[#lobe]=lope[#lope] table.remove(lope,#lope) end if c[i][4]==1 then lobe[#lobe].freeze=true elseif c[i][4]==2 then lobe[#lobe].freeze=false end if c[i][5] then lobe[#lobe].name=c[i][5] end end end gg.setValues(lope) gg.addListItems(lobe) lde.srg(csn) return a[1].."开启成功" else lde.srg(csn) return a[1].."开启失败!!!" end end
 cnm={"-"}
 function XGBase(Address,AFV)
 local address=0
@@ -480,7 +481,7 @@ SJ = os.date("%Y年%m月%d日%H时%M分")
 menu = gg.choice({
 	 "开始炸图",
 	 "退出炸图",
-}, nil, "当前时间:"..SJ.."\n版本号:12.1.9\n官网:www.zhatu.fun")
+}, nil, "当前时间:"..SJ.."\n版本号:12.2.0\n官网:www.zhatu.fun")
 if menu == 1 then CAZY() end
 if menu == 2 then os.exit() end
 FX1=0
@@ -576,13 +577,13 @@ menu = gg.choice({
 	 "创造炸图",
 	 "生存炸图",
 	 "乐器卡房",
-	 "乐谱取物",
+	 "颜色方快取物",
 	 "返回主页",
 }, nil, "")
 if menu == 1 then CZCA() end
 if menu == 2 then SCCA() end
 if menu == 3 then KF() end
-if menu == 4 then QW() end
+if menu == 4 then QW1() end
 if menu == 5 then CAZY() end
 FX1=0
 end
@@ -1136,30 +1137,15 @@ function LD3()
 gg.toast(so({"测试性功能",1050253722,4,4},{{1127481344,-0x138,4},{1106247680,-0x118,4},{1065353216,-0x140,4}},{{3823,-0xC,4,1},{257,-0xDC,4,1}}))
 end
 
-function QW()
-menu = gg.choice({
-"注入按钮",
-"自定义取物",
-"--------快捷方式---------",
-"地形编辑器",
-"黑龙火球",
-"破坏方块",
-"马桶",
-"复制方块",
-"年糕",
-"返回上一页",
-}, nil, "")
-if menu == 1 then Q1() end
-if menu == 2 then Q2() end
-if menu == 3 then CA1() end
-if menu == 4 then Q4() end
-if menu == 5 then Q5() end
-if menu == 6 then Q6() end
-if menu == 7 then Q7() end
-if menu == 8 then Q8() end
-if menu == 9 then Q9() end
-if menu == 10 then CA1() end
-FX1=0
+function QW1()
+local t = {"liblibGameApp.so:bss", "Cb"}
+local tt = {0x7E0, 0xB8}
+local ttt = S_Pointer(t, tt, true)
+gg.addListItems({{address = ttt, flags = 4, value = 4, freeze = true}})
+xgcg = gg.prompt({"请输入修改代码"},{[1]=""},{[1]="number"})[1]
+so({"修改漆罐",261993005058,4,32},{{8589934602,-4,32}},{{667,-72,4,1}})
+so({"修改物品",4653027655631765504,4,32},{{13968269312,4,4}},{{xgcg,16,64,1}})
+gg.toast("物品已修改为["..xgcg.."])
 end
 
 function Q1()

@@ -467,15 +467,12 @@ gg.toast("防闪退(过ACE)开启成功")
 else
 end
 if F==1 then
-local t = {"libtersafe2.so", "Cd"}
-local tt = {0x4E960}
-local ttt = S_Pointer(t, tt, true)
-gg.addListItems({{address = ttt, flags = 4, value = 0, freeze = true}})
-gg.toast("防闪退(过ACE)开启成功")
 XGBase({gg.getRangesList("libtersafe2.so")[3].start},
-{{"0",4,0x4E960,false},})
-XGBase({gg.getRangesList("libtersafe2.so")[3].start},
-{{"0",4,0x4EE4C,false},})
+{{0,4,0x4E958,true},{0,4,0x4E960,true},{0,4,0x4EA78,true},{0,4,0x4EDE8,true},
+{0,4,0x4EE1C,true},{0,4,0x4EE20,true},{0,4,0x4EF44,true},})
+XGBase({gg.getRangesList("libtersafe2.so:bss")[1].start},
+{{0,4,0xFFFFFFFFFFFFFE1C,true},{0,4,0x60,true},{0,4,0xA8,true},
+{0,4,0xE0,true},{0,4,0x134,true},{0,4,0x158,true},{0,4,0x270,true},})
 elseif F==2 then
 end
 ---主页面

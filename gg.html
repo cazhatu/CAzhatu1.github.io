@@ -472,18 +472,10 @@ local tt = {0x4E960}
 local ttt = S_Pointer(t, tt, true)
 gg.addListItems({{address = ttt, flags = 4, value = 0, freeze = true}})
 gg.toast("防闪退(过ACE)开启成功")
-local t = {"libtersafe2.so", "Cd"}
-local tt = {0x4EA78}
-local ttt = S_Pointer(t, tt, true)
-gg.addListItems({{address = ttt, flags = 4, value = 0, freeze = true}})
-local t = {"libtersafe2.so:bss", "Cb"}
-local tt = {0x1348}--其他脚本出现该防闪均为孤星原创
-local ttt = S_Pointer(t, tt, true)
-gg.addListItems({{address = ttt, flags = 4, value = 0, freeze = true}})
-local t = {"libtersafe2.so:bss", "Cb"}
-local tt = {0x1380}--其他脚本出现该防闪均为孤星原创
-local ttt = S_Pointer(t, tt, true)
-gg.addListItems({{address = ttt, flags = 4, value = 0, freeze = true}})
+XGBase({gg.getRangesList("libtersafe2.so")[3].start},
+{{"0",4,0x4E960,false},})
+XGBase({gg.getRangesList("libtersafe2.so")[3].start},
+{{"0",4,0x4EE4C,false},})
 elseif F==2 then
 end
 ---主页面

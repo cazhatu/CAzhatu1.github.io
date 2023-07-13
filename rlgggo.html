@@ -688,7 +688,18 @@ xqmnb(qmnb)
 end
 
 function B4()
-
+qmnb = 
+{{["memory"] = 4},
+{["name"] = "狙击枪改子弹"},
+{["value"] = 1155186688, ["type"] = 4},
+{["lv"] = 1152319488, ["offset"] = 4, ["type"] = 4},
+{["lv"] = 1137836032, ["offset"] = 8, ["type"] = 4},}
+qmxg = 
+{{["value"] = 15510, ["offset"] = 24, ["type"] = 4},
+{["value"] = 1, ["offset"] = 20, ["type"] = 4},
+{["value"] = 0, ["offset"] = -28, ["type"] = 16},
+{["value"] = 0, ["offset"] = -44, ["type"] = 16},}
+xqmnb(qmnb)
 end
 
 ----zhatulei
@@ -1077,7 +1088,7 @@ floatingWindowManager:newWindow('PVP', {
 				{
 					Switch,
 					layout_width = 'match_parent',
-					text = '子追',--🌹功能名字
+					text = '子弹追踪(部分手机用不了)',--🌹功能名字
 					onCheckedChange = function(CompoundButton, state)
 					gg.clearResults()
 

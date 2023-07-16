@@ -1111,6 +1111,29 @@ gg.toast(so({"物品复刻","945804461~945804524",4,4},{{xggs[1]+999,-4,4}},{{94
 						end
 					end
 				},
+						{
+					Switch,
+					layout_width = 'match_parent',
+					text = '编辑器物品自定义修改',
+					onCheckedChange = function(CompoundButton, state)
+					gg.clearResults()
+
+					
+					
+						if state then
+							gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("439;1;1,065,353,216;15;100",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("439", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+v = gg.prompt({i='请输入您的代码默认炸药桶'}, {i='835'})--这个
+gg.editAll(v['i'],gg.TYPE_DWORD)
+gg.toast("编辑器物品改自定义物品开启成功")
+						else
+							gg.toast('test-ok')--🌹关闭修改ID
+						end
+					end
+				},
 			}
 		})
 		
@@ -1314,6 +1337,89 @@ floatingWindowManager:newWindow('PVP', {
 					
 						if state then
 							B4() --🌹开启修改ID
+						else
+							gg.toast('test-ok')--🌹关闭修改ID
+						end
+					end
+				},
+						{
+					Switch,
+					layout_width = 'match_parent',
+					text = '平飞',
+					onCheckedChange = function(CompoundButton, state)
+					gg.clearResults()
+
+					
+					
+						if state then
+							qmnb = {
+{["memory"] = 4},
+{["name"] = "平飞"},
+{["value"] = 515396075740, ["type"] = 32},
+{["lv"] = 60, ["offset"] = -16, ["type"] = 4},
+{["lv"] = 180, ["offset"] = -12, ["type"] = 4},
+{["lv"] = 120, ["offset"] = -4, ["type"] = 4},
+}
+qmxg = {
+{["value"] = 1, ["offset"] = 64, ["type"] = 4, ["freeze"] = true},
+}
+xqmnb(qmnb)
+						else
+							gg.toast('test-ok')--🌹关闭修改ID
+						end
+					end
+				},
+						{
+					Switch,
+					layout_width = 'match_parent',
+					text = '人物加速',
+					onCheckedChange = function(CompoundButton, state)
+					gg.clearResults()
+
+					
+					
+						if state then
+							so({("人物加速"),4812096202965778432,4,32},{{1065353216,0xD8,4}},{{50,0x84,16,1}})
+						else
+							gg.toast('test-ok')--🌹关闭修改ID
+						end
+					end
+				},
+						{
+					Switch,
+					layout_width = 'match_parent',
+					text = '视角透视',
+					onCheckedChange = function(CompoundButton, state)
+					gg.clearResults()
+
+					
+					
+						if state then
+							qmnb = {
+{["memory"] = 4},
+{["name"] = "视角透视"},
+{["value"] = 1189765120, ["type"] = 4},
+{["lv"] = 1065353216, ["offset"] = -28, ["type"] = 4},
+{["lv"] = 10.0, ["offset"] = -4, ["type"] = 16}}
+qmxg = {
+{["value"] = 99999, ["offset"] = 0, ["type"] = 4}}
+xqmnb(qmnb)
+						else
+							gg.toast('test-ok')--🌹关闭修改ID
+						end
+					end
+				},
+						{
+					Switch,
+					layout_width = 'match_parent',
+					text = '滑翔',
+					onCheckedChange = function(CompoundButton, state)
+					gg.clearResults()
+
+					
+					
+						if state then
+							gg.toast(so({"滑翔",4.0,16384,16},{{8.0,-4,16}},{{1,-4,16,1}}))
 						else
 							gg.toast('test-ok')--🌹关闭修改ID
 						end

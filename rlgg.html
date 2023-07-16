@@ -594,7 +594,7 @@ end
 --🌹🌹🌹
 -----------------------------------------------------🌹绘制投射文字标题
 ----绘制手机屏幕文字标题
-draw.text('CA炸图辅助付费版\n官网:zhatu1.top  ', 200,200)draw.setColor('#FF3300')--字体颜色
+draw.text('CA炸图辅助付费版V1.1.9\n官网:zhatu1.top  ', 200,200)draw.setColor('#FF3300')--字体颜色
   function interruptThread(thread)
 	if thread then
 		pcall(function()
@@ -985,6 +985,28 @@ gg.toast("能量剑改新BOSS开启成功")
 						end
 					end
 				},
+						{
+					Switch,
+					layout_width = 'match_parent',
+					text = '喷射塞子拉高',
+					onCheckedChange = function(CompoundButton, state)
+					gg.clearResults()
+
+					
+					
+						if state then
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("1.75;1,065,353,216D;700",  gg.TYPE_FLOAT,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("1.75", gg.TYPE_FLOAT,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("-100",gg.TYPE_FLOAT)
+gg.toast("喷射塞子拉高开启成功")
+						else
+							gg.toast('test-ok')--🌹关闭修改ID
+						end
+					end
+				},
 		
 			}
 		})
@@ -1067,6 +1089,24 @@ floatingWindowManager:newWindow('炸图类', {
 					
 						if state then
 							SC3() --🌹开启修改ID
+						else
+							gg.toast('test-ok')--🌹关闭修改ID
+						end
+					end
+				},
+						{
+					Switch,
+					layout_width = 'match_parent',
+					text = '复制物品',
+					onCheckedChange = function(CompoundButton, state)
+					gg.clearResults()
+
+					
+					
+						if state then
+							xggs = gg.prompt({"开启复刻格数[1;8]"},{[1]=""},{[1]="number"})
+gg.toast(so({"物品复刻","945804461~945804524",4,4},{{xggs[1]+999,-4,4}},{{945804388,0,4,1}}))
+end
 						else
 							gg.toast('test-ok')--🌹关闭修改ID
 						end

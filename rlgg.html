@@ -850,6 +850,18 @@ floatingWindowManager:newWindow(('CA for RLGG'):format(floatingWindowManager.ver
 -----------------------------------------------------------------🌹PUBGM防封--按钮ID名字
 					end
 				},
+				{
+					Button,
+					background = floatingWindowManager:getStateListDrawable(),
+					layout_width = 'match_parent',
+					layout_margin = '5dp',
+					text = '创造类',--🌹PUBGM防封--按钮名字
+					textSize = '16sp',
+					onClick = function(View)
+						floatingWindowManager:start('创造类')
+-----------------------------------------------------------------🌹PUBGM防封--按钮ID名字
+					end
+				},
 				
 				
 ----------------------------------🌹隐藏状态栏功能--布局🌹
@@ -876,6 +888,109 @@ floatingWindowManager:newWindow(('CA for RLGG'):format(floatingWindowManager.ver
 	onDestroy = function()
 		
 	end
+})
+
+floatingWindowManager:newWindow('创造类', {
+	onCreate = function(floatingWindow)
+		floatingWindow:addlayout({
+			ScrollView,
+			layout_width = 'match_parent',
+			layout_height = 'match_parent',
+			{
+				LinearLayout,
+				background = floatingWindowManager:getStateListDrawable(),
+				layout_width = 'match_parent',
+				layout_height = 'match_parent',
+				orientation = 'vertical',
+				padding = '10dp',
+				
+----------------------------------🌹大厅过检测--布局
+				{
+					Switch,
+					layout_width = 'match_parent',
+					text = '一键开启召唤虚空幻影',
+					onCheckedChange = function(CompoundButton, state)
+					gg.clearResults()
+
+					
+					
+						if state then
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("11002",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("11002", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("141",gg.TYPE_DWORD)
+gg.toast("召唤虚空幻影第2步开启成功")
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("11003",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("11003", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("142",gg.TYPE_DWORD)
+gg.toast("召唤虚空幻影第3步开启成功")
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("11001",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("11001", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("140",gg.TYPE_DWORD)
+gg.toast("召唤虚空幻影第1步开启成功")
+						else
+							gg.toast('test')--🌹关闭修改ID
+						end
+					end
+				},
+					{
+					Switch,
+					layout_width = 'match_parent',
+					text = '香溢蔬菜煲改中心长方体',
+					onCheckedChange = function(CompoundButton, state)
+					gg.clearResults()
+
+					
+					
+						if state then
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("12554",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("12554", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("15525",gg.TYPE_DWORD)
+gg.toast("香溢蔬菜煲改中心长方体开启成功")
+						else
+							gg.toast('test-ok')--🌹关闭修改ID
+						end
+					end
+				},
+				{
+					Switch,
+					layout_width = 'match_parent',
+					text = '能量剑改新BOSS',
+					onCheckedChange = function(CompoundButton, state)
+					gg.clearResults()
+
+					
+					
+						if state then
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("12005",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("12005", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("13197",gg.TYPE_DWORD)
+gg.toast("能量剑改新BOSS开启成功")
+						else
+							gg.toast('test-ok')--🌹关闭修改ID
+						end
+					end
+				},
+		
+			}
+		})
+		
+		
+		end
 })
 
 floatingWindowManager:newWindow('炸图类', {

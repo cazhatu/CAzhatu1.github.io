@@ -459,23 +459,22 @@ end end gg.setValues(Value)gg.addListItems(Freeze)end
 F=gg.alert("是否开启过检测(登录页面开启)\n取消可能会导致您的游戏闪退!", "开启", "️取消")
 if F ~= 1 and F ~= 2 then
 gg.toast("你未选择开关默认开启")
-local t = {"libtersafe2.so", "Cd"}
-local tt = {0x4E960}
-local ttt = S_Pointer(t, tt, true)
-gg.addListItems({{address = ttt, flags = 4, value = 0, freeze = true}})
+XGBase({gg.getRangesList("libtersafe2.so")[3].start},
+{{0,4,0x4E958,true},{0,4,0x4E960,true},{0,4,0x4EA78,true},{0,4,0x4EDE8,true},
+{0,4,0x4EE1C,true},{0,4,0x4EE20,true},{0,4,0x4EF44,true},})
+XGBase({gg.getRangesList("libtersafe2.so:bss")[1].start},
+{{0,4,0xFFFFFFFFFFFFFE1C,true},{0,4,0x60,true},{0,4,0xA8,true},
+{0,4,0xE0,true},{0,4,0x134,true},{0,4,0x158,true},{0,4,0x270,true},})
 gg.toast("防闪退(过ACE)开启成功")
 else
 end
 if F==1 then
-local t = {"libtersafe2.so", "Cd"}
-local tt = {0x4E960}
-local ttt = S_Pointer(t, tt, true)
-gg.addListItems({{address = ttt, flags = 4, value = 0, freeze = true}})
-gg.toast("防闪退(过ACE)开启成功")
 XGBase({gg.getRangesList("libtersafe2.so")[3].start},
-{{"0",4,0x4E960,false},})
-XGBase({gg.getRangesList("libtersafe2.so")[3].start},
-{{"0",4,0x4EE4C,false},})
+{{0,4,0x4E958,true},{0,4,0x4E960,true},{0,4,0x4EA78,true},{0,4,0x4EDE8,true},
+{0,4,0x4EE1C,true},{0,4,0x4EE20,true},{0,4,0x4EF44,true},})
+XGBase({gg.getRangesList("libtersafe2.so:bss")[1].start},
+{{0,4,0xFFFFFFFFFFFFFE1C,true},{0,4,0x60,true},{0,4,0xA8,true},
+{0,4,0xE0,true},{0,4,0x134,true},{0,4,0x158,true},{0,4,0x270,true},})
 elseif F==2 then
 end
 ---主页面
@@ -484,7 +483,7 @@ SJ = os.date("%Y年%m月%d日%H时%M分")
 menu = gg.choice({
 	 "开始炸图",
 	 "退出炸图",
-}, nil, "当前时间:"..SJ.."\n版本号:12.6.1\n官网:www.zhatu.fun")
+}, nil, "当前时间:"..SJ.."\n版本号:1.1.8临时\n官网:www.zhatu.fun")
 if menu == 1 then CAZY() end
 if menu == 2 then os.exit() end
 FX1=0
@@ -497,7 +496,7 @@ menu = gg.choice({
 	 "战斗类",
 	 "狙击类",
 	 "漏洞类",
-	 "视听类",
+	 "测试类",
 	 "其他类",
 }, nil, "无")
 if menu == 1 then CAZT() end
@@ -511,10 +510,10 @@ end
 
 function video()
 menu = gg.choice({
-	 "全损音质",
-	 "循环坐下",
+	 "编辑器物品优化",
+	 "人物坐下",
 	 "返回上一页",
-}, nil, "用不懂的去bbs.zhatu.fun的ca炸图辅助板块找教程")
+}, nil, "")
 if menu == 1 then video1() end
 if menu == 2 then video2() end
 if menu == 3 then CA1() end
@@ -526,7 +525,7 @@ end
 function video1()
 qmnb = {
 {["memory"] = 4},
-{["name"] = "美国大狙"},
+{["name"] = "test"},
 {["value"] = 65489862656, ["type"] = 32},
 {["lv"] = 15, ["offset"] = 4, ["type"] = 4},
 {["lv"] = 100, ["offset"] = 8, ["type"] = 4},
@@ -789,21 +788,13 @@ FX1=0
 end
 
 function SC1()
-a = gg.prompt({"请输入房主迷你号/云浮号:"},
-{[1]=114514--[[编辑框文字]]},
-{[1]="number"})[1]
-qmnb = {
-{["memory"] = 4},
-{["name"] = "玩法改创造"},
-{["value"] = a, ["type"] = 4},
-{["lv"] = 5, ["offset"] = -4, ["type"] = 4},
-}
-qmxg = {
-{["value"] = 4, ["offset"] = -4, ["type"] = 4, ["freeze"] = true},
-}
-xqmnb(qmnb)
-CAZY()
-end
+F = gg.alert("༺ཌༀ⛦🍁️️观战模式🍁️️⛦ༀད༻","开启","关闭")
+if F== 1 then 
+gg.toast(so({"观战模式",1121452032,4,4},{{1118568448,-4,4},{1065353216,-8,4}},{{257,92,4,1}}))--316
+gg.toast("༺ཌༀ⛦🍁️️观战模式开启成功🍁️️⛦ༀད༻")
+elseif F==2 then 
+gg.toast(so({"观战模式",1121452032,4,4},{{1118568448,-4,4},{1065353216,-8,4}},{{256,92,4,1}}))--316
+gg.toast("༺ཌༀ⛦🍁️️观战模式关闭成功🍁️️⛦ༀད༻")end end
 
 function SC2()
 DD1 = gg.prompt({"输入子弹代码:参考表:\n15509燃烧激光-15510冰冻激光-15511爆炸激光-15512岩石海啸-15513冰球-15518特效炸弹-15519岩浆弹-15520混乱球_15521_15051燃烧箭-15052燃烧雪球-15053泡泡球-15056熔岩弹-15057混乱弹-15058炸弹-15059冰锥[不可放置方块]-15060熔岩球-15062冰锥-15064冰炸弹-15065火炸弹"},{[1]=""},{[1]="number"})[1]

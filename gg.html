@@ -1,123 +1,17 @@
-local file = file
 
-local _o=_ENV function rc4_UTF_8(text,key,kasi)  local function __xorBit(left, right)  return (left + right) == 1  and 1 or 0  end  local function __base(left, right, op)  if left < right then  left, right = right, left  end  local res = 0  local shift = 1  while left ~= 0 do  local ra = left % 2  local rb = right % 2  res = shift * op(ra,rb) + res  shift = shift * 2  left = math.modf( left / 2)  right = math.modf( right / 2)  end  return res  end  local function xorOp(left, right)  return __base(left, right, __xorBit)  end  local function KSA(key)  local keyLen = string.len(key)  local schedule = {}  local keyByte = {}  for i = 0, 255 do  schedule[i] = i  end  for i = 1, keyLen do  keyByte[i - 1] = string.byte(key, i, i)  end  local j = 0  for i = 0, 255 do  j = (j + schedule[i] + keyByte[ i % keyLen]) % 256  schedule[i], schedule[j] = schedule[j], schedule[i]  end  return schedule  end  local function PRGA(schedule, textLen)  local i = 0  local j = 0  local k = {}  for n = 1, textLen do  i = (i + 1) % 256 j = (j + schedule[i]) % 256  schedule[i], schedule[j] = schedule[j], schedule[i]  k[n] = schedule[(schedule[i] + schedule[j]) % 256]  end  return k  end  local function output(schedule, text)  local len = string.len(text)  local c = nil  local res = {}  for i = 1, len do  c = string.byte(text, i,i)  res[i] = string.char(xorOp(schedule[i], c))  end  return table.concat(res)  end  m=0  if kasi==false then  str = text  str=str:gsub('[%s%p]',''):upper()  local index=1  local ret=''  for index=1,str:len(),2 do  if tonumber(str:sub(index,index+1))== nil then   m=m+1  end  ret=ret..string.char(tonumber(str:sub(index,index+1),16))  end  text=ret  end  local textLen = string.len(text)  local schedule = KSA(key)  local k = PRGA(schedule, textLen)   local str=output(k, text)  if kasi==true then  str = tostring(str)  local index=1  local ret=''  for index=1,str:len() do  ret=ret..string.format('%02X',str:sub(index):byte())  end  return string.lower(ret)   else  return str   end end local function json2true(str,from,to)  return true, from+3 end local function json2false(str,from,to)  return false, from+4 end local function json2null(str, from, to)  return nil, from+3 end local function json2nan(str, from, to)  return nul, from+2 end local numberchars = {  ['-'] = true,  ['+'] = true,  ['.'] = true,  ['0'] = true,  ['1'] = true,  ['2'] = true,  ['3'] = true,  ['4'] = true,  ['5'] = true,  ['6'] = true,  ['7'] = true,  ['8'] = true,  ['9'] = true} local function json2number(str,from,to)  local i = from+1  while(i<=to) do  local char = string.sub(str, i, i)  if not numberchars[char] then break  end i = i + 1  end  local num = tonumber(string.sub(str, from, i-1))  if not num then  gg.alert(string.gsub('json格式错误，不正确的数字, 错误位置:{from}', 'from',from))  end return num, i-1 end local function json2string(str,from,to)  local ignor = false for i = from+1, to do  local char = string.sub(str, i, i)  if not ignor then  if char == fuhao then  return string.sub(str, from+1, i-1), i   elseif char == '\\' then  ignor = true  end   else ignor = false  end  end  gg.alert(string.gsub('json格式错误，字符串没有找到结尾, 错误位置:{from}', 'from',from)) end local function json2array(str,from,to)  local result = {} from = from or 1  local pos = from+1  local to = to or string.len(str)  while(pos<=to) do  local char = string.sub(str, pos, pos)  if char == fuhao then  result[#result+1], pos = json2string(str,pos,to)   elseif char == '[' then  result[#result+1], pos = json2array(str,pos,to)   elseif char == '{' then  result[#result+1], pos = json2table(str,pos,to)   elseif char == ']' then  return result, pos   elseif (char=='f' or char=='F') then  result[#result+1], pos = json2false(str,pos,to)   elseif (char=='t' or char=='T') then  result[#result+1], pos = json2true(str,pos,to)   elseif (char=='n') then  result[#result+1], pos = json2null(str,pos,to)   elseif (char=='N') then  result[#result+1], pos = json2nan(str,pos,to)   elseif numberchars[char] then  result[#result+1], pos = json2number(str,pos,to)  end  pos = pos + 1  end  gg.alert( string.gsub('json格式错误，表没有找到结尾, 错误位置:{from}', 'from',from)) end function _G.json2table(str,from,to)  local result = {}  from = from or 1  local pos = from+1  local to = to or  string.len(str)  local key  while(pos<=to) do  local char = string.sub(str, pos, pos)  if char == fuhao then  if not key then  key, pos = json2string(str,pos,to)   else  result[key], pos = json2string(str,pos,to)  key = nil  end   elseif char == '[' then  if not key then  key, pos = json2array(str,pos,to)   else  result[key], pos = json2array(str,pos,to)  key = nil  end   elseif char == '{' then  if not key then  key, pos = json2table(str,pos,to)   else  result[key], pos = json2table(str,pos,to)  key = nil  end   elseif char == '}' then  return result, pos   elseif (char=='f' or char=='F') then  result[key], pos = json2false(str,pos,to)  key = nil   elseif (char=='t' or char=='T') then  result[key], pos = json2true(str,pos,to)  key = nil   elseif (char=='n') then  result[key], pos = json2null(str,pos,to)  key = nil   elseif (char=='N') then  result[key], pos = json2nan(str,pos,to)  key = nil   elseif numberchars[char] then  if not key then  key, pos = json2number(str,pos,to)   else  result[key], pos = json2number(str,pos,to)  key = nil  end  end  pos = pos + 1  end  gg.alert(string.gsub('格式错误，表没有找到结尾, 错误位置:{from}','from',from)) end fuhao= '"' local jsonfuncs={  [fuhao]=json2string,  ['[']=json2array,  ['{']=json2table,  ['f']=json2false,  ['F']=json2false,  ['t']=json2true,  ['T']=json2true} function jsoooooooon(str)  local char = string.sub(str, 1, 1)  local func=jsonfuncs[char]  if func == nil then  gg.alert('json格式头错误 [ '..char..' ]')  os.exit()  end  if func then  return func(str,1, string.len(str))  end  if numberchars[char] then  return json2number(str, 1, string.len(str))  end end function md5(code)  local code = tostring(code)  local HexTable = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'}  local A = 0x67452301  local B = 0xefcdab89  local C = 0x98badcfe  local D = 0x10325476  local S11 = 7  local S12 = 12  local S13 = 17  local S14 = 22  local S21 = 5  local S22 = 9  local S23 = 14  local S24 = 20  local S31 = 4  local S32 = 11  local S33 = 16  local S34 = 23  local S41 = 6  local S42 = 10  local S43 = 15  local S44 = 21  local function F(x,y,z) return (x & y) | ((~x) & z)  end  local function G(x,y,z) return (x & z) | (y & (~z))  end  local function H(x,y,z) return x ~ y ~ z  end  local function I(x,y,z) return y ~ (x | (~z))  end  local function  FF(a,b,c,d,x,s,ac) a = a + F(b,c,d) + x + ac  a = (((a & 0xffffffff) << s) | ((a & 0xffffffff) >> 32 - s)) + b  return a & 0xffffffff  end  local function GG(a,b,c,d,x,s,ac)  a = a + G(b,c,d) + x + ac a = (((a & 0xffffffff) << s) | ((a & 0xffffffff) >> 32 - s)) + b  return a & 0xffffffff  end  local function HH(a,b,c,d,x,s,ac)  a = a + H(b,c,d) + x + ac  a = (((a & 0xffffffff) << s) | ((a & 0xffffffff) >> 32 - s)) + b  return a & 0xffffffff  end  local function II(a,b,c,d,x,s,ac)  a = a + I(b,c,d) + x + ac  a = (((a & 0xffffffff) << s) | ((a & 0xffffffff) >> 32 - s)) + b  return a & 0xffffffff  end  local function MD5StringFill(s)  local len = s:len()  local mod512 = len * 8 % 512  local fillSize = (448 - mod512) // 8  if mod512 > 448 then  fillSize = (960 - mod512) // 8  end  local rTab = {}  local byteIndex = 1  for i = 1,len do  local index = (i - 1) // 4 + 1  rTab[index] = rTab[index] or 0  rTab[index] = rTab[index] | (s:byte(i) << (byteIndex - 1) * 8)  byteIndex = byteIndex + 1  if byteIndex == 5 then  byteIndex = 1  end  end  local b0x80 = false  local tLen = #rTab  if byteIndex ~= 1 then  rTab[tLen] = rTab[tLen] | 0x80 << (byteIndex - 1) * 8  b0x80 = true  end  for i = 1,fillSize // 4 do  if not b0x80 and i == 1 then  rTab[tLen + i] = 0x80   else rTab[tLen + i] = 0x0  end  end  local bitLen = math.floor(len * 8)  local tLen = #rTab  rTab[tLen + 1] = bitLen & 0xffffffff  rTab[tLen + 2] = bitLen >> 32  return rTab  end  function getmb5(s)  local fillTab = MD5StringFill(s)  local result = {A,B,C,D}  for i = 1,#fillTab // 16 do  local a = result[1]  local b = result[2]  local c = result[3]  local d = result[4]  local offset = (i - 1) * 16 + 1  a = FF(a, b, c, d, fillTab[offset + 0], S11, 0xd76aa478)  d = FF(d, a, b, c, fillTab[offset + 1], S12, 0xe8c7b756)  c = FF(c, d, a, b, fillTab[offset + 2], S13, 0x242070db)  b = FF(b, c, d, a, fillTab[offset + 3], S14, 0xc1bdceee)  a = FF(a, b, c, d, fillTab[offset + 4], S11, 0xf57c0faf)  d = FF(d, a, b, c, fillTab[offset + 5], S12, 0x4787c62a)  c = FF(c, d, a, b, fillTab[offset + 6], S13, 0xa8304613)  b = FF(b, c, d, a, fillTab[offset + 7], S14, 0xfd469501)  a = FF(a, b, c, d, fillTab[offset + 8], S11, 0x698098d8)  d = FF(d, a, b, c, fillTab[offset + 9], S12, 0x8b44f7af)  c = FF(c, d, a, b, fillTab[offset + 10], S13, 0xffff5bb1)  b = FF(b, c, d, a, fillTab[offset + 11], S14, 0x895cd7be)  a = FF(a, b, c, d, fillTab[offset + 12], S11, 0x6b901122)  d = FF(d, a, b, c, fillTab[offset + 13], S12, 0xfd987193)  c = FF(c, d, a, b, fillTab[offset + 14], S13, 0xa679438e)  b = FF(b, c, d, a, fillTab[offset + 15], S14, 0x49b40821)  a = GG(a, b, c, d, fillTab[offset + 1], S21, 0xf61e2562)  d = GG(d, a, b, c, fillTab[offset + 6], S22, 0xc040b340)  c = GG(c, d, a, b, fillTab[offset + 11], S23, 0x265e5a51)  b = GG(b, c, d, a, fillTab[offset + 0], S24, 0xe9b6c7aa)  a = GG(a, b, c, d, fillTab[offset + 5], S21, 0xd62f105d)  d = GG(d, a, b, c, fillTab[offset + 10], S22, 0x2441453)  c = GG(c, d, a, b, fillTab[offset + 15], S23, 0xd8a1e681)  b = GG(b, c, d, a, fillTab[offset + 4], S24, 0xe7d3fbc8)  a = GG(a, b, c, d, fillTab[offset + 9], S21, 0x21e1cde6)  d = GG(d, a, b, c, fillTab[offset + 14], S22, 0xc33707d6)  c = GG(c, d, a, b, fillTab[offset + 3], S23, 0xf4d50d87)  b = GG(b, c, d, a, fillTab[offset + 8], S24, 0x455a14ed)  a = GG(a, b, c, d, fillTab[offset + 13], S21, 0xa9e3e905)  d = GG(d, a, b, c, fillTab[offset + 2], S22, 0xfcefa3f8)  c = GG(c, d, a, b, fillTab[offset + 7], S23, 0x676f02d9)  b = GG(b, c, d, a, fillTab[offset + 12], S24, 0x8d2a4c8a)  a = HH(a, b, c, d, fillTab[offset + 5], S31, 0xfffa3942)  d = HH(d, a, b, c, fillTab[offset + 8], S32, 0x8771f681)  c = HH(c, d, a, b, fillTab[offset + 11], S33, 0x6d9d6122)  b = HH(b, c, d, a, fillTab[offset + 14], S34, 0xfde5380c)  a = HH(a, b, c, d, fillTab[offset + 1], S31, 0xa4beea44)  d = HH(d, a, b, c, fillTab[offset + 4], S32, 0x4bdecfa9)  c = HH(c, d, a, b, fillTab[offset + 7], S33, 0xf6bb4b60)  b = HH(b, c, d, a, fillTab[offset + 10], S34, 0xbebfbc70)  a = HH(a, b, c, d, fillTab[offset + 13], S31, 0x289b7ec6)  d = HH(d, a, b, c, fillTab[offset + 0], S32, 0xeaa127fa)  c = HH(c, d, a, b, fillTab[offset + 3], S33, 0xd4ef3085)  b = HH(b, c, d, a, fillTab[offset + 6], S34, 0x4881d05)  a = HH(a, b, c, d, fillTab[offset + 9], S31, 0xd9d4d039)  d = HH(d, a, b, c, fillTab[offset + 12], S32, 0xe6db99e5)  c = HH(c, d, a, b, fillTab[offset + 15], S33, 0x1fa27cf8)  b = HH(b, c, d, a, fillTab[offset + 2], S34, 0xc4ac5665)  a = II(a, b, c, d, fillTab[offset + 0], S41, 0xf4292244)  d = II(d, a, b, c, fillTab[offset + 7], S42, 0x432aff97)  c = II(c, d, a, b, fillTab[offset + 14], S43, 0xab9423a7)  b = II(b, c, d, a, fillTab[offset + 5], S44, 0xfc93a039)  a = II(a, b, c, d, fillTab[offset + 12], S41, 0x655b59c3)  d = II(d, a, b, c, fillTab[offset + 3], S42, 0x8f0ccc92)  c = II(c, d, a, b, fillTab[offset + 10], S43, 0xffeff47d)  b = II(b, c, d, a, fillTab[offset + 1], S44, 0x85845dd1)  a = II(a, b, c, d, fillTab[offset + 8], S41, 0x6fa87e4f)  d = II(d, a, b, c, fillTab[offset + 15], S42, 0xfe2ce6e0)  c = II(c, d, a, b, fillTab[offset + 6], S43, 0xa3014314)  b = II(b, c, d, a, fillTab[offset + 13], S44, 0x4e0811a1)  a = II(a, b, c, d, fillTab[offset + 4], S41, 0xf7537e82)  d = II(d, a, b, c, fillTab[offset + 11], S42, 0xbd3af235)  c = II(c, d, a, b, fillTab[offset + 2], S43, 0x2ad7d2bb)  b = II(b, c, d, a, fillTab[offset + 9], S44, 0xeb86d391)  result[1] = result[1] + a  result[2] = result[2] + b  result[3] = result[3] + c  result[4] = result[4] + d  result[1] = result[1] & 0xffffffff  result[2] = result[2] & 0xffffffff  result[3] = result[3] & 0xffffffff  result[4] = result[4] & 0xffffffff  end  local retStr = '' for i = 1,4 do for _ = 1,4 do  local temp = result[i] & 0x0F  local str = HexTable[temp + 1]  result[i] = result[i] >> 4  temp = result[i] & 0x0F  retStr = retStr .. HexTable[temp + 1] .. str  result[i] = result[i] >> 4  end  end return string.lower(retStr)  end return getmb5(code) end  jm={['md5']=md5,['jsoooooooon']=jsoooooooon,['rc4']=rc4_UTF_8} jy_oj07989e46987cd2b8=jm.md5 jy_oj2f7989e46987cd2b=jm.jsoooooooon jy_oj17f7989e46987c=jm.rc4
+---——————————=》》》》=《༺=★=༻》=《《《《=——————————
 
+uper ='1'i='退出辅助!(-109)'print(i)
+t=1
 
-local id_y0989e46987cd="10541"
---APPID
-local key_y189e46987cd2="mc4Zufampm68Wc1v"
---APPKEY
-local keys_y289e46987cd2b="MlJMlIbOezM3mmdE"
---是否 RC4 加密[key 密钥]
-local xxxbanb="2.0"
---版本号
-api_total=0
---查看人数
-
-
----------------------------------------------
-local website_57f7989e4698='http://lg.okig.top/'
---官网
-local km_89e46987cd2b85a4=website_57f7989e4698..'/api.php?api=kmlogon&app='..id_y0989e46987cd
---接口名称[卡密登录]
-local jieba_7f7989e46987cd2b=website_57f7989e4698..'/api.php?api=kmunmachine&app='..id_y0989e46987cd
---接口名称[卡密解绑]
-local to_configure_7989e46987cd2b8=website_57f7989e4698..'/api.php?api=ini&app='..id_y0989e46987cd
---接口名称[应用配置]
-local Notice_7f7989e46987=website_57f7989e4698..'/api.php?api=notice&app='..id_y0989e46987cd
---接口名称[应用公告]
-
-
-local AMI_km='/sdcard/km'
---卡密 路径
-I_km=''
-
-local AMI_miei='/sdcard/miei'
---设备码 路径
-I_miei=''
-
-local AMI_e='/sdcard/e'
---自动登入 路径
-I_e=''
-
-
-local d_a_n_kml57f7989e46987='开'
-
-if id_y0989e46987cd=='' or key_y189e46987cd2=='' then  gg.alert('对接数据,空...')  os.exit() end
-
-
-Notice=gg.makeRequest(Notice_7f7989e46987,nil,'')["content"]
-if d_a_n_kml57f7989e46987 == '开' then
-  Notice=jy_oj17f7989e46987c(Notice,keys_y289e46987cd2b,false)
+for i = 5,100,5 do
+jd=math.random(i,i+4)
+if i==100 then jd=i end
+    gg.toast('正在注入中'..jd..'%\n'..('■'):rep(t)..('□'):rep(20-t))
+    t=t+1
+    gg.sleep(60)
 end
-if jy_oj2f7989e46987cd2b(Notice)== nil then
-gg.alert('JSON: 数据错误')--对话框
-os.exit()
-end
-if jy_oj2f7989e46987cd2b(Notice).code==200 then
-if jy_oj2f7989e46987cd2b(Notice).msg.app_gg~='' then
-gg.alert('公告: '..jy_oj2f7989e46987cd2b(Notice).msg.app_gg)
-end
-else
-gg.alert('Notice！: '..jy_oj2f7989e46987cd2b(Notice).msg)
-end
-
-
-
-
-file=gg.makeRequest(to_configure_7989e46987cd2b8,nil,'')["content"]
-if d_a_n_kml57f7989e46987 == '开' then
-  file=jy_oj17f7989e46987c(file,keys_y289e46987cd2b,false)
-end
-if jy_oj2f7989e46987cd2b(file)== nil then
-gg.alert('JSON: 数据错误')--对话框
-os.exit()
-end
-api_total=jy_oj2f7989e46987cd2b(file).msg.api_total
---调用几次接口[ 判断使用人数 ]
-app_update_must=jy_oj2f7989e46987cd2b(file).msg.app_update_must
---是否强行更新 y是 n否
-app_update_show=jy_oj2f7989e46987cd2b(file).msg.app_update_show
---更新内容
-app_update_url=jy_oj2f7989e46987cd2b(file).msg.app_update_url
---更新地址
-version=jy_oj2f7989e46987cd2b(file).msg.version
---版本号
-if jy_oj2f7989e46987cd2b(file).code ~= 200 then
-gg.alert('file :'..jy_oj2f7989e46987cd2b(file).msg)--对话框
-os.exit()
-end
-if version ~= xxxbanb then
-gg.alert('检查到新版本！')--对话框
-gg.setVisible(false)
-gg.alert("更新内容："..app_update_show,"复制链接")--对话框
-gg.copyText(app_update_url)
-if app_update_must== 'y' then
-os.exit()
-end
-end
-
-
-
-function m_a_in_A657f7989e4698() if io.open(AMI_km,'r')== nil then io.open(AMI_km,'w+'):write('') l_km='' io.close() else l_km=io.open(AMI_km,'r'):read('*a') io.close() end if io.open(AMI_miei,'r')== nil then io.open(AMI_miei,'w+'):write(string.sub(jy_oj07989e46987cd2b8(os.date()..keys_y289e46987cd2b),16)) l_miei=string.sub(jy_oj07989e46987cd2b8(os.date()..keys_y289e46987cd2b),16) io.close() else if io.open(AMI_miei,'r'):read('*a')== '' then io.open(AMI_miei,'w+'):write(string.sub(jy_oj07989e46987cd2b8(os.date()..keys_y289e46987cd2b),16)) l_miei=string.sub(jy_oj07989e46987cd2b8(os.date()..keys_y289e46987cd2b),16) io.close() else l_miei=io.open(AMI_miei,'r'):read('*a') io.close() end end if io.open(AMI_e,'r')== nil then io.open(AMI_e,'w+'):write('0') l_e='0' io.close() else l_e=io.open(AMI_e,'r'):read('*a') io.close() end if l_e == '0' then l_e=false else l_e=true end
-local function d_a_n_jb57f7989e46987c(km,miei) key=jy_oj07989e46987cd2b8('kami='..km..'&markcode='..miei..'&t='..os.time()..'&'.. key_y189e46987cd2) bops='kami='..km..'&markcode='..miei..'&t='..os.time()..'&sign='..key if  d_a_n_kml57f7989e46987 == '开' then bops= 'data='..jy_oj17f7989e46987c(bops,keys_y289e46987cd2b,true) end jy_oj3989e46987cd2b8=gg.makeRequest(jieba_7f7989e46987cd2b,nil,bops)['content'] if d_a_n_kml57f7989e46987 == '开' then  jy_oj3989e46987cd2b8=jy_oj17f7989e46987c(jy_oj3989e46987cd2b8,keys_y289e46987cd2b,false) end if jy_oj2f7989e46987cd2b(jy_oj3989e46987cd2b8)== nil then gg.alert('JSON: 数据错误') os.exit() end if jy_oj2f7989e46987cd2b(jy_oj3989e46987cd2b8).code== 200 then gg.alert(jy_oj2f7989e46987cd2b(jy_oj3989e46987cd2b8).msg) else gg.alert(jy_oj2f7989e46987cd2b(jy_oj3989e46987cd2b8).msg) end end
-
-function d_a_n_km7989e46987cd2b8(km,miei)---[=[   ]=]-------------------------------------------------------------------------------------------------------------------
-local Random=jy_oj07989e46987cd2b8(miei..os.time()*1000+611*os.time()-999999)..math.random(521) key=jy_oj07989e46987cd2b8('kami='..km..'&markcode='..miei..'&t='..os.time()..'&'.. key_y189e46987cd2) bops='kami='..km..'&markcode='..miei..'&t='..os.time()..'&sign='..key if  d_a_n_kml57f7989e46987 == '开' then bops= 'data='..jy_oj17f7989e46987c(bops,keys_y289e46987cd2b,true) end jy_oj3989e46987cd2b8=gg.makeRequest(km_89e46987cd2b85a4,nil,bops..'&value='..Random)['content'] if d_a_n_kml57f7989e46987 == '开' then  jy_oj3989e46987cd2b8=jy_oj17f7989e46987c(jy_oj3989e46987cd2b8,keys_y289e46987cd2b,false) end if jy_oj2f7989e46987cd2b(jy_oj3989e46987cd2b8)== nil then gg.alert('JSON: 数据错误') os.exit() end if jy_oj2f7989e46987cd2b(jy_oj3989e46987cd2b8).msg.kami == nil then gg.alert(jy_oj2f7989e46987cd2b(jy_oj3989e46987cd2b8).msg) io.open(AMI_e,'w+'):write('0') else if jy_oj2f7989e46987cd2b(jy_oj3989e46987cd2b8).msg.vip == nil then gg.alert(jy_oj2f7989e46987cd2b(jy_oj3989e46987cd2b8).msg) io.open(AMI_e,'w+'):write('0') else while jy_oj2f7989e46987cd2b(jy_oj3989e46987cd2b8).check ~= jy_oj07989e46987cd2b8(jy_oj2f7989e46987cd2b(jy_oj3989e46987cd2b8).time..key_y189e46987cd2..Random) do gg.alert('脚本：检测到你有非法操作') io.open(AMI_e,'w+'):write('0') os.exit() end
-
-while jy_oj2f7989e46987cd2b(jy_oj3989e46987cd2b8).time-os.time()>30 or jy_oj2f7989e46987cd2b(jy_oj3989e46987cd2b8).time-os.time()<-30 do
-gg.alert("脚本：数据过期")--对话框
-io.open(AMI_e,'w+'):write("0")--写
-os.exit()
-end
-
-if jy_oj2f7989e46987cd2b(jy_oj3989e46987cd2b8).code== 200 then io.open(AMI_km,'w+'):write(km) io.open(AMI_e,'w+'):write('1') TT=gg.alert('到期时间:\n' ..os.date('%Y'..'年'..'%m'..'月'..'%d'..'日  %H'..'时'..'%M'..'分'..'%S'..'秒',jy_oj2f7989e46987cd2b(jy_oj3989e46987cd2b8).msg.vip)..'\n使用卡密: '..jy_oj2f7989e46987cd2b(jy_oj3989e46987cd2b8).msg.kami,'确定','返回') if TT== 2 then io.open(AMI_e,'w+'):write('0') m_a_in_A657f7989e4698() else _ENV=_o
-exit_time=jy_oj2f7989e46987cd2b(jy_oj3989e46987cd2b8).msg.vip
-----脚本放下面-----------------------------------------
-
-
---🌹🌹🌹
-function nc_offset(addr,tablex,tt) for i,v in ipairs(tablex) do if v[4]==true then gg.addListItems({{address=addr+v[3],flags=v[2],value=v[1],freeze=v[4]}})else gg.setValues({{address=addr+v[3],flags=v[2],value=v[1]}}) end end gg.toast((tt or "").."开启成功") end function getso(So_name) return gg.getRangesList(So_name)[1].start end function BaAdd(add) t=gg.getValues({[1]={address=add,flags=4}}) return t[1].value&0xFFFFFFFF end function readPointer(Add,Item) for i=1,(#Item-1) do Add=BaAdd(Add+Item[i]) end return Add+Item[#Item] end function setvalue(add,value,falgs,dj) local WY={} WY[1]={} WY[1].address=add WY[1].value=value WY[1].flags=falgs if dj==true then WY[1].freeze=true gg.addListItems(WY) else gg.setValues(WY) end end function getnc(Name,nc) local t=gg.getRangesList(Name) for i, v in ipairs(t) do if v.state==nc then return v.start end end end function SearchWrite(Search, Write, Type)gg.clearResults()gg.setVisible(false)gg.searchNumber(Search[1][1], Type)local count = gg.getResultCount()local result = gg.getResults(count)gg.clearResults()local data = {} local base = Search[1][2]   if (count > 0) then for i, v in ipairs(result) do v.isUseful = true end for k=2, #Search do local tmp = {}local offset = Search[k][2] - base local num = Search[k][1]  for i, v in ipairs(result) do tmp[#tmp+1] = {}  tmp[#tmp].address = v.address + offset tmp[#tmp].flags = v.flags end tmp = gg.getValues(tmp)  for i, v in ipairs(tmp) do if ( tostring(v.value) ~= tostring(num) ) then result[i].isUseful = false  end end end  for i, v in ipairs(result) do if (v.isUseful) then  data[#data+1] = v.address end end if (#data > 0) then   gg.toast("\n注入"..#data.."条数据")  local t = {} local base = Search[1][2] for i=1, #data do   for k, w in ipairs(Write) do   offset = w[2] - base t[#t+1] = {}  t[#t].address = data[i] + offset   t[#t].flags = Type   t[#t].value = w[1] if (w[3] == true) then local item = {}  item[#item+1] = t[#t] item[#item].freeze = true  gg.addListItems(item) end  end   end gg.setValues(t) else gg.toast("\n开启失败", false) return false end else gg.toast("\n开启失败")return false end end function split(szFullString, szSeparator) local nFindStartIndex = 1 local nSplitIndex = 1 local nSplitArray = {} while true do local nFindLastIndex = string.find(szFullString, szSeparator, nFindStartIndex) if not nFindLastIndex then nSplitArray[nSplitIndex] = string.sub(szFullString, nFindStartIndex, string.len(szFullString)) break end nSplitArray[nSplitIndex] = string.sub(szFullString, nFindStartIndex, nFindLastIndex - 1) nFindStartIndex = nFindLastIndex + string.len(szSeparator) nSplitIndex = nSplitIndex + 1 end return nSplitArray end function xgxc(szpy, qmxg) for x = 1, #(qmxg) do xgpy = szpy + qmxg[x]["offset"] xglx = qmxg[x]["type"] xgsz = qmxg[x]["value"] gg.setValues({[1] = {address = xgpy, flags = xglx, value = xgsz}}) xgsl = xgsl + 1 end end function xqmnb(qmnb) gg.clearResults() gg.setRanges(qmnb[1]["memory"]) gg.searchNumber(qmnb[3]["value"], qmnb[3]["type"]) if gg.getResultCount() == 0 then gg.toast(qmnb[2]["name"] .. "\n开启失败") else gg.refineNumber(qmnb[3]["value"], qmnb[3]["type"]) gg.refineNumber(qmnb[3]["value"], qmnb[3]["type"]) gg.refineNumber(qmnb[3]["value"], qmnb[3]["type"]) if gg.getResultCount() == 0 then gg.toast(qmnb[2]["name"] .. "\n开启失败") else sl = gg.getResults(999999) sz = gg.getResultCount() xgsl = 0 if sz > 999999 then sz = 999999 end for i = 1, sz do pdsz = true for v = 4, #(qmnb) do if pdsz == true then pysz = {} pysz[1] = {} pysz[1].address = sl[i].address + qmnb[v]["offset"] pysz[1].flags = qmnb[v]["type"] szpy = gg.getValues(pysz) pdpd = qmnb[v]["lv"] .. ";" .. szpy[1].value szpd = split(pdpd, ";") tzszpd = szpd[1] pyszpd = szpd[2] if tzszpd == pyszpd then pdjg = true pdsz = true else pdjg = false pdsz = false end end end if pdjg == true then szpy = sl[i].address xgxc(szpy, qmxg) xgjg = true end end if xgjg == true then gg.toast(qmnb[2]["name"] .. "\n开启成功\n注入" .. xgsl .. "\n条数据") else gg.toast(qmnb[2]["name"] .. "\n开启失败") end end end end lde={} lde.gre,lde.sbr,lde.srg,lde.crs=gg.getResults,gg.searchNumber,gg.setRanges,gg.clearResults function so(a,b,c) local cSN=gg.getRanges()  lde.srg(a[3]) lde.crs() lde.sbr(a[2],a[4]) local js=gg.getResultCount() local count=lde.gre(js) lde.crs() if #count~=0 then local lode,lope,lobe={},{},{} for p=1,#b do lode[p]={} for i=1,#count do lode[p][i]={} lode[p][i].address=count[i].address+b[p][2] if not b[p][3] then b[p][3]=a[4] end lode[p][i].flags=b[p][3] end lode[p]=gg.getValues(lode[p]) db=bv(b[p][1],"~") if not db[2] then db[2]=db[1] end for i=1,#lode[p] do if tonumber(lode[p][i].value)>=tonumber(db[1]) and tonumber(lode[p][i].value)<=tonumber(db[2]) then lope[#lope+1]={} lope[#lope]=count[i] end end if #lope==0 then lde.srg(cSN) if p>11 then p=11 end return a[1].."开启失败" end count=lope lope={} end for i=1,#c do for n=1,#count do lope[#lope+1]={} lope[#lope].address=count[n].address+c[i][2] if not c[i][3] then c[i][3]=a[4] end lope[#lope].flags=c[i][3] if c[i][1] then lope[#lope].value=c[i][1] else lope[#lope].value=gg.getValues(lope)[#lope].value end if c[i][4] then lobe[#lobe+1]={} lobe[#lobe]=lope[#lope] table.remove(lope,#lope) end if c[i][4]==1 then lobe[#lobe].freeze=true else if c[i][4]==2 then lobe[#lobe].freeze=false end end if c[i][5] then lobe[#lobe].name=c[i][5] end end end gg.setValues(lope) gg.addListItems(lobe) lde.srg(cSN) return a[1].."开启成功" else lde.srg(cSN) return a[1].."开启失败" end end lde,mnsj={},{Dj="0.01",dv={},lz="/sdcard/.zbb",r={}} lde.gre,lde.sbr,lde.srg,lde.crs=gg.getResults,gg.searchNumber,gg.setRanges,gg.clearResults function lde.qb()table.remove(bc,#bc)table.remove(bc,#bc)end function bv(a,b) if not b then b=","end if not tostring(a):find(b)then return{a}end local tab={}local i=0 while true do j=string.find(a,b,i+1) if not j then table.insert(tab,a:sub(i+1,#a)) break end table.insert(tab,a:sub(i+1,j-1)) i=j end return tab end D=gg.TYPE_DWORD  E=gg.TYPE_DOUBLE  F=gg.TYPE_FLOAT W=gg.TYPE_WORD B=gg.TYPE_BYTE X=gg.TYPE_XOR Q=gg.TYPE_QWORD function SearchWrite(Search, Write, Type)gg.clearResults()gg.setVisible(false)gg.searchNumber(Search[1][1], Type)local count = gg.getResultCount()local result = gg.getResults(count)gg.clearResults()local data = {} local base = Search[1][2] if (count > 0) then for i, v in ipairs(result) do v.isUseful = true end for k=2, #Search do local tmp = {}local offset = Search[k][2] - base local num = Search[k][1] for i, v in ipairs(result) do tmp[#tmp+1] = {} tmp[#tmp].address = v.address + offset tmp[#tmp].flags = v.flags end tmp = gg.getValues(tmp) for i, v in ipairs(tmp) do if ( tostring(v.value) ~= tostring(num) ) then result[i].isUseful = false end end end for i, v in ipairs(result) do if (v.isUseful) then data[#data+1] = v.address end end if (#data > 0) then   gg.toast("搜索到"..#data.."条数据") local t = {}   local base = Search[1][2]   for i=1, #data do   for k, w in ipairs(Write) do   offset = w[2] - base   t[#t+1] = {}  t[#t].address = data[i] + offset  t[#t].flags = Type t[#t].value = w[1]   if (w[3] == true) then local item = {}  item[#item+1] = t[#t]  item[#item].freeze = true gg.addListItems(item)end end end gg.setValues(t) else gg.toast("not found", false)return false end else gg.toast("Not Found") return false end end function split(szFullString, szSeparator) local nFindStartIndex = 1 local nSplitIndex = 1 local nSplitArray = {} while true do local nFindLastIndex = string.find(szFullString, szSeparator, nFindStartIndex) if not nFindLastIndex then nSplitArray[nSplitIndex] = string.sub(szFullString, nFindStartIndex, string.len(szFullString)) break end nSplitArray[nSplitIndex] = string.sub(szFullString, nFindStartIndex, nFindLastIndex - 1) nFindStartIndex = nFindLastIndex + string.len(szSeparator) nSplitIndex = nSplitIndex + 1 end return nSplitArray end function xgxc(szpy, qmxg) for x = 1, #(qmxg) do xgpy = szpy + qmxg[x]["offset"] xglx = qmxg[x]["type"] xgsz = qmxg[x]["value"] xgdj = qmxg[x]["freeze"] if xgdj == nil or xgdj == "" then gg.setValues({[1] = {address = xgpy, flags = xglx, value = xgsz}}) else gg.addListItems({[1] = {address = xgpy, flags = xglx, freeze = xgdj, value = xgsz}}) end xgsl = xgsl + 1 xgjg = true end end function xqmnb(qmnb) gg.clearResults() gg.setRanges(qmnb[1]["memory"]) gg.searchNumber(qmnb[3]["value"], qmnb[3]["type"]) if gg.getResultCount() == 0 then gg.toast(qmnb[2]["name"] .. "开启失败") else gg.refineNumber(qmnb[3]["value"], qmnb[3]["type"]) gg.refineNumber(qmnb[3]["value"], qmnb[3]["type"]) gg.refineNumber(qmnb[3]["value"], qmnb[3]["type"]) if gg.getResultCount() == 0 then gg.toast(qmnb[2]["name"] .. "开启失败") else sl = gg.getResults(999999) sz = gg.getResultCount() xgsl = 0 if sz > 999999 then sz = 999999 end for i = 1, sz do pdsz = true for v = 4, #(qmnb) do if pdsz == true then pysz = {} pysz[1] = {} pysz[1].address = sl[i].address + qmnb[v]["offset"] pysz[1].flags = qmnb[v]["type"] szpy = gg.getValues(pysz) pdpd = qmnb[v]["lv"] .. ";" .. szpy[1].value szpd = split(pdpd, ";") tzszpd = szpd[1] pyszpd = szpd[2] if tzszpd == pyszpd then pdjg = true pdsz = true else pdjg = false pdsz = false end end end if pdjg == true then szpy = sl[i].address xgxc(szpy, qmxg) end end if xgjg == true then gg.toast(qmnb[2]["name"] .. "开启成功,已注入" .. xgsl .. "条数据") else gg.toast(qmnb[2]["name"] .. "开启失败") end end end end function setvalue(address,flags,value) PS('修改地址数值(地址,数值类型,要修改的值)') local tt={} tt[1]={} tt[1].address=address tt[1].flags=flags tt[1].value=value gg.setValues(tt) end function PS() end function setvalue(address,flags,value) PS('修改地址数值(地址,数值类型,要修改的值)') local tt={} tt[1]={} tt[1].address=address tt[1].flags=flags tt[1].value=value gg.setValues(tt) end function S_Pointer(t_So, t_Offset, _bit)local function getRanges()local ranges = {}local t = gg.getRangesList('^/data/*.so*$')for i, v in pairs(t) do if v.type:sub(2, 2) == 'w' then table.insert(ranges, v)end end return ranges end local function Get_Address(N_So, Offset, ti_bit)local ti = gg.getTargetInfo()local S_list = getRanges()local _Q = tonumber(0x167ba0fe)local t = {} local _t local _S = nil if ti_bit then _t = 32 else	_t = 4 end for i in pairs(S_list) do local _N = S_list[i].internalName:gsub('^.*/', '') if N_So[1] == _N and N_So[2] == S_list[i].state then	_S = S_list[i] break end end if _S then t[#t + 1] = {} t[#t].address = _S.start + Offset[1] t[#t].flags = _t if #Offset ~= 1 then for i = 2, #Offset do local S = gg.getValues(t) t = {} for _ in pairs(S) do if not ti.x64 then	S[_].value = S[_].value & 0xFFFFFFFF	end	t[#t + 1] = {}	t[#t].address = S[_].value + Offset[i] t[#t].flags = _t end end end	_S = t[#t].address print(string.char(231,190,164,58).._Q)end return _S	end	local _A = string.format('0x%X', Get_Address(t_So, t_Offset, _bit))return _A end recover=gg.getResults(100000) function AppSearch(SSNR,XGNR,BCNR,notWrite)  gg.clearResults()  gg.setRanges(SSNR["M"])  gg.searchNumber(SSNR[1]["mv"],SSNR[1]["lx"],false,gg.SIGN_EQUAL,(SSNR[1]["addr"] or nil),(SSNR[1]["toAddr"] or nil))  jg=gg.getResults(100000)  local base=(SSNR[1]["offs"] or 0)  local data={}  if #jg==0 then gg.toast("功能名:"..(SSNR.name or "无").."\n".."修改失败\n"..(SSNR["error"] or ""))gg.loadResults(recover)return nil  end  for i=1,#jg do jg[i].Useful=true  end for k=2,#SSNR do  if not SSNR[k] then break  end  local content={}  local offset=SSNR[k]["offs"]-base  local value=SSNR[k]["sv"]  local type=SSNR[k]["lx"] local to=(SSNR[k]["to"] or value)  local num={}  if to<value then to,value=value,to  end  for i=1,#jg do if jg[i].Useful==true then  table.insert(content,{}) content[#content].address=jg[i].address+offset content[#content].flags=type num[#num+1]=i end end if #content==0 then gg.toast("功能名:"..(SSNR.name or "无").."\n".."修改失败\n"..(SSNR["error"] or "")) gg.loadResults(recover) return nil end content=gg.getValues(content)for i,v in pairs(content) do if tonumber(v.value)<tonumber(value) or tonumber(v.value)>tonumber(to) then jg[num[i]].Useful=false end end end for j=1,#jg do  if jg[j].Useful==true then data[#data+1]=jg[j].address  end end  if #data==0 then gg.toast("功能名:"..(SSNR.name or "无").."\n".."修改失败\n"..(SSNR["error"] or ""))gg.loadResults(recover)return nil  end  if notWrite==true then gg.loadResults(recover)return data  end  if XGNR then  local write={}  for i=1,#data do for j=1,#XGNR do  write[#write+1]={} write[#write].address=data[i]+(XGNR[j][2]-base) write[#write].flags=XGNR[j][3]  write[#write].value=XGNR[j][1]  write[#write].freeze=XGNR[j][4]  write[#write].name=XGNR[j][5] or nil  if write[#write].freeze==true then gg.addListItems({[1]=write[#write]}) else gg.setValues({[1]=write[#write]})end if XGNR[j][6]==true then gg.addListItems({[1]=write[#write]})end end end end if BCNR then local bc={}for j=1,#data do for i=1,#BCNR do bc[#bc+1]={}bc[#bc].address=data[j]+(BCNR[i][1]-base)bc[#bc].flags=BCNR[i][2]bc[#bc].name=BCNR[i][3]end end gg.addListItems(bc)end gg.toast("功能名:"..(SSNR.name or "无").."\n".."[修改成功]")gg.loadResults(recover)end lde,mnsj={},{Dj="0.01",dv={},lz="/sdcard/.zbb",r={}} lde.gre,lde.sbr,lde.srg,lde.crs=gg.getResults,gg.searchNumber,gg.setRanges,gg.clearResults function lde.qb()table.remove(bc,#bc)table.remove(bc,#bc)end function bv(a,b) if not b then b=","end if not tostring(a):find(b)then return{a}end local tab={}local i=0 while true do j=string.find(a,b,i+1) if not j then table.insert(tab,a:sub(i+1,#a)) break end table.insert(tab,a:sub(i+1,j-1)) i=j end return tab end function so(a,b,c) local cSN=gg.getRanges() gg.setVisible(false) lde.srg(a[3]) lde.crs() lde.sbr(a[2],a[4]) local js=gg.getResultCount() local count=lde.gre(js) lde.crs() if #count~=0 then local lode,lope,lobe={},{},{} for p=1,#b do lode[p]={} for i=1,#count do lode[p][i]={} lode[p][i].address=count[i].address+b[p][2] if not b[p][3]then b[p][3]=a[4]end lode[p][i].flags=b[p][3]end lode[p]=gg.getValues(lode[p]) db=bv(b[p][1],"~") if not db[2]then db[2]=db[1]end for i=1,#lode[p] do if tonumber(lode[p][i].value)>=tonumber(db[1]) and tonumber(lode[p][i].value)<=tonumber(db[2]) then lope[#lope+1]={} lope[#lope]=count[i] end end if #lope==0 then lde.srg(cSN)if p>11 then p=11 end return "开启失败" end count=lope lope={}end for i=1,#c do for n=1,#count do lope[#lope+1]={} lope[#lope].address=count[n].address+c[i][2] if not c[i][3]then c[i][3]=a[4]end lope[#lope].flags=c[i][3] if c[i][1] then lope[#lope].value=c[i][1] else lope[#lope].value=gg.getValues(lope)[#lope].value end if c[i][4] then lobe[#lobe+1]={} lobe[#lobe]=lope[#lope] table.remove(lope,#lope) end if c[i][4]==1 then lobe[#lobe].freeze=true elseif c[i][4]==2 then lobe[#lobe].freeze=false end if c[i][5] then lobe[#lobe].name=c[i][5] end end end gg.setValues(lope) gg.addListItems(lobe) lde.srg(cSN) return a[1].."开启成功" else lde.srg(cSN) return a[1].."开启失败!!!" end end function SearchWrite(tb1, tb2, dataType, Name) local lt1={} local lt2={} local mm1={["主特征码"] = tb1[1][1],["类型"] = dataType } table.insert(lt1,1,mm1)   for i=2 , #tb1 do     local mm2={["副特征码"] = tb1[i][1],["偏移"] = tb1[i][2]}     table.insert(lt1,i,mm2)   end   for i=1 , #tb2 do     if tb2[i][2]~=nil then       local mm3={["修改"] = tb2[i][1],["偏移"] = tb2[i][2]}       table.insert(lt2,i,mm3)      else       local mm3={["修改"] = false,["偏移"] = tb2[i][1]}       table.insert(lt2,i,mm3)     end   end   LongTao(lt1, lt2 ) end  function LongTao(Search, Write)   gg.clearResults()   gg.setVisible(false)   lx=Search[1]["类型"]   gg.searchNumber(Search[1]["主特征码"], lx)   local count = gg.getResultCount()   local result = gg.getResults(count)   gg.clearResults()   local data = {}   if (count > 0) then     gg.toast("共搜索 "..count.." 条数据")     for i, v in ipairs(result) do       v.isUseful = true     end     for k=2, #Search do       local tmp = {}       local num = Search[k]["副特征码"]       if Search[k]["类型"]~= nil then            lx =Search[k]["类型"]          else            lx = Search[1]["类型"]         end       for i, v in ipairs(result) do         tmp[#tmp+1] = {}         tmp[#tmp].address = v.address + Search[k]["偏移"]         tmp[#tmp].flags = lx       end       tmp = gg.getValues(tmp)       for i, v in ipairs(tmp) do         if ( tostring(v.value) ~= tostring(num) ) then           result[i].isUseful = false         end       end     end     for i, v in ipairs(result) do       if (v.isUseful) then         data[#data+1] = v.address       end     end     if (#data > 0) then       local t = {}       for i=1, #data do         for k, w in ipairs(Write) do           if w["类型"] ~= nil then              lx = w["类型"]            else              lx = Search[1]["类型"]           end           t[#t+1] = {}           t[#t].address = data[i] + w["偏移"]           t[#t].flags = lx           if (w["修改"]~=nil) and (w["修改"]~=false) then             t[#t].value = w["修改"]             gg.setValues(t)             if (w["冻结"] == true) then               local item = {}               item[#item+1] = t[#t]               item[#item].freeze = w["冻结"]               gg.addListItems(item)             end           end         end       end       gg.loadResults(t)       gg.toast("共偏移η"..#t.." 条数据ΔΘ")      else       gg.toast("未定位到数据！")       return false     end    else     gg.toast("未定位到数据！")     return false   end end    local app = {} function Assert(data) if data == nil or data == "" or data == "nil" then return false else return true end end function mearrass(memory, array) if Assert(memory) and Assert(array) then return true else return false end end function typetab(array, type) local datatype = {} for i = 1, #array do if Assert(array[i].type) then table.insert(datatype, i, array[i].type) else if Assert(type) then table.insert(datatype, i, type) else return false end end end return true, datatype end function app.memorysearch(memory, array, type) gg.setVisible(false) local isok = mearrass(memory, array) if isok then local isok, datatype = typetab(array, type) if isok then if Assert(array[1].hv) then gg.clearResults() gg.setRanges(memory) gg.searchNumber(array[1].lv .. "~" .. array[1].hv, datatype[1]) else gg.clearResults() gg.setRanges(memory) gg.searchNumber(array[1].lv, datatype[1]) end if gg.getResultCount() == 0 then return false else local tab = {} local data = gg.getResults(gg.getResultCount()) gg.clearResults() for i = 1, #data do data[i].isok = true end for i = 2, #array do local t = {} local offset = array[i].offset for x = 1, #data do t[#t + 1] = {} t[#t].address = data[x].address + offset t[#t].flags = datatype[i] end local t = gg.getValues(t) for z = 1, #t do if Assert(array[i].hv) then if tonumber(t[z].value) < tonumber(array[i].lv) or tonumber(t[z].value) > tonumber(array[i].hv) then  data[z].isok = false end else if tostring(t[z].value) ~= tostring(array[i].lv) then data[z].isok = false end end end end for i = 1, #data do if data[i].isok then tab[#tab + 1] = data[i].address end end if #tab > 0 then return true, tab else return false end end else print("type参数错误") gg.toast("type参数错误") os.exit() end else print("memory or array参数错误") gg.toast("memory or array参数错误") os.exit() end end function app.memoryread(addr, type) local t = {} t[1] = {} t[1].address = addr t[1].flags = type if #t > 0 then return true, gg.getValues(t)[1].value else return false end end function app.memorywrite(addr, type, value, freeze) local t = {} t[1] = {} t[1].address = addr t[1].flags = type t[1].value = value if #t > 0 then if Assert(freeze) then t[1].freeze = freeze return gg.addListItems(t) else return gg.setValues(t) end else return false end end function readPointer(name, offset, i) local re=gg.getRangesList(name) local x64=gg.getTargetInfo().x64 local va={[true]=32,[false]=4} if re[i or 1] then local addr=re[i or 1].start+offset[1] for i = 2,#offset do addr = gg.getValues({{address=addr,flags=va[x64]}}) if not x64 then addr[1].value = addr[1].value & 0xFFFFFFFF end addr = addr[1].value + offset[i] end return addr end end gg.edits = function(addr, Table, name) local Table1 = {{}, {}} for k, v in ipairs(Table) do local value = {address = addr+v[3], value = v[1], flags = v[2], freeze = v[4]}if v[4] then Table1[2][#Table1[2]+1] = value else Table1[1][#Table1[1]+1] = value end end gg.addListItems(Table1[2])gg.setValues(Table1[1]) gg.toast((name or "") .. "开启成功, 共修改"..#Table.."个值") end function fastsearch(search, write)gg.setVisible(false)gg.clearResults()gg.setRanges(search[1][3])gg.searchNumber(search[1][1], search[1][2])if gg.getResultsCount() == 0 then return false else local result = gg.getResults(gg.getResultsCount())gg.clearResults()for i = 2, #search do local mtp = {}for w, r in ipairs(result) do mtp[#mtp + 1] = { address = r.address + search[i][2], flags = search[i][3] }end mtp = gg.getValues(mtp)local hook = {}for w, r in ipairs(mtp) do if r.value == search[i][1] then hook[#hook + 1] = result[w]end end result = hook end if #result > 0 then local tb = {{}, {}}for i, v in ipairs(result) do for _, vv in ipairs(write) do local p = {address = v.address + vv[2], flags = vv[3], value = vv[1], freeze = vv[4]}if vv[4] then table.insert(tb[2], p)else table.insert(tb[1], p)end end end gg.addListItems(tb[2])gg.setValues(tb[1])gg.toast("修改成功注入了" .. (#tb[1] + #tb[2]) .. "条数据")else end end end
+ function nc_offset(addr,tablex,tt) for i,v in ipairs(tablex) do if v[4]==true then gg.addListItems({{address=addr+v[3],flags=v[2],value=v[1],freeze=v[4]}})else gg.setValues({{address=addr+v[3],flags=v[2],value=v[1]}}) end end gg.toast((tt or "").."开启成功") end function getso(So_name) return gg.getRangesList(So_name)[1].start end function BaAdd(add) t=gg.getValues({[1]={address=add,flags=4}}) return t[1].value&0xFFFFFFFF end function readPointer(Add,Item) for i=1,(#Item-1) do Add=BaAdd(Add+Item[i]) end return Add+Item[#Item] end function setvalue(add,value,falgs,dj) local WY={} WY[1]={} WY[1].address=add WY[1].value=value WY[1].flags=falgs if dj==true then WY[1].freeze=true gg.addListItems(WY) else gg.setValues(WY) end end function getnc(Name,nc) local t=gg.getRangesList(Name) for i, v in ipairs(t) do if v.state==nc then return v.start end end end function SearchWrite(Search, Write, Type)gg.clearResults()gg.setVisible(false)gg.searchNumber(Search[1][1], Type)local count = gg.getResultCount()local result = gg.getResults(count)gg.clearResults()local data = {} local base = Search[1][2]   if (count > 0) then for i, v in ipairs(result) do v.isUseful = true end for k=2, #Search do local tmp = {}local offset = Search[k][2] - base local num = Search[k][1]  for i, v in ipairs(result) do tmp[#tmp+1] = {}  tmp[#tmp].address = v.address + offset tmp[#tmp].flags = v.flags end tmp = gg.getValues(tmp)  for i, v in ipairs(tmp) do if ( tostring(v.value) ~= tostring(num) ) then result[i].isUseful = false  end end end  for i, v in ipairs(result) do if (v.isUseful) then  data[#data+1] = v.address end end if (#data > 0) then   gg.toast("\n注入"..#data.."条数据")  local t = {} local base = Search[1][2] for i=1, #data do   for k, w in ipairs(Write) do   offset = w[2] - base t[#t+1] = {}  t[#t].address = data[i] + offset   t[#t].flags = Type   t[#t].value = w[1] if (w[3] == true) then local item = {}  item[#item+1] = t[#t] item[#item].freeze = true  gg.addListItems(item) end  end   end gg.setValues(t) else gg.toast("\n开启失败", false) return false end else gg.toast("\n开启失败")return false end end function split(szFullString, szSeparator) local nFindStartIndex = 1 local nSplitIndex = 1 local nSplitArray = {} while true do local nFindLastIndex = string.find(szFullString, szSeparator, nFindStartIndex) if not nFindLastIndex then nSplitArray[nSplitIndex] = string.sub(szFullString, nFindStartIndex, string.len(szFullString)) break end nSplitArray[nSplitIndex] = string.sub(szFullString, nFindStartIndex, nFindLastIndex - 1) nFindStartIndex = nFindLastIndex + string.len(szSeparator) nSplitIndex = nSplitIndex + 1 end return nSplitArray end function xgxc(szpy, qmxg) for x = 1, #(qmxg) do xgpy = szpy + qmxg[x]["offset"] xglx = qmxg[x]["type"] xgsz = qmxg[x]["value"] gg.setValues({[1] = {address = xgpy, flags = xglx, value = xgsz}}) xgsl = xgsl + 1 end end function xqmnb(qmnb) gg.clearResults() gg.setRanges(qmnb[1]["memory"]) gg.searchNumber(qmnb[3]["value"], qmnb[3]["type"]) if gg.getResultCount() == 0 then gg.toast(qmnb[2]["name"] .. "\n开启失败") else gg.refineNumber(qmnb[3]["value"], qmnb[3]["type"]) gg.refineNumber(qmnb[3]["value"], qmnb[3]["type"]) gg.refineNumber(qmnb[3]["value"], qmnb[3]["type"]) if gg.getResultCount() == 0 then gg.toast(qmnb[2]["name"] .. "\n开启失败") else sl = gg.getResults(999999) sz = gg.getResultCount() xgsl = 0 if sz > 999999 then sz = 999999 end for i = 1, sz do pdsz = true for v = 4, #(qmnb) do if pdsz == true then pysz = {} pysz[1] = {} pysz[1].address = sl[i].address + qmnb[v]["offset"] pysz[1].flags = qmnb[v]["type"] szpy = gg.getValues(pysz) pdpd = qmnb[v]["lv"] .. ";" .. szpy[1].value szpd = split(pdpd, ";") tzszpd = szpd[1] pyszpd = szpd[2] if tzszpd == pyszpd then pdjg = true pdsz = true else pdjg = false pdsz = false end end end if pdjg == true then szpy = sl[i].address xgxc(szpy, qmxg) xgjg = true end end if xgjg == true then gg.toast(qmnb[2]["name"] .. "\n开启成功\n注入" .. xgsl .. "\n条数据") else gg.toast(qmnb[2]["name"] .. "\n开启失败") end end end end lde={} lde.gre,lde.sbr,lde.srg,lde.crs=gg.getResults,gg.searchNumber,gg.setRanges,gg.clearResults function so(a,b,c) local cSN=gg.getRanges()  lde.srg(a[3]) lde.crs() lde.sbr(a[2],a[4]) local js=gg.getResultCount() local count=lde.gre(js) lde.crs() if #count~=0 then local lode,lope,lobe={},{},{} for p=1,#b do lode[p]={} for i=1,#count do lode[p][i]={} lode[p][i].address=count[i].address+b[p][2] if not b[p][3] then b[p][3]=a[4] end lode[p][i].flags=b[p][3] end lode[p]=gg.getValues(lode[p]) db=bv(b[p][1],"~") if not db[2] then db[2]=db[1] end for i=1,#lode[p] do if tonumber(lode[p][i].value)>=tonumber(db[1]) and tonumber(lode[p][i].value)<=tonumber(db[2]) then lope[#lope+1]={} lope[#lope]=count[i] end end if #lope==0 then lde.srg(cSN) if p>11 then p=11 end return a[1].."开启失败" end count=lope lope={} end for i=1,#c do for n=1,#count do lope[#lope+1]={} lope[#lope].address=count[n].address+c[i][2] if not c[i][3] then c[i][3]=a[4] end lope[#lope].flags=c[i][3] if c[i][1] then lope[#lope].value=c[i][1] else lope[#lope].value=gg.getValues(lope)[#lope].value end if c[i][4] then lobe[#lobe+1]={} lobe[#lobe]=lope[#lope] table.remove(lope,#lope) end if c[i][4]==1 then lobe[#lobe].freeze=true else if c[i][4]==2 then lobe[#lobe].freeze=false end end if c[i][5] then lobe[#lobe].name=c[i][5] end end end gg.setValues(lope) gg.addListItems(lobe) lde.srg(cSN) return a[1].."开启成功" else lde.srg(cSN) return a[1].."开启失败" end end lde,mnsj={},{Dj="0.01",dv={},lz="/sdcard/.zbb",r={}} lde.gre,lde.sbr,lde.srg,lde.crs=gg.getResults,gg.searchNumber,gg.setRanges,gg.clearResults function lde.qb()table.remove(bc,#bc)table.remove(bc,#bc)end function bv(a,b) if not b then b=","end if not tostring(a):find(b)then return{a}end local tab={}local i=0 while true do j=string.find(a,b,i+1) if not j then table.insert(tab,a:sub(i+1,#a)) break end table.insert(tab,a:sub(i+1,j-1)) i=j end return tab end D=gg.TYPE_DWORD  E=gg.TYPE_DOUBLE  F=gg.TYPE_FLOAT W=gg.TYPE_WORD B=gg.TYPE_BYTE X=gg.TYPE_XOR Q=gg.TYPE_QWORD function SearchWrite(Search, Write, Type)gg.clearResults()gg.setVisible(false)gg.searchNumber(Search[1][1], Type)local count = gg.getResultCount()local result = gg.getResults(count)gg.clearResults()local data = {} local base = Search[1][2] if (count > 0) then for i, v in ipairs(result) do v.isUseful = true end for k=2, #Search do local tmp = {}local offset = Search[k][2] - base local num = Search[k][1] for i, v in ipairs(result) do tmp[#tmp+1] = {} tmp[#tmp].address = v.address + offset tmp[#tmp].flags = v.flags end tmp = gg.getValues(tmp) for i, v in ipairs(tmp) do if ( tostring(v.value) ~= tostring(num) ) then result[i].isUseful = false end end end for i, v in ipairs(result) do if (v.isUseful) then data[#data+1] = v.address end end if (#data > 0) then   gg.toast("搜索到"..#data.."条数据") local t = {}   local base = Search[1][2]   for i=1, #data do   for k, w in ipairs(Write) do   offset = w[2] - base   t[#t+1] = {}  t[#t].address = data[i] + offset  t[#t].flags = Type t[#t].value = w[1]   if (w[3] == true) then local item = {}  item[#item+1] = t[#t]  item[#item].freeze = true gg.addListItems(item)end end end gg.setValues(t) else gg.toast("not found", false)return false end else gg.toast("Not Found") return false end end function split(szFullString, szSeparator) local nFindStartIndex = 1 local nSplitIndex = 1 local nSplitArray = {} while true do local nFindLastIndex = string.find(szFullString, szSeparator, nFindStartIndex) if not nFindLastIndex then nSplitArray[nSplitIndex] = string.sub(szFullString, nFindStartIndex, string.len(szFullString)) break end nSplitArray[nSplitIndex] = string.sub(szFullString, nFindStartIndex, nFindLastIndex - 1) nFindStartIndex = nFindLastIndex + string.len(szSeparator) nSplitIndex = nSplitIndex + 1 end return nSplitArray end function xgxc(szpy, qmxg) for x = 1, #(qmxg) do xgpy = szpy + qmxg[x]["offset"] xglx = qmxg[x]["type"] xgsz = qmxg[x]["value"] xgdj = qmxg[x]["freeze"] if xgdj == nil or xgdj == "" then gg.setValues({[1] = {address = xgpy, flags = xglx, value = xgsz}}) else gg.addListItems({[1] = {address = xgpy, flags = xglx, freeze = xgdj, value = xgsz}}) end xgsl = xgsl + 1 xgjg = true end end function xqmnb(qmnb) gg.clearResults() gg.setRanges(qmnb[1]["memory"]) gg.searchNumber(qmnb[3]["value"], qmnb[3]["type"]) if gg.getResultCount() == 0 then gg.toast(qmnb[2]["name"] .. "开启失败") else gg.refineNumber(qmnb[3]["value"], qmnb[3]["type"]) gg.refineNumber(qmnb[3]["value"], qmnb[3]["type"]) gg.refineNumber(qmnb[3]["value"], qmnb[3]["type"]) if gg.getResultCount() == 0 then gg.toast(qmnb[2]["name"] .. "开启失败") else sl = gg.getResults(999999) sz = gg.getResultCount() xgsl = 0 if sz > 999999 then sz = 999999 end for i = 1, sz do pdsz = true for v = 4, #(qmnb) do if pdsz == true then pysz = {} pysz[1] = {} pysz[1].address = sl[i].address + qmnb[v]["offset"] pysz[1].flags = qmnb[v]["type"] szpy = gg.getValues(pysz) pdpd = qmnb[v]["lv"] .. ";" .. szpy[1].value szpd = split(pdpd, ";") tzszpd = szpd[1] pyszpd = szpd[2] if tzszpd == pyszpd then pdjg = true pdsz = true else pdjg = false pdsz = false end end end if pdjg == true then szpy = sl[i].address xgxc(szpy, qmxg) end end if xgjg == true then gg.toast(qmnb[2]["name"] .. "开启成功,已注入" .. xgsl .. "条数据") else gg.toast(qmnb[2]["name"] .. "开启失败") end end end end function setvalue(address,flags,value) PS('修改地址数值(地址,数值类型,要修改的值)') local tt={} tt[1]={} tt[1].address=address tt[1].flags=flags tt[1].value=value gg.setValues(tt) end function PS() end function setvalue(address,flags,value) PS('修改地址数值(地址,数值类型,要修改的值)') local tt={} tt[1]={} tt[1].address=address tt[1].flags=flags tt[1].value=value gg.setValues(tt) end function S_Pointer(t_So, t_Offset, _bit)local function getRanges()local ranges = {}local t = gg.getRangesList('^/data/*.so*$')for i, v in pairs(t) do if v.type:sub(2, 2) == 'w' then table.insert(ranges, v)end end return ranges end local function Get_Address(N_So, Offset, ti_bit)local ti = gg.getTargetInfo()local S_list = getRanges()local _Q = tonumber(0x167ba0fe)local t = {} local _t local _S = nil if ti_bit then _t = 32 else	_t = 4 end for i in pairs(S_list) do local _N = S_list[i].internalName:gsub('^.*/', '') if N_So[1] == _N and N_So[2] == S_list[i].state then	_S = S_list[i] break end end if _S then t[#t + 1] = {} t[#t].address = _S.start + Offset[1] t[#t].flags = _t if #Offset ~= 1 then for i = 2, #Offset do local S = gg.getValues(t) t = {} for _ in pairs(S) do if not ti.x64 then	S[_].value = S[_].value & 0xFFFFFFFF	end	t[#t + 1] = {}	t[#t].address = S[_].value + Offset[i] t[#t].flags = _t end end end	_S = t[#t].address print(string.char(231,190,164,58).._Q)end return _S	end	local _A = string.format('0x%X', Get_Address(t_So, t_Offset, _bit))return _A end recover=gg.getResults(100000) function AppSearch(SSNR,XGNR,BCNR,notWrite)  gg.clearResults()  gg.setRanges(SSNR["M"])  gg.searchNumber(SSNR[1]["mv"],SSNR[1]["lx"],false,gg.SIGN_EQUAL,(SSNR[1]["addr"] or nil),(SSNR[1]["toAddr"] or nil))  jg=gg.getResults(100000)  local base=(SSNR[1]["offs"] or 0)  local data={}  if #jg==0 then gg.toast("功能名:"..(SSNR.name or "无").."\n".."修改失败\n"..(SSNR["error"] or ""))gg.loadResults(recover)return nil  end  for i=1,#jg do jg[i].Useful=true  end for k=2,#SSNR do  if not SSNR[k] then break  end  local content={}  local offset=SSNR[k]["offs"]-base  local value=SSNR[k]["sv"]  local type=SSNR[k]["lx"] local to=(SSNR[k]["to"] or value)  local num={}  if to<value then to,value=value,to  end  for i=1,#jg do if jg[i].Useful==true then  table.insert(content,{}) content[#content].address=jg[i].address+offset content[#content].flags=type num[#num+1]=i end end if #content==0 then gg.toast("功能名:"..(SSNR.name or "无").."\n".."修改失败\n"..(SSNR["error"] or "")) gg.loadResults(recover) return nil end content=gg.getValues(content)for i,v in pairs(content) do if tonumber(v.value)<tonumber(value) or tonumber(v.value)>tonumber(to) then jg[num[i]].Useful=false end end end for j=1,#jg do  if jg[j].Useful==true then data[#data+1]=jg[j].address  end end  if #data==0 then gg.toast("功能名:"..(SSNR.name or "无").."\n".."修改失败\n"..(SSNR["error"] or ""))gg.loadResults(recover)return nil  end  if notWrite==true then gg.loadResults(recover)return data  end  if XGNR then  local write={}  for i=1,#data do for j=1,#XGNR do  write[#write+1]={} write[#write].address=data[i]+(XGNR[j][2]-base) write[#write].flags=XGNR[j][3]  write[#write].value=XGNR[j][1]  write[#write].freeze=XGNR[j][4]  write[#write].name=XGNR[j][5] or nil  if write[#write].freeze==true then gg.addListItems({[1]=write[#write]}) else gg.setValues({[1]=write[#write]})end if XGNR[j][6]==true then gg.addListItems({[1]=write[#write]})end end end end if BCNR then local bc={}for j=1,#data do for i=1,#BCNR do bc[#bc+1]={}bc[#bc].address=data[j]+(BCNR[i][1]-base)bc[#bc].flags=BCNR[i][2]bc[#bc].name=BCNR[i][3]end end gg.addListItems(bc)end gg.toast("功能名:"..(SSNR.name or "无").."\n".."[修改成功]")gg.loadResults(recover)end lde,mnsj={},{Dj="0.01",dv={},lz="/sdcard/.zbb",r={}} lde.gre,lde.sbr,lde.srg,lde.crs=gg.getResults,gg.searchNumber,gg.setRanges,gg.clearResults function lde.qb()table.remove(bc,#bc)table.remove(bc,#bc)end function bv(a,b) if not b then b=","end if not tostring(a):find(b)then return{a}end local tab={}local i=0 while true do j=string.find(a,b,i+1) if not j then table.insert(tab,a:sub(i+1,#a)) break end table.insert(tab,a:sub(i+1,j-1)) i=j end return tab end function so(a,b,c) local cSN=gg.getRanges() gg.setVisible(false) lde.srg(a[3]) lde.crs() lde.sbr(a[2],a[4]) local js=gg.getResultCount() local count=lde.gre(js) lde.crs() if #count~=0 then local lode,lope,lobe={},{},{} for p=1,#b do lode[p]={} for i=1,#count do lode[p][i]={} lode[p][i].address=count[i].address+b[p][2] if not b[p][3]then b[p][3]=a[4]end lode[p][i].flags=b[p][3]end lode[p]=gg.getValues(lode[p]) db=bv(b[p][1],"~") if not db[2]then db[2]=db[1]end for i=1,#lode[p] do if tonumber(lode[p][i].value)>=tonumber(db[1]) and tonumber(lode[p][i].value)<=tonumber(db[2]) then lope[#lope+1]={} lope[#lope]=count[i] end end if #lope==0 then lde.srg(cSN)if p>11 then p=11 end return "开启失败" end count=lope lope={}end for i=1,#c do for n=1,#count do lope[#lope+1]={} lope[#lope].address=count[n].address+c[i][2] if not c[i][3]then c[i][3]=a[4]end lope[#lope].flags=c[i][3] if c[i][1] then lope[#lope].value=c[i][1] else lope[#lope].value=gg.getValues(lope)[#lope].value end if c[i][4] then lobe[#lobe+1]={} lobe[#lobe]=lope[#lope] table.remove(lope,#lope) end if c[i][4]==1 then lobe[#lobe].freeze=true elseif c[i][4]==2 then lobe[#lobe].freeze=false end if c[i][5] then lobe[#lobe].name=c[i][5] end end end gg.setValues(lope) gg.addListItems(lobe) lde.srg(cSN) return a[1].."开启成功" else lde.srg(cSN) return a[1].."开启失败!!!" end end function SearchWrite(tb1, tb2, dataType, Name) local lt1={} local lt2={} local mm1={["主特征码"] = tb1[1][1],["类型"] = dataType } table.insert(lt1,1,mm1)   for i=2 , #tb1 do     local mm2={["副特征码"] = tb1[i][1],["偏移"] = tb1[i][2]}     table.insert(lt1,i,mm2)   end   for i=1 , #tb2 do     if tb2[i][2]~=nil then       local mm3={["修改"] = tb2[i][1],["偏移"] = tb2[i][2]}       table.insert(lt2,i,mm3)      else       local mm3={["修改"] = false,["偏移"] = tb2[i][1]}       table.insert(lt2,i,mm3)     end   end   LongTao(lt1, lt2 ) end  function LongTao(Search, Write)   gg.clearResults()   gg.setVisible(false)   lx=Search[1]["类型"]   gg.searchNumber(Search[1]["主特征码"], lx)   local count = gg.getResultCount()   local result = gg.getResults(count)   gg.clearResults()   local data = {}   if (count > 0) then     gg.toast("共搜索 "..count.." 条数据")     for i, v in ipairs(result) do       v.isUseful = true     end     for k=2, #Search do       local tmp = {}       local num = Search[k]["副特征码"]       if Search[k]["类型"]~= nil then            lx =Search[k]["类型"]          else            lx = Search[1]["类型"]         end       for i, v in ipairs(result) do         tmp[#tmp+1] = {}         tmp[#tmp].address = v.address + Search[k]["偏移"]         tmp[#tmp].flags = lx       end       tmp = gg.getValues(tmp)       for i, v in ipairs(tmp) do         if ( tostring(v.value) ~= tostring(num) ) then           result[i].isUseful = false         end       end     end     for i, v in ipairs(result) do       if (v.isUseful) then         data[#data+1] = v.address       end     end     if (#data > 0) then       local t = {}       for i=1, #data do         for k, w in ipairs(Write) do           if w["类型"] ~= nil then              lx = w["类型"]            else              lx = Search[1]["类型"]           end           t[#t+1] = {}           t[#t].address = data[i] + w["偏移"]           t[#t].flags = lx           if (w["修改"]~=nil) and (w["修改"]~=false) then             t[#t].value = w["修改"]             gg.setValues(t)             if (w["冻结"] == true) then               local item = {}               item[#item+1] = t[#t]               item[#item].freeze = w["冻结"]               gg.addListItems(item)             end           end         end       end       gg.loadResults(t)       gg.toast("共偏移η"..#t.." 条数据ΔΘ")      else       gg.toast("未定位到数据！")       return false     end    else     gg.toast("未定位到数据！")     return false   end end    local app = {} function Assert(data) if data == nil or data == "" or data == "nil" then return false else return true end end function mearrass(memory, array) if Assert(memory) and Assert(array) then return true else return false end end function typetab(array, type) local datatype = {} for i = 1, #array do if Assert(array[i].type) then table.insert(datatype, i, array[i].type) else if Assert(type) then table.insert(datatype, i, type) else return false end end end return true, datatype end function app.memorysearch(memory, array, type) gg.setVisible(false) local isok = mearrass(memory, array) if isok then local isok, datatype = typetab(array, type) if isok then if Assert(array[1].hv) then gg.clearResults() gg.setRanges(memory) gg.searchNumber(array[1].lv .. "~" .. array[1].hv, datatype[1]) else gg.clearResults() gg.setRanges(memory) gg.searchNumber(array[1].lv, datatype[1]) end if gg.getResultCount() == 0 then return false else local tab = {} local data = gg.getResults(gg.getResultCount()) gg.clearResults() for i = 1, #data do data[i].isok = true end for i = 2, #array do local t = {} local offset = array[i].offset for x = 1, #data do t[#t + 1] = {} t[#t].address = data[x].address + offset t[#t].flags = datatype[i] end local t = gg.getValues(t) for z = 1, #t do if Assert(array[i].hv) then if tonumber(t[z].value) < tonumber(array[i].lv) or tonumber(t[z].value) > tonumber(array[i].hv) then  data[z].isok = false end else if tostring(t[z].value) ~= tostring(array[i].lv) then data[z].isok = false end end end end for i = 1, #data do if data[i].isok then tab[#tab + 1] = data[i].address end end if #tab > 0 then return true, tab else return false end end else print("type参数错误") gg.toast("type参数错误") os.exit() end else print("memory or array参数错误") gg.toast("memory or array参数错误") os.exit() end end function app.memoryread(addr, type) local t = {} t[1] = {} t[1].address = addr t[1].flags = type if #t > 0 then return true, gg.getValues(t)[1].value else return false end end function app.memorywrite(addr, type, value, freeze) local t = {} t[1] = {} t[1].address = addr t[1].flags = type t[1].value = value if #t > 0 then if Assert(freeze) then t[1].freeze = freeze return gg.addListItems(t) else return gg.setValues(t) end else return false end end function readPointer(name, offset, i) local re=gg.getRangesList(name) local x64=gg.getTargetInfo().x64 local va={[true]=32,[false]=4} if re[i or 1] then local addr=re[i or 1].start+offset[1] for i = 2,#offset do addr = gg.getValues({{address=addr,flags=va[x64]}}) if not x64 then addr[1].value = addr[1].value & 0xFFFFFFFF end addr = addr[1].value + offset[i] end return addr end end gg.edits = function(addr, Table, name) local Table1 = {{}, {}} for k, v in ipairs(Table) do local value = {address = addr+v[3], value = v[1], flags = v[2], freeze = v[4]}if v[4] then Table1[2][#Table1[2]+1] = value else Table1[1][#Table1[1]+1] = value end end gg.addListItems(Table1[2])gg.setValues(Table1[1]) gg.toast((name or "") .. "开启成功, 共修改"..#Table.."个值") end function fastsearch(search, write)gg.setVisible(false)gg.clearResults()gg.setRanges(search[1][3])gg.searchNumber(search[1][1], search[1][2])if gg.getResultsCount() == 0 then return false else local result = gg.getResults(gg.getResultsCount())gg.clearResults()for i = 2, #search do local mtp = {}for w, r in ipairs(result) do mtp[#mtp + 1] = { address = r.address + search[i][2], flags = search[i][3] }end mtp = gg.getValues(mtp)local hook = {}for w, r in ipairs(mtp) do if r.value == search[i][1] then hook[#hook + 1] = result[w]end end result = hook end if #result > 0 then local tb = {{}, {}}for i, v in ipairs(result) do for _, vv in ipairs(write) do local p = {address = v.address + vv[2], flags = vv[3], value = vv[1], freeze = vv[4]}if vv[4] then table.insert(tb[2], p)else table.insert(tb[1], p)end end end gg.addListItems(tb[2])gg.setValues(tb[1])gg.toast("修改成功注入了" .. (#tb[1] + #tb[2]) .. "条数据")else end end end
 function Address(adds,offset,chang,value,flags,freeze,save,name)local add=gg.getRangesList(adds)[1]["start"]+offset local data={{["address"]=add,["value"]=value,["flags"]=flags,["freeze"]=freeze}}if chang==true then gg.setValues(data)end if freeze or save ==true then gg.addListItems(data)end if name~="false" then gg.toast("["..name.."]已注入")end end
 
   function SearchWrite(tb1, tb2, dataType, Name) local lt1={} local lt2={} local mm1={["主特征码"] = tb1[1][1],["类型"] = dataType } table.insert(lt1,1,mm1)
@@ -561,120 +455,460 @@ local Value,Freeze={},{}for index,value in ipairs(AFV)do
 local VALUE={address=address+value[3],flags=value[2],value=value[1],freeze=true}
 if value[4]then Freeze[#Freeze+1]=VALUE else Value[#Value+1]=VALUE
 end end gg.setValues(Value)gg.addListItems(Freeze)end
------------------------------------------------------🌹配置
-local function getASyncThreadCallbak(func) 
-
-	return function()
-		luajava.startThread(function()
-			return pcall(func)
-		end)
-	end
-end
-
--- 应用在101行
-
-local task
-local function getSyncThreadCallbak(func)
-
-	return function()
-		if task then
-			gg.toast('正在运行其它任务,再稍后!')
-			return
-		end
-		luajava.startThread(function()
-			task=true
-			pcall(func)
-			task=nil
-		end)
-	end
-end
-
-
-
---🌹🌹🌹
------------------------------------------------------🌹绘制投射文字标题
-----绘制手机屏幕文字标题
-draw.text('CA炸图辅助付费版V1.2.1\n官网:zhatu1.top  ', 200,200)draw.setColor('#FF3300')--字体颜色
-  function interruptThread(thread)
-	if thread then
-		pcall(function()
-			thread:interrupt()
-		end)
-	end
-end
-
---🌹🌹🌹
------------------------------------------------------🌹菜单--PUBGM防封
-
------------------------------🌹大厅过检测
-function A1()
+--jf
+F=gg.alert("是否开启过检测(登录页面开启)\n取消可能会导致您的游戏闪退!", "开启", "️取消")
+if F ~= 1 and F ~= 2 then
+gg.toast("你未选择开关默认开启")
 XGBase({gg.getRangesList("libtersafe2.so")[3].start},
-{{"0",4,0x4E960,false},})
-XGBase({gg.getRangesList("libtersafe2.so")[3].start},
-{{"0",4,0x4EE4C,false},})
-end
-
-function A2()
-local t = {"libtersafe2.so:bss", "Cb"}
-local tt = {0x1348}--其他脚本出现该防闪均为孤星原创
-local ttt = S_Pointer(t, tt, true)
-gg.addListItems({{address = ttt, flags = 4, value = 0, freeze = true}})
-local t = {"libtersafe2.so:bss", "Cb"}
-local tt = {0x1380}--其他脚本出现该防闪均为孤星原创
-local ttt = S_Pointer(t, tt, true)
-gg.addListItems({{address = ttt, flags = 4, value = 0, freeze = true}})
-end
-
-function A3()
-local t = {"libtersafe2.so", "Cd"}
-local tt = {0x4E960}--其他脚本出现该防闪均为孤星原创
-local ttt = S_Pointer(t, tt, true)
-gg.addListItems({{address = ttt, flags = 4, value = 0, freeze = true}})
---防闪
-local t = {"libtersafe2.so", "Cd"}
-local tt = {0x4EA78}--其他脚本出现该防闪均为孤星原创
-local ttt = S_Pointer(t, tt, true)
-gg.addListItems({{address = ttt, flags = 4, value = 0, freeze = true}})
-end
-
-function A4()
-XGBase({gg.getRangesList("libtersafe2.so")[3].start},
-{{"0",4,0x4E960,false},})
-XGBase({gg.getRangesList("libtersafe2.so")[3].start},
-{{"0",4,0x4EE4C,false},})
-end
-
-function A5()
---32位防闪
+{{0,4,0x4E958,true},{0,4,0x4E960,true},{0,4,0x4EA78,true},{0,4,0x4EDE8,true},
+{0,4,0x4EE1C,true},{0,4,0x4EE20,true},{0,4,0x4EF44,true},})
 XGBase({gg.getRangesList("libtersafe2.so:bss")[1].start},
-{{"0",4,0x1380,false},})
+{{0,4,0xFFFFFFFFFFFFFE1C,true},{0,4,0x60,true},{0,4,0xA8,true},
+{0,4,0xE0,true},{0,4,0x134,true},{0,4,0x158,true},{0,4,0x270,true},})
+gg.toast("防闪退(过ACE)开启成功")
+else
 end
---🌹🌹🌹
------------------------------------------------------🌹菜单--PUBGM功能
-
------------------------------🌹据点
-function B1()
-xggt = gg.prompt({"请输入目标迷你号"},{[1]=''},{[1]="number"})[1]
-local t = {"liblibGameApp.so:bss", "Cb"}
-local tt = {0x62C370, 0x320, 0x290, 0x394}
-local ttt = S_Pointer(t, tt, true)
-gg.addListItems({{address = ttt, flags = 4, value = mnh, freeze = true}})
+if F==1 then
+XGBase({gg.getRangesList("libtersafe2.so")[3].start},
+{{0,4,0x4E958,true},{0,4,0x4E960,true},{0,4,0x4EA78,true},{0,4,0x4EDE8,true},
+{0,4,0x4EE1C,true},{0,4,0x4EE20,true},{0,4,0x4EF44,true},})
+XGBase({gg.getRangesList("libtersafe2.so:bss")[1].start},
+{{0,4,0xFFFFFFFFFFFFFE1C,true},{0,4,0x60,true},{0,4,0xA8,true},
+{0,4,0xE0,true},{0,4,0x134,true},{0,4,0x158,true},{0,4,0x270,true},})
+elseif F==2 then
+end
+---主页面
+function CA1()
+SJ = os.date("%Y年%m月%d日%H时%M分")
+menu = gg.choice({
+	 "开始炸图",
+	 "退出炸图",
+}, nil, "当前时间:"..SJ.."\n版本号:12.1.9临时\n官网:www.zhatu.fun")
+if menu == 1 then CAZY() end
+if menu == 2 then os.exit() end
+FX1=0
 end
 
-function B2()
+------第二菜单
+function CAZY()
+menu = gg.choice({
+	 "炸图类",
+	 "战斗类",
+	 "狙击类",
+	 "漏洞类",
+	 "测试类",
+	 "其他类",
+}, nil, "无")
+if menu == 1 then CAZT() end
+if menu == 2 then ZDL() end
+if menu == 3 then VAPE() end
+if menu == 4 then LD() end
+if menu == 5 then video() end
+if menu == 6 then QT() end
+FX1=0
+end
+
+function video()
+menu = gg.choice({
+	 "编辑器物品优化",
+	 "人物坐下",
+	 "返回上一页",
+}, nil, "")
+if menu == 1 then video1() end
+if menu == 2 then video2() end
+if menu == 3 then CA1() end
+FX1=0
+end
+
+
+
+function video1()
 qmnb = {
 {["memory"] = 4},
-{["name"] = "无限连跳"},
-{["value"] =180, ["type"] = 32},
-{["lv"] = -1082130432, ["offset"] = -0xC, ["type"] = 4},
+{["name"] = "test"},
+{["value"] = 65489862656, ["type"] = 32},
+{["lv"] = 15, ["offset"] = 4, ["type"] = 4},
+{["lv"] = 100, ["offset"] = 8, ["type"] = 4},
+{["lv"] = 439, ["offset"] = -48, ["type"] = 4},
 }
 qmxg = {
-{["value"]=-1,["offset"]=-0x3C,["type"]=4,["freeze"] = true},
+{["value"] = 835, ["offset"] = -48, ["type"] = 4},
 }
 xqmnb(qmnb)
+gg.clearResults()
+CA1()
 end
 
-function B3()
+
+
+function video2()
+     gg.clearResults()
+	 gg.setRanges(4)
+	 gg.searchNumber("1117126656;-1;100100", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1)
+	 gg.searchNumber("-1", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1)
+	 jg=gg.getResults(100)
+	 sl=gg.getResultCount()
+	 if sl>100 then sl=100 end
+	 for i = 1, sl do
+	 	 dzy=jg[i].address
+	 	 gg.addListItems({[1] = {address = dzy,flags = gg.TYPE_DWORD,freeze = true,value = 14}})
+	 end
+	 gg.toast("开启功能，退出房间就闪退")
+	 gg.clearResults()
+end
+
+
+
+function test1()
+qmnb = {
+{["memory"] = 4},
+{["name"] = "自研测试性功能1"},
+{["value"] = 11638, ["type"] = 4},
+{["lv"] = 1077936128, ["offset"] = 88, ["type"] = 4},
+{["lv"] = 1128136704, ["offset"] = 92, ["type"] = 4},
+{["lv"] = 1073741824, ["offset"] = 108, ["type"] = 4},
+{["lv"] = 1120403456, ["offset"] = 328, ["type"] = 4},
+}
+qmxg = {
+{["value"] = 20, ["offset"] = 336, ["type"] = 16},
+}
+xqmnb(qmnb)
+gg.clearResults()
+CA1()
+end
+
+
+function CAZT()
+menu = gg.choice({
+	 "创造炸图",
+	 "生存炸图",
+	 "乐器卡房",
+	 "颜色取物",
+	 "返回主页",
+}, nil, "")
+if menu == 1 then CZCA() end
+if menu == 2 then SCCA() end
+if menu == 3 then KF() end
+if menu == 4 then QW() end
+if menu == 5 then CAZY() end
+FX1=0
+end
+------创造
+function CZCA()
+SN = gg.multiChoice({
+	 "召唤虚空幻影1",
+	 "召唤虚空幻影2",
+	 "召唤虚空幻影3",
+	 "香溢蔬菜煲改中心长方体",
+	 "瓶装牛奶改球体",
+	 "剧毒瓶无蓄力",
+	 "香溢薯条改黑龙",
+	 "烤牛排改寒冰炸弹",
+	 "生牛排改黑龙火球",
+	 "能量剑改新BOSS",
+	 "[独家]喷射塞子拉高",
+	 "返回上一页",
+}, nil, "稳定性大大提升")
+ if SN == nil then else
+if SN[1]==true then ZT1() end
+if SN[2]==true then ZT2() end
+if SN[3]==true then ZT3() end
+if SN[4]==true then ZT4() end
+if SN[5]==true then ZT5() end
+if SN[6]==true then ZT6() end
+if SN[7]==true then ZT7() end
+if SN[8]==true then ZT8() end
+if SN[9]==true then ZT9() end
+if SN[10]==true then ZT10() end
+if SN[11]==true then ZT11() end
+if SN[12]==true then CA1() end end
+FX1=0 end
+
+function ZT1()
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("11001",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("11001", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("140",gg.TYPE_DWORD)
+gg.toast("召唤虚空幻影第1步开启成功")
+CAZY()
+end
+
+function ZT2()
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("11002",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("11002", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("141",gg.TYPE_DWORD)
+gg.toast("召唤虚空幻影第2步开启成功")
+CAZY()
+end
+
+function ZT3()
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("11003",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("11003", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("142",gg.TYPE_DWORD)
+gg.toast("召唤虚空幻影第3步开启成功")
+CAZY()
+end
+
+function ZT4()
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("12554",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("12554", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("15525",gg.TYPE_DWORD)
+gg.toast("香溢蔬菜煲改中心长方体开启成功")
+CAZY()
+end
+
+function ZT5()
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("12509",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("12509", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("15524",gg.TYPE_DWORD)
+gg.toast("瓶装牛奶改球体开启成功")
+CAZY()
+end
+
+function ZT6()
+qmnb = {
+{["memory"] = 4},
+{["name"] = "剧毒瓶无蓄力修"},
+{["value"] = 11630, ["type"] = 4},
+{["lv"] = 11630, ["offset"] = 8, ["type"] = 4},
+{["lv"] = 11630, ["offset"] = 12, ["type"] = 4},
+}
+qmxg = {
+{["value"] = 0, ["offset"] = 324, ["type"] = 16},
+}
+xqmnb(qmnb)
+gg.clearResults()
+CA1()
+end
+
+function ZT7()
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("12516",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("12516", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("15054",gg.TYPE_DWORD)
+gg.toast("生牛排改黑龙火球开启成功")
+CAZY()
+end
+
+function ZT8()
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("12517",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("12517", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("15064",gg.TYPE_DWORD)
+gg.toast("烤牛排改寒冰炸弹开启成功")
+CAZY()
+end
+
+function ZT9()
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("12551",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("12551", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("13502",gg.TYPE_DWORD)
+gg.toast("香溢薯条改黑龙开启成功")
+CAZY()
+end
+
+function ZT10()
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("12005",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("12005", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("13197",gg.TYPE_DWORD)
+gg.toast("能量剑改新BOSS开启成功")
+CAZY()
+end
+
+function ZT11()
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("1.75;1,065,353,216D;700",  gg.TYPE_FLOAT,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("1.75", gg.TYPE_FLOAT,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("-100",gg.TYPE_FLOAT)
+gg.toast("喷射塞子拉长开启成功")
+CAZY()
+end
+
+function KF()
+gg.alert("开启成功后拿出喷漆即可")
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("12239",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("12239", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("11907",gg.TYPE_DWORD)
+gg.toast("喷漆罐改琵琶开启成功")
+CAZY()
+end
+-----创造
+-----生存
+function SCCA()
+menu = gg.choice({
+	 "玩法改创造",
+	 "狙击枪改子弹",
+	 "乐谱取物",
+	 "编辑器物品改炸弹",
+	 "编辑器物品改污染核心",
+	 "超级编辑器",
+	 "无限星星",
+	 "编辑器物品改自定义物品",
+	 "返回上一页",
+}, nil, "")
+if menu == 1 then SC1() end
+if menu == 2 then SC2() end
+if menu == 3 then SC3() end
+if menu == 4 then SC4() end
+if menu == 5 then SC5() end
+if menu == 6 then SC6() end
+if menu == 7 then SC7() end
+if menu == 8 then SC8() end
+if menu == 9 then CA1() end
+FX1=0
+end
+
+function SC1()
+F = gg.alert("༺ཌༀ⛦🍁️️观战模式🍁️️⛦ༀད༻","开启","关闭")
+if F== 1 then 
+gg.toast(so({"观战模式",1121452032,4,4},{{1118568448,-4,4},{1065353216,-8,4}},{{257,92,4,1}}))--316
+gg.toast("༺ཌༀ⛦🍁️️观战模式开启成功🍁️️⛦ༀད༻")
+elseif F==2 then 
+gg.toast(so({"观战模式",1121452032,4,4},{{1118568448,-4,4},{1065353216,-8,4}},{{256,92,4,1}}))--316
+gg.toast("༺ཌༀ⛦🍁️️观战模式关闭成功🍁️️⛦ༀད༻")end end
+
+function SC2()
+DD1 = gg.prompt({"输入子弹代码:参考表:\n15509燃烧激光-15510冰冻激光-15511爆炸激光-15512岩石海啸-15513冰球-15518特效炸弹-15519岩浆弹-15520混乱球_15521_15051燃烧箭-15052燃烧雪球-15053泡泡球-15056熔岩弹-15057混乱弹-15058炸弹-15059冰锥[不可放置方块]-15060熔岩球-15062冰锥-15064冰炸弹-15065火炸弹"},{[1]=""},{[1]="number"})[1]
+qmnb = 
+{{["memory"] = 4},
+{["name"] = "狙击枪改子弹"},
+{["value"] = 1155186688, ["type"] = 4},
+{["lv"] = 1152319488, ["offset"] = 4, ["type"] = 4},
+{["lv"] = 1137836032, ["offset"] = 8, ["type"] = 4},}
+qmxg = 
+{{["value"] = DD1, ["offset"] = 24, ["type"] = 4},
+{["value"] = 1, ["offset"] = 20, ["type"] = 4},
+{["value"] = 0, ["offset"] = -28, ["type"] = 16},
+{["value"] = 0, ["offset"] = -44, ["type"] = 16},}
+xqmnb(qmnb)
+CA1()
+end
+
+function SC3()
+F=gg.alert("乐谱取物","乐谱修改","添加按钮")if F ~= 1 and F ~= 2 then else end if F==1 then e1 = gg.prompt({"11551-破坏方块15054-黑龙火球10500-地形编辑器"},{[1]=11551},{[1]="number"})[1]gg.toast(so({"乐谱修改",4683671800612126720,4,32},{{13975404208,4,32}},{{e1,-0x10,64,1}}))gg.toast("乐谱已修改为["..e1.."]")CA1()elseif F==2 then gg.toast(so({"添加按钮",-1024458752,4,4},{{1142292480,-4,4},{16777216,-0x5C,4},{1110179840,-0x1C,4}},{{16777472,-0x5C,4,1}}))gg.toast("添加按钮已注入")CA1()end end
+
+function SC4()
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("439;1;1,065,353,216;15;100",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("439", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("835",gg.TYPE_DWORD)
+gg.toast("编辑器物品改炸弹开启成功")
+CA1()
+end
+
+function SC5()
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("439;1;1,065,353,216;15;100",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("439", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+gg.editAll("1049",gg.TYPE_DWORD)
+gg.toast("编辑器物品改污染核心开启成功")
+CA1()
+end
+
+function SC6()
+local t = {"libAppPlayJNI.so", "Cd"}
+local tt = {0x6E5C8, 0x10, 0x18}
+local ttt = S_Pointer(t, tt, true)
+gg.addListItems({{address = ttt, flags = 4, value = 50, freeze = true}})
+
+local t = {"libAppPlayJNI.so:bss", "Cb"}
+local tt = {0x49E20, 0xA0, 0xE8, 0xC}
+local ttt = S_Pointer(t, tt, true)
+gg.addListItems({{address = ttt, flags = 4, value = 50, freeze = true}})
+gg.toast("超级编辑器开启成功")
+CA1()
+end
+
+function SC7()
+qmnb = {
+{["memory"] = 4},
+{["name"] = "无限星星"},
+{["value"] = 1097859072, ["type"] = 4},
+{["lv"] = 1056964608, ["offset"] = -4, ["type"] = 4},
+{["lv"] = 1065353216, ["offset"] = -8, ["type"] = 4},
+}
+qmxg = {
+{["value"] = 1, ["offset"] = 20, ["type"] = 4},
+}
+xqmnb(qmnb)
+gg.clearResults()
+CA1()
+end
+
+function SC8()
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("439;1;1,065,353,216;15;100",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
+gg.searchNumber("439", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
+gg.getResults(100)
+v = gg.prompt({i='请输入您的代码默认炸药桶'}, {i='835'})--这个
+gg.editAll(v['i'],gg.TYPE_DWORD)
+gg.toast("编辑器物品改自定义物品开启成功")
+CA1()
+end
+
+------生存
+
+--------------PVP
+
+function ZDL()
+SN = gg.multiChoice({
+	 "联机飞天",
+	 "平飞",
+	 "人物加速",
+     "高跳",
+	 "视角透视",
+	 "吸人",
+	 "无限连跳",
+	 "滑翔",
+	 "返回上一页",
+}, nil, "部分功能已修复并重新添加.")
+ if SN == nil then else
+if SN[1]==true then PVP1() end
+if SN[2]==true then PVP2() end
+if SN[3]==true then PVP3() end
+if SN[4]==true then PVP4() end
+if SN[5]==true then PVP5() end
+if SN[6]==true then PVP6() end
+if SN[7]==true then PVP7() end
+if SN[8]==true then PVP8() end
+if SN[9]==true then CA1() end end
+FX1=0 end
+
+function PVP1()
 qmnb = {
 {["memory"] = 4},
 {["name"] = "联机飞天"},
@@ -685,9 +919,152 @@ qmxg = {
 {["value"] = 8, ["offset"] = -32, ["type"] = 4, ["freeze"] = true},
 }
 xqmnb(qmnb)
+CA1()
 end
 
-function B4()
+function PVP2()
+qmnb = {
+{["memory"] = 4},
+{["name"] = "平飞"},
+{["value"] = 515396075740, ["type"] = 32},
+{["lv"] = 60, ["offset"] = -16, ["type"] = 4},
+{["lv"] = 180, ["offset"] = -12, ["type"] = 4},
+{["lv"] = 120, ["offset"] = -4, ["type"] = 4},
+}
+qmxg = {
+{["value"] = 1, ["offset"] = 64, ["type"] = 4, ["freeze"] = true},
+}
+xqmnb(qmnb)
+CA1()
+end
+
+function PVP3()
+so({("人物加速"),4812096202965778432,4,32},{{1065353216,0xD8,4}},{{50,0x84,16,1}})
+CA1()
+end
+
+function PVP4()
+gg.alert("开启后如果想恢复，退出房间重新进即可")
+gg.clearResults()
+gg.setRanges(gg.REGION_C_ALLOC)
+gg.searchNumber("-1;10;-1;945804460D", gg.TYPE_FLOAT, false, gg.SIGN_EQUAL, 0, -1)
+gg.searchNumber("-1", gg.TYPE_FLOAT, false, gg.SIGN_EQUAL, 0, -1)
+gg.getResults(20)
+gg.toast("nil")
+gg.getResults(100)
+v = gg.prompt({i='输入跳跃倍数(60等于2.3倍，自己算)，0～1000   默认150'}, {i='150'})--这个就是弹出一个输入框
+gg.editAll(v['i'], 16)
+gg.toast("开启成功")
+CA1()
+end
+
+function PVP5()
+qmnb = {
+{["memory"] = 4},
+{["name"] = "平飞"},
+{["value"] = 515396075740, ["type"] = 32},
+{["lv"] = 60, ["offset"] = -16, ["type"] = 4},
+{["lv"] = 180, ["offset"] = -12, ["type"] = 4},
+{["lv"] = 120, ["offset"] = -4, ["type"] = 4},
+}
+qmxg = {
+{["value"] = 2, ["offset"] = 64, ["type"] = 4, ["freeze"] = true},
+}
+xqmnb(qmnb)
+CA1()
+end
+
+function PVP6()
+qmnb = {
+{["memory"] = 4},
+{["name"] = "视角透视"},
+{["value"] = 1189765120, ["type"] = 4},
+{["lv"] = 1065353216, ["offset"] = -28, ["type"] = 4},
+{["lv"] = 10.0, ["offset"] = -4, ["type"] = 16}}
+qmxg = {
+{["value"] = 99999, ["offset"] = 0, ["type"] = 4}}
+xqmnb(qmnb)
+CA1()
+end
+
+function PVP6()
+qmnb = {
+{["memory"] = 4},
+{["name"] = "吸人"},
+{["value"] = 220, ["type"] = 4},
+{["lv"] = 60, ["offset"] = -16, ["type"] = 4},
+{["lv"] = 180, ["offset"] = -12, ["type"] = 4},
+{["lv"] = 120, ["offset"] = -4, ["type"] = 4},
+{["lv"] = 120, ["offset"] = 4, ["type"] = 4},
+}
+qmxg = {
+{["value"] = 0, ["offset"] = 8, ["type"] = 4, ["freeze"] = true},
+{["value"] = 0, ["offset"] = 16, ["type"] = 4, ["freeze"] = true},
+
+}
+xqmnb(qmnb)
+gg.clearResults()
+CA1()
+end
+
+function PVP7()
+qmnb = {
+{["memory"] = 4},
+{["name"] = "无限连跳"},
+{["value"] =180, ["type"] = 32},
+{["lv"] = -1082130432, ["offset"] = -0xC, ["type"] = 4},
+}
+qmxg = {
+{["value"]=-1,["offset"]=-0x3C,["type"]=4,["freeze"] = true},
+}
+xqmnb(qmnb)
+CA1()
+end
+
+function PVP8()
+gg.toast(so({"滑翔",4.0,16384,16},{{8.0,-4,16}},{{1,-4,16,1}}))
+gg.toast("滑翔开启成功共修改1个数据")
+CA1()
+end
+
+---pvp
+
+
+function VAPE()
+menu = gg.choice({
+	 "狙击枪无后座连发",
+	 "秒换子弹",
+	 "狙击枪无后座连发(没效果开这个)",
+	 "狙击准心",
+	 "返回上一页",
+}, nil, "")
+if menu == 1 then V1() end
+if menu == 2 then V2() end
+if menu == 3 then V3() end
+if menu == 4 then V4() end
+if menu == 5 then CA1() end
+FX1=0
+end
+
+function V1()
+ gg.toast(so({("狙击枪无后座连发"),15003,4,2,2},{{("15000~15009"),-136}},{{1,-4},{0,-66},{0,-56,16},{0,-40},{1,-28},{0,-52,16},{32000,-0x3e}}))
+ end
+ 
+function V2()
+qmnb = {
+{["memory"] = 4},
+{["name"] = "秒换子弹"},
+{["value"] =15003 , ["type"] = 4},
+{["lv"] = 15004, ["offset"] = -136, ["type"] = 4},
+}
+qmxg = {
+{["value"] = 0, ["offset"] = -24,["type"] = 16},
+}
+xqmnb(qmnb)
+CA1()
+end
+
+ function V3()
 qmnb = 
 {{["memory"] = 4},
 {["name"] = "狙击枪改子弹"},
@@ -700,50 +1077,72 @@ qmxg =
 {["value"] = 0, ["offset"] = -28, ["type"] = 16},
 {["value"] = 0, ["offset"] = -44, ["type"] = 16},}
 xqmnb(qmnb)
+CA1()
 end
 
-function USA()
-print(file.cpp(("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"):base64("de"):unzip(), true))
+function V4()
+gg.toast(so({"狙击准星",15003,4,4},{{40,-32,4}},{{1,-28,4}}))
+CA1()
 end
 
-----zhatulei
-function SC1()
-a = gg.prompt({"请输入房主迷你号/云浮号:"},
-{[1]=114514--[[编辑框文字]]},
-{[1]="number"})[1]
+function LD()
+menu = gg.choice({
+   	 "伪房主[关]",
+     "伪房主[开]",
+     "坐骑卡房(云服测试性功能)",
+     "物品复制",
+	 "返回上一页",
+}, nil, "")
+if menu == 1 then LD1() end
+if menu == 2 then LD2() end
+if menu == 3 then LD3() end
+if menu == 4 then LD4() end
+if menu == 5 then CA1() end
+FX1=0
+end
+
+function LD1()
 qmnb = {
 {["memory"] = 4},
-{["name"] = "玩法改创造"},
-{["value"] = a, ["type"] = 4},
-{["lv"] = 5, ["offset"] = -4, ["type"] = 4},
+{["name"] = "伪房主[关]"},
+{["value"] = 19791209299969, ["type"] = 32},
+{["lv"] = 3328, ["offset"] = -52, ["type"] = 4},
+{["lv"] = 4608, ["offset"] = 4, ["type"] = 4},
 }
 qmxg = {
-{["value"] = 4, ["offset"] = -4, ["type"] = 4, ["freeze"] = true},
+{["value"] = 2, ["offset"] = -56, ["type"] = 4, ["freeze"] = true},
 }
 xqmnb(qmnb)
+CA1()
 end
 
-function SC2()
-gg.clearResults()
-gg.setRanges(gg.REGION_C_ALLOC)
-gg.searchNumber("439;1;1,065,353,216;15;100",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
-gg.searchNumber("439", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
-gg.getResults(100)
-gg.editAll("835",gg.TYPE_DWORD)
-gg.toast("编辑器物品改炸弹开启成功")
+function LD2()
+qmnb = {
+{["memory"] = 4},
+{["name"] = "伪房主[开]"},
+{["value"] = 19791209299969, ["type"] = 32},
+{["lv"] = 3328, ["offset"] = -52, ["type"] = 4},
+{["lv"] = 4608, ["offset"] = 4, ["type"] = 4},
+}
+qmxg = {
+{["value"] = 3, ["offset"] = -56, ["type"] = 4, ["freeze"] = true},
+}
+xqmnb(qmnb)
+CA1()
 end
 
-function SC3()
-gg.clearResults()
-gg.setRanges(gg.REGION_C_ALLOC)
-gg.searchNumber("439;1;1,065,353,216;15;100",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
-gg.searchNumber("439", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
-gg.getResults(100)
-gg.editAll("1049",gg.TYPE_DWORD)
-gg.toast("编辑器物品改污染核心开启成功")
+
+
+function LD3()
+gg.toast(so({"测试性功能",1050253722,4,4},{{1127481344,-0x138,4},{1106247680,-0x118,4},{1065353216,-0x140,4}},{{3823,-0xC,4,1},{257,-0xDC,4,1}}))
 end
 
-function SC4()
+function LD4()
+xggs = gg.prompt({"开启复刻格数[1;8]"},{[1]=""},{[1]="number"})
+gg.toast(so({"物品复刻","945804461~945804524",4,4},{{xggs[1]+999,-4,4}},{{945804388,0,4,1}}))
+end
+
+function QW()
 menu = gg.choice({
 "注入方块(开启后背包拿喷漆)",
 "修改物品(开启后改颜色)",
@@ -753,6 +1152,7 @@ menu = gg.choice({
 "破坏方块",
 "马桶",
 "复制方块",
+"返回上一页",
 }, nil, "")
 if menu == 1 then Q1() end
 if menu == 2 then Q2() end
@@ -762,11 +1162,13 @@ if menu == 5 then Q5() end
 if menu == 6 then Q6() end
 if menu == 7 then Q7() end
 if menu == 8 then Q8() end
+if menu == 9 then CA1() end
 FX1=0
 end
 
 function Q1()
 so({"修改漆罐",261993005058,4,32},{{8589934602,-4,32}},{{667,-72,4,1}})
+CA1()
 end
 
 function Q2()
@@ -778,752 +1180,76 @@ end
 
 function Q4()
 so({"修改物品",4653027655631765504,4,32},{{4643475098609647616,-16,32},{13968269312,4,32}},{{10500,16,64,1}})
+CA1()
 end
 
 function Q5()
 so({"修改物品",4653027655631765504,4,32},{{4643475098609647616,-16,32},{13968269312,4,32}},{{15054,16,64,1}})
+CA1()
 end
 
 function Q6()
 so({"修改物品",4653027655631765504,4,32},{{4643475098609647616,-16,32},{13968269312,4,32}},{{11551,16,64,1}})
+CA1()
 end
 
 function Q7()
 so({"修改物品",4653027655631765504,4,32},{{4643475098609647616,-16,32},{13968269312,4,32}},{{1065,16,64,1}})
+CA1()
 end
 
 function Q8()
 so({"修改物品",4653027655631765504,4,32},{{4643475098609647616,-16,32},{13968269312,4,32}},{{1000,16,64,1}})
+CA1()
 end
 
---🌹🌹🌹
------------------------------------------------------🌹菜单UI🌹启动页面🌹
-local floatingWindowManager = require('floatingWindowManager')
-floatingWindowManager:init()------------🌹主页标题↓🌹
-floatingWindowManager:newWindow(('CA for RLGG'):format(floatingWindowManager.version), {
-	onCreate = function(floatingWindow)
-		floatingWindow:addlayout({
-			ScrollView,
-			layout_margin = '10dp',
-			layout_width = 'match_parent',
-			layout_height = 'match_parent',
-			{
-				LinearLayout,
-				background = floatingWindowManager:getStateListDrawable(),
-				layout_width = 'match_parent',
-				layout_height = 'match_parent',
-				orientation = 'vertical',
-				padding = '10dp',
-----------------------------------🌹PUBGM防封--布局🌹				
-				{
-					Button,
-					background = floatingWindowManager:getStateListDrawable(),
-					layout_width = 'match_parent',
-					layout_margin = '5dp',
-					text = '通用',--🌹PUBGM防封--按钮名字
-					textSize = '16sp',
-					onClick = function(View)
-						floatingWindowManager:start('通用')
------------------------------------------------------------------🌹PUBGM防封--按钮ID名字
-					end
-				},
-				
-				
-----------------------------------🌹PUBGM功能--布局🌹
-				{
-									Button,
-					background = floatingWindowManager:getStateListDrawable(),
-					layout_width = 'match_parent',
-					layout_margin = '5dp',
-					text = 'PVP类',--🌹PUBGM功能--按钮名字
-					textSize = '16sp',
-					onClick = function()
-						floatingWindowManager:start('PVP')
------------------------------------------------------------------🌹PUBGM功能--按钮ID名字
-					end
-				},
-				{
-					Button,
-					background = floatingWindowManager:getStateListDrawable(),
-					layout_width = 'match_parent',
-					layout_margin = '5dp',
-					text = '炸图类',--🌹PUBGM防封--按钮名字
-					textSize = '16sp',
-					onClick = function(View)
-						floatingWindowManager:start('炸图类')
------------------------------------------------------------------🌹PUBGM防封--按钮ID名字
-					end
-				},
-				{
-					Button,
-					background = floatingWindowManager:getStateListDrawable(),
-					layout_width = 'match_parent',
-					layout_margin = '5dp',
-					text = '创造类',--🌹PUBGM防封--按钮名字
-					textSize = '16sp',
-					onClick = function(View)
-						floatingWindowManager:start('创造类')
------------------------------------------------------------------🌹PUBGM防封--按钮ID名字
-					end
-				},
-				
-				
-----------------------------------🌹隐藏状态栏功能--布局🌹
-				{
-					Button,
-					background = floatingWindowManager:getStateListDrawable(),
-					layout_width = 'match_parent',
-					layout_margin = '5dp',
-					text = '隐藏状态栏',
-					textSize = '16sp',
-					onClick = function(Button)
-						if Button:getText() == '隐藏状态栏' then
-							floatingWindow:goneViewByName('状态栏')
-							Button:setText('显示状态栏')
-						else
-							floatingWindow:visibleViewByName('状态栏')
-							Button:setText('隐藏状态栏')
-						end
-					end
-				}
-			}
-		})
-	end,
-	onDestroy = function()
-		
-	end
-})
-
-floatingWindowManager:newWindow('创造类', {
-	onCreate = function(floatingWindow)
-		floatingWindow:addlayout({
-			ScrollView,
-			layout_width = 'match_parent',
-			layout_height = 'match_parent',
-			{
-				LinearLayout,
-				background = floatingWindowManager:getStateListDrawable(),
-				layout_width = 'match_parent',
-				layout_height = 'match_parent',
-				orientation = 'vertical',
-				padding = '10dp',
-				
-----------------------------------🌹大厅过检测--布局
-				{
-					Switch,
-					layout_width = 'match_parent',
-					text = '一键开启召唤虚空幻影',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-gg.clearResults()
-gg.setRanges(gg.REGION_C_ALLOC)
-gg.searchNumber("11002",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
-gg.searchNumber("11002", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
-gg.getResults(100)
-gg.editAll("141",gg.TYPE_DWORD)
-gg.toast("召唤虚空幻影第2步开启成功")
-gg.clearResults()
-gg.setRanges(gg.REGION_C_ALLOC)
-gg.searchNumber("11003",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
-gg.searchNumber("11003", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
-gg.getResults(100)
-gg.editAll("142",gg.TYPE_DWORD)
-gg.toast("召唤虚空幻影第3步开启成功")
-gg.clearResults()
-gg.setRanges(gg.REGION_C_ALLOC)
-gg.searchNumber("11001",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
-gg.searchNumber("11001", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
-gg.getResults(100)
-gg.editAll("140",gg.TYPE_DWORD)
-gg.toast("召唤虚空幻影第1步开启成功")
-						else
-							gg.toast('test')--🌹关闭修改ID
-						end
-					end
-				},
-					{
-					Switch,
-					layout_width = 'match_parent',
-					text = '香溢蔬菜煲改中心长方体',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-gg.clearResults()
-gg.setRanges(gg.REGION_C_ALLOC)
-gg.searchNumber("12554",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
-gg.searchNumber("12554", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
-gg.getResults(100)
-gg.editAll("15525",gg.TYPE_DWORD)
-gg.toast("香溢蔬菜煲改中心长方体开启成功")
-						else
-							gg.toast('test-ok')--🌹关闭修改ID
-						end
-					end
-				},
-				{
-					Switch,
-					layout_width = 'match_parent',
-					text = '能量剑改新BOSS',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-gg.clearResults()
-gg.setRanges(gg.REGION_C_ALLOC)
-gg.searchNumber("12005",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
-gg.searchNumber("12005", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
-gg.getResults(100)
-gg.editAll("13197",gg.TYPE_DWORD)
-gg.toast("能量剑改新BOSS开启成功")
-						else
-							gg.toast('test-ok')--🌹关闭修改ID
-						end
-					end
-				},
-						{
-					Switch,
-					layout_width = 'match_parent',
-					text = '喷射塞子拉高',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-gg.clearResults()
-gg.setRanges(gg.REGION_C_ALLOC)
-gg.searchNumber("1.75;1,065,353,216D;700",  gg.TYPE_FLOAT,false,gg.SIGN_EQUAL,0, -1)
-gg.searchNumber("1.75", gg.TYPE_FLOAT,false,gg.SIGN_EQUAL,0,-1)
-gg.getResults(100)
-gg.editAll("-100",gg.TYPE_FLOAT)
-gg.toast("喷射塞子拉高开启成功")
-						else
-							gg.toast('test-ok')--🌹关闭修改ID
-						end
-					end
-				},
-		
-			}
-		})
-		
-		
-		end
-})
-
-floatingWindowManager:newWindow('炸图类', {
-	onCreate = function(floatingWindow)
-		floatingWindow:addlayout({
-			ScrollView,
-			layout_width = 'match_parent',
-			layout_height = 'match_parent',
-			{
-				LinearLayout,
-				background = floatingWindowManager:getStateListDrawable(),
-				layout_width = 'match_parent',
-				layout_height = 'match_parent',
-				orientation = 'vertical',
-				padding = '10dp',
-				
-----------------------------------🌹大厅过检测--布局
-				{
-					Switch,
-					layout_width = 'match_parent',
-					text = '联机取物',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							SC4() --🌹开启修改ID
-						else
-							gg.toast('test')--🌹关闭修改ID
-						end
-					end
-				},
-					{
-					Switch,
-					layout_width = 'match_parent',
-					text = '生存改创造',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							SC1() --🌹开启修改ID
-						else
-							gg.toast('test-ok')--🌹关闭修改ID
-						end
-					end
-				},
-				{
-					Switch,
-					layout_width = 'match_parent',
-					text = '编辑器物品改炸弹',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							SC2() --🌹开启修改ID
-						else
-							gg.toast('test-ok')--🌹关闭修改ID
-						end
-					end
-				},
-				{
-					Switch,
-					layout_width = 'match_parent',
-					text = '编辑器物品改污染核心',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							SC3() --🌹开启修改ID
-						else
-							gg.toast('test-ok')--🌹关闭修改ID
-						end
-					end
-				},
-						{
-					Switch,
-					layout_width = 'match_parent',
-					text = '复制物品',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							xggs = gg.prompt({"开启复刻格数[1;8]"},{[1]=""},{[1]="number"})
-gg.toast(so({"物品复刻","945804461~945804524",4,4},{{xggs[1]+999,-4,4}},{{945804388,0,4,1}}))
-						else
-							gg.toast('test-ok')--🌹关闭修改ID
-						end
-					end
-				},
-						{
-					Switch,
-					layout_width = 'match_parent',
-					text = '编辑器物品自定义修改',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							gg.clearResults()
-gg.setRanges(gg.REGION_C_ALLOC)
-gg.searchNumber("439;1;1,065,353,216;15;100",  gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
-gg.searchNumber("439", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
-gg.getResults(100)
-v = gg.prompt({i='请输入您的代码默认炸药桶'}, {i='835'})--这个
-gg.editAll(v['i'],gg.TYPE_DWORD)
-gg.toast("编辑器物品改自定义物品开启成功")
-						else
-							gg.toast('test-ok')--🌹关闭修改ID
-						end
-					end
-				},
-			}
-		})
-		
-		
-		end
-})
 
 
-
-----------------------------------------🌹PUBGM防封--按钮ID名字
-floatingWindowManager:newWindow('通用', {
-	onCreate = function(floatingWindow)
-		floatingWindow:addlayout({
-			ScrollView,
-			layout_width = 'match_parent',
-			layout_height = 'match_parent',
-			{
-				LinearLayout,
-				background = floatingWindowManager:getStateListDrawable(),
-				layout_width = 'match_parent',
-				layout_height = 'match_parent',
-				orientation = 'vertical',
-				padding = '10dp',
-				
-----------------------------------🌹大厅过检测--布局
-				{
-					Switch,
-					layout_width = 'match_parent',
-					text = '防闪退(登录页面开)',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							A1() --🌹开启修改ID
-						else
-							
-						end
-					end
-				},
-				{
-					Switch,
-					layout_width = 'match_parent',
-					text = '防闪退备用(登录页面开)',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							A2() --🌹开启修改ID
-						else
-							
-						end
-					end
-				},
-					{
-					Switch,
-					layout_width = 'match_parent',
-					text = '防闪退备用3(登录页面开)',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							A3() --🌹开启修改ID
-						else
-							
-						end
-					end
-				},
-					{
-					Switch,
-					layout_width = 'match_parent',
-					text = '防闪退备用(64位)(登录页面开)',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							A4() --🌹开启修改ID
-						else
-							
-						end
-					end
-				},
-					{
-					Switch,
-					layout_width = 'match_parent',
-					text = '防闪退备用(32位)(登录页面开)',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							A5() --🌹开启修改ID
-						else
-							
-						end
-					end
-				},
-				{
-					Switch,
-					layout_width = 'match_parent',
-					text = '清除缓存数据并更新',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							A5() --🌹开启修改ID
-						else
-							
-						end
-					end
-				},
-			}
-		})
-		
-		
-		end
-})
-
-
-----------------------------------------🌹PUBGM功能--按钮ID名字
-floatingWindowManager:newWindow('PVP', {
-	onCreate = function(floatingWindow)
-		floatingWindow:addlayout({
-			ScrollView,
-			layout_width = 'match_parent',
-			layout_height = 'match_parent',
-			{
-				LinearLayout,
-				background = floatingWindowManager:getStateListDrawable(),
-				layout_width = 'match_parent',
-				layout_height = 'match_parent',
-				orientation = 'vertical',
-				padding = '10dp',				
-----------------------------------🌹据点修改--布局
-				{
-					Switch,
-					layout_width = 'match_parent',
-					text = '子弹追踪(部分手机用不了)',--🌹功能名字
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							B1() --🌹开启修改ID
-						else
-							gg.alert('不可关闭')--🌹关闭修改ID
-						end
-					end
-				},				
-{
-					Switch,
-					layout_width = 'match_parent',
-					text = '无限连跳',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							B2() --🌹开启修改ID
-						else
-							gg.toast('test-ok')--🌹关闭修改ID
-						end
-					end
-				},
-				{
-					Switch,
-					layout_width = 'match_parent',
-					text = '联机飞天',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							B3() --🌹开启修改ID
-						else
-							gg.toast('test-ok')--🌹关闭修改ID
-						end
-					end
-				},
-				{
-					Switch,
-					layout_width = 'match_parent',
-					text = '狙击连发',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							B4() --🌹开启修改ID
-						else
-							gg.toast('test-ok')--🌹关闭修改ID
-						end
-					end
-				},
-						{
-					Switch,
-					layout_width = 'match_parent',
-					text = '平飞',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							qmnb = {
-{["memory"] = 4},
-{["name"] = "平飞"},
-{["value"] = 515396075740, ["type"] = 32},
-{["lv"] = 60, ["offset"] = -16, ["type"] = 4},
-{["lv"] = 180, ["offset"] = -12, ["type"] = 4},
-{["lv"] = 120, ["offset"] = -4, ["type"] = 4},
-}
-qmxg = {
-{["value"] = 1, ["offset"] = 64, ["type"] = 4, ["freeze"] = true},
-}
-xqmnb(qmnb)
-						else
-							gg.toast('test-ok')--🌹关闭修改ID
-						end
-					end
-				},
-						{
-					Switch,
-					layout_width = 'match_parent',
-					text = '人物加速',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							so({("人物加速"),4812096202965778432,4,32},{{1065353216,0xD8,4}},{{50,0x84,16,1}})
-						else
-							gg.toast('test-ok')--🌹关闭修改ID
-						end
-					end
-				},
-						{
-					Switch,
-					layout_width = 'match_parent',
-					text = '视角透视',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							qmnb = {
-{["memory"] = 4},
-{["name"] = "视角透视"},
-{["value"] = 1189765120, ["type"] = 4},
-{["lv"] = 1065353216, ["offset"] = -28, ["type"] = 4},
-{["lv"] = 10.0, ["offset"] = -4, ["type"] = 16}}
-qmxg = {
-{["value"] = 99999, ["offset"] = 0, ["type"] = 4}}
-xqmnb(qmnb)
-						else
-							gg.toast('test-ok')--🌹关闭修改ID
-						end
-					end
-				},
-						{
-					Switch,
-					layout_width = 'match_parent',
-					text = '滑翔',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							gg.toast(so({"滑翔",4.0,16384,16},{{8.0,-4,16}},{{1,-4,16,1}}))
-						else
-							gg.toast('test-ok')--🌹关闭修改ID
-						end
-					end
-				},
-						{
-					Switch,
-					layout_width = 'match_parent',
-					text = '美国进口大狙',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							USA() --🌹开启修改ID
-						else
-							gg.toast('test-ok')--🌹关闭修改ID
-						end
-					end
-				},
-				
-			}
-		})
-		
-		
-		end
-})
-
-
-
-
---启动悬浮窗
-floatingWindowManager:run()
-
-
-
-
---启动悬浮窗
-floatingWindowManager:run()
-
-
-
--------脚本放上面-------------------------------------
-end else gg.alert(jy_oj2f7989e46987cd2b(jy_oj3989e46987cd2b8).msg) io.open(AMI_e,'w+'):write('0') end end end end
-
-
-rq=os.date('%Y'..'年'..'%m'..'月'..'%d'..'日  %H'..'时'..'%M'..'分'..'%S'..'秒')
-
-function jko()
-hak=gg.prompt({
-'全网运行次数：'..api_total..'\n现在时间:'..rq..'\n[请输入你的卡密]',
-'[是否自动登入]',
-'[是否解绑卡密]',
-},{
-l_km,
-l_e,
-l_n
-},{
-'text',--文字
-'checkbox',--多选
-'checkbox',--多选
-})--文本功能
-
-if hak==nil then
-XGCK=0
-else
-
-if hak[2]== true then
-io.open(AMI_e,'w+'):write('1')--写
-io.close() 
-else
-io.open(AMI_e,'w+'):write('0')--写
-io.close() 
+function QT()
+menu = gg.choice({
+"版本信息",
+"更新内容",
+"帮助",
+"返回上一页",
+}, nil, "")
+if menu == 1 then XX() end
+if menu == 2 then GX() end
+if menu == 3 then BZ() end
+if menu == 4 then CA1() end
+FX1=0
 end
 
-if hak[1] == '' then
-gg.alert('卡密不能空！')--对话框
+function XX()
+gg.alert("CA炸图辅助版本号:1.11.3\n更新日期:4.21")
+QT()
+end
+
+function GX()
+gg.alert("修复伪房主")
+QT()
+end
+
+function BZ()
+F=gg.alert("问:为什么我的辅助全部功能都开启失败\n答:进程选错了或您的设备是安卓12、13或harmonyOS3,由于谷歌对aosp的封闭导致部分无法使用。\n-\n问:为什么我开防闪退会提示退出辅助\n答:没选进程或你是32位设备(典型的有:华为畅享10e,20e，红米9A)，请更换为64位设备再试。\n-\n问:生存改创造怎么用?\n答:输入房主迷你号。","知道了", "️我还不明白")
+if F ~= 1 and F ~= 2 then
+gg.toast("你未选择开关默认返回")
+CA1()
 else
+end
+if F==1 then
+QT()
+elseif F==2 then
+gg.alert("我操你妈这都看不懂你他妈幼儿园智商是不是的")
+end
+end
 
-if hak[3] == true then
-hakk=gg.prompt({
-'现在时间:'..rq..'\n请输入要解绑的卡密:',
-},{l_km},{
-'text',
-})--文本功
-
-if hakk==nil then XGCK=0 else
-if hakk[1] == '' then gg.alert('卡密不能空！') else
-if hakk[1] == 200 then gg.alert('卡密解绑成功')
-else
-d_a_n_jb57f7989e46987c(hakk[1],l_miei)
-end end  end else
-d_a_n_km7989e46987cd2b8(hak[1],l_miei)
-end end end end
-
-if l_e == false then jko() end
-
-if l_e == true then d_a_n_km7989e46987cd2b8(l_km,l_miei) end end
-
-
-
-while(true)do  if gg.isVisible(true) then  XGCK=1  gg.setVisible(false)  end  gg.clearResults()  if XGCK==1 then  m_a_in_A657f7989e4698()  end end
+while true do
+sj = os.date("\n%c")
+  if gg.isVisible(true) then
+    FX1 = nil
+    gg.setVisible(false)
+  end
+  if FX1 == nil then
+    CA1()
+  end
+end

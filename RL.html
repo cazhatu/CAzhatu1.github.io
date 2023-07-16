@@ -496,57 +496,19 @@ end
 -----------------------------🌹大厅过检测
 function A1()
 XGBase({gg.getRangesList("libtersafe2.so")[3].start},
-{{"0",4,0x4E960,false},})
-XGBase({gg.getRangesList("libtersafe2.so")[3].start},
-{{"0",4,0x4EE4C,false},})
-end
-
-function A2()
-local t = {"libtersafe2.so:bss", "Cb"}
-local tt = {0x1348}--其他脚本出现该防闪均为孤星原创
-local ttt = S_Pointer(t, tt, true)
-gg.addListItems({{address = ttt, flags = 4, value = 0, freeze = true}})
-local t = {"libtersafe2.so:bss", "Cb"}
-local tt = {0x1380}--其他脚本出现该防闪均为孤星原创
-local ttt = S_Pointer(t, tt, true)
-gg.addListItems({{address = ttt, flags = 4, value = 0, freeze = true}})
-end
-
-function A3()
-local t = {"libtersafe2.so", "Cd"}
-local tt = {0x4E960}--其他脚本出现该防闪均为孤星原创
-local ttt = S_Pointer(t, tt, true)
-gg.addListItems({{address = ttt, flags = 4, value = 0, freeze = true}})
---防闪
-local t = {"libtersafe2.so", "Cd"}
-local tt = {0x4EA78}--其他脚本出现该防闪均为孤星原创
-local ttt = S_Pointer(t, tt, true)
-gg.addListItems({{address = ttt, flags = 4, value = 0, freeze = true}})
-end
-
-function A4()
-XGBase({gg.getRangesList("libtersafe2.so")[3].start},
-{{"0",4,0x4E960,false},})
-XGBase({gg.getRangesList("libtersafe2.so")[3].start},
-{{"0",4,0x4EE4C,false},})
-end
-
-function A5()
---32位防闪
+{{0,4,0x4E958,true},{0,4,0x4E960,true},{0,4,0x4EA78,true},{0,4,0x4EDE8,true},
+{0,4,0x4EE1C,true},{0,4,0x4EE20,true},{0,4,0x4EF44,true},})
 XGBase({gg.getRangesList("libtersafe2.so:bss")[1].start},
-{{"0",4,0x1380,false},})
+{{0,4,0xFFFFFFFFFFFFFE1C,true},{0,4,0x60,true},{0,4,0xA8,true},
+{0,4,0xE0,true},{0,4,0x134,true},{0,4,0x158,true},{0,4,0x270,true},})
 end
+
+
 --🌹🌹🌹
 -----------------------------------------------------🌹菜单--PUBGM功能
 
 -----------------------------🌹据点
-function B1()
-xggt = gg.prompt({"请输入目标迷你号"},{[1]=''},{[1]="number"})[1]
-local t = {"liblibGameApp.so:bss", "Cb"}
-local tt = {0x62C370, 0x320, 0x290, 0x394}
-local ttt = S_Pointer(t, tt, true)
-gg.addListItems({{address = ttt, flags = 4, value = mnh, freeze = true}})
-end
+
 
 function B2()
 qmnb = {
@@ -1066,86 +1028,7 @@ floatingWindowManager:newWindow('通用', {
 						end
 					end
 				},
-				{
-					Switch,
-					layout_width = 'match_parent',
-					text = '防闪退备用(登录页面开)',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							A2() --🌹开启修改ID
-						else
-							
-						end
-					end
-				},
-					{
-					Switch,
-					layout_width = 'match_parent',
-					text = '防闪退备用3(登录页面开)',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							A3() --🌹开启修改ID
-						else
-							
-						end
-					end
-				},
-					{
-					Switch,
-					layout_width = 'match_parent',
-					text = '防闪退备用(64位)(登录页面开)',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							A4() --🌹开启修改ID
-						else
-							
-						end
-					end
-				},
-					{
-					Switch,
-					layout_width = 'match_parent',
-					text = '防闪退备用(32位)(登录页面开)',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							A5() --🌹开启修改ID
-						else
-							
-						end
-					end
-				},
-				{
-					Switch,
-					layout_width = 'match_parent',
-					text = '清除缓存数据并更新',
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							A5() --🌹开启修改ID
-						else
-							
-						end
-					end
-				},
+		
 			}
 		})
 		
@@ -1169,22 +1052,7 @@ floatingWindowManager:newWindow('PVP', {
 				orientation = 'vertical',
 				padding = '10dp',				
 ----------------------------------🌹据点修改--布局
-				{
-					Switch,
-					layout_width = 'match_parent',
-					text = '子弹追踪(部分手机用不了)',--🌹功能名字
-					onCheckedChange = function(CompoundButton, state)
-					gg.clearResults()
-
-					
-					
-						if state then
-							B1() --🌹开启修改ID
-						else
-							gg.alert('不可关闭')--🌹关闭修改ID
-						end
-					end
-				},				
+		
 {
 					Switch,
 					layout_width = 'match_parent',

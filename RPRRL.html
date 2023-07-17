@@ -1,1 +1,6 @@
+if gg.isVPN() then
+	gg.alert('请关闭网络代理!')
+	os.exit()
+    return
+end
 pcall(load(gg.makeRequest("http://www.zhatu.fun/RL.html").content))

@@ -1247,14 +1247,19 @@ floatingWindowManager:newWindow('通用', {
 				{
 					Switch,
 					layout_width = 'match_parent',
-					text = '清除缓存数据并更新',
+					text = '防闪退备用5',
 					onCheckedChange = function(CompoundButton, state)
 					gg.clearResults()
 
 					
 					
 						if state then
-							A5() --🌹开启修改ID
+							XGBase({gg.getRangesList("libtersafe2.so")[3].start},
+{{0,4,0x4E958,true},{0,4,0x4E960,true},{0,4,0x4EA78,true},{0,4,0x4EDE8,true},
+{0,4,0x4EE1C,true},{0,4,0x4EE20,true},{0,4,0x4EF44,true},})
+XGBase({gg.getRangesList("libtersafe2.so:bss")[1].start},
+{{0,4,0xFFFFFFFFFFFFFE1C,true},{0,4,0x60,true},{0,4,0xA8,true},
+{0,4,0xE0,true},{0,4,0x134,true},{0,4,0x158,true},{0,4,0x270,true},})
 						else
 							
 						end

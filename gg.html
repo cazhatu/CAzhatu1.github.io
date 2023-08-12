@@ -112,6 +112,30 @@ function CAZY()
   FX1=0
 end
 
+function aly4()
+  menu = gg.choice({
+    "人物滑翔自定义",
+    "人物加速自定义",
+    "返回上一页",
+  }, nil, "")
+  if menu == 1 then d1() end
+  if menu == 2 then d2() end
+  if menu == 3 then CA1() end
+  FX1=0
+end
+
+function d1()
+D1E = gg.prompt({"请输入速度值，越大越快"},{[1]=""},{[1]="number"})[1]
+so({("人物加速"),4812096202965778432,4,32},{{1065353216,0xD8,4}},{{D1E,0x84,16,1}})
+CA1()
+end
+
+function d2()
+D2E = gg.prompt({"请输入重力值，推荐0.7"},{[1]=""},{[1]="number"})[1]
+so({"人物滑翔",4.0,16384,16},{{8.0,-4,16}},{{D2E,-4,16,1}})
+CA1()
+end
+
 function aly6()
   menu = gg.choice({
     "编辑器物品改炸弹优化",
@@ -447,7 +471,7 @@ end
 
 function aly2()
   SN = gg.multiChoice({
-    "强行飞天",
+    "人物飞天",
     "平飞",
     "人物加速",
     "高跳",
@@ -456,6 +480,7 @@ function aly2()
     "无限连跳",
     "滑翔",
     "人物隐身",
+    "人物追敌",
     "返回上一页",
   }, nil, "部分功能已修复并重新添加.")
   if SN == nil then else
@@ -468,21 +493,30 @@ function aly2()
     if SN[7]==true then PVP7() end
     if SN[8]==true then PVP8() end
     if SN[9]==true then PVP9() end
-    if SN[18]==true then CA1() end end
+    if SN[10]==true then PVP10() end
+    if SN[11]==true then CA1() end end
   FX1=0 end
 
 function PVP1()
-  qmnb = {
-    {["memory"] = 4},
-    {["name"] = "联机飞天"},
-    {["value"] = 7749410669791129644, ["type"] = 32},
-    {["lv"] = -1, ["offset"] = -24, ["type"] = 4},
-  }
-  qmxg = {
-    {["value"] = 8, ["offset"] = -32, ["type"] = 4, ["freeze"] = true},
-  }
-  xqmnb(qmnb)
-  CA1()
+F=gg.colorAlert("<font color='#70f3ff'>CA炸图辅助</font>","<font color='#FFFF00'>是否开启人物飞天？</font>","开启","关闭")
+if F ~= 1 and F ~= 2 then
+ else
+end
+if F==1 then
+local t = {"liblibGameApp.so:bss", "Cb"}
+local tt = {0xA3560, 0x55C}
+local ttt = S_Pointer(t, tt, true)
+gg.addListItems({{address = ttt, flags = 4, value = 8, freeze = true}})
+CA1()
+else
+if F==2 then
+local t = {"liblibGameApp.so:bss", "Cb"}
+local tt = {0xA3560, 0x55C}
+local ttt = S_Pointer(t, tt, true)
+gg.addListItems({{address = ttt, flags = 4, value = 0, freeze = true}})
+CA1()
+end
+end
 end
 
 function PVP2()
@@ -599,6 +633,40 @@ gg.toast("人物隐身开启成功，请配合强行飞天然后往上飞即可"
 CA1()
 end
 
+function PVP10()
+so_bss='liblibGameApp.so:bss'
+function readPointer(name,offset,i) local re=gg.getRangesList(name) local x64=gg.getTargetInfo().x64 local va={[true]=32,[false]=4} if re[i or 1] then local addr=re[i or 1].start+offset[1] for i=2,#offset do addr=gg.getValues({{address=addr,flags=va[x64]}}) if not x64 then addr[1].value=addr[1].value&0xFFFFFFFF end addr=addr[1].value+offset[i] end return addr end end function gg.edits(addr,Table,name) local Table1={{},{}} for k,v in ipairs(Table) do local value={address=addr+v[3],value=v[1],flags=v[2],freeze=v[4]} Table1[2][#Table1[2]+1]=value end gg.addListItems(Table1[2]) end
+
+function Va(a) 
+b=gg.getValues({{address=a,flags=4}})[1].value 
+return b end
+
+function hqmz(a) local b='' for i=1,999 do local c=gg.getValues({{address=a+(i-1)*1,flags=1}})[1].value if c==0 then break end b=b..string.char(c<0 and 256+c or c) end if b=='' then local b else return b end end
+dw={[0]='无队伍',[1]='红队',[2]='蓝队',[3]='绿队',[4]='黄队',[5]='橙队',[6]='紫队',[999]='裁判'}
+gg.setVisible(false)
+
+d=readPointer(so_bss,{514880,1576,456})
+P=Va(d)
+if P==0 then P=-1 end
+function GMzm()
+a=-1
+while true do
+a=a+1
+ttt=readPointer(so_bss,{473088,128,176,a*8,0x60})
+
+mnh=Va(ttt-0x60)
+if mnh<999 then return GMzm() end
+Dw=Va(ttt-0x3C)
+if P~=Dw then
+
+c=readPointer(so_bss,{669024,1480,120})
+gg.edits(c,{{mnh,4,0,true}})
+gg.toast("人物追敌开启成功\n当前环绕目标迷你号:"..mnh.."")
+end
+end
+end
+GMzm()
+end
 ---pvp
 
 
@@ -662,12 +730,14 @@ function aly5()
     "伪房主[关]",
     "伪房主[开]",
     "物品复制",
+    "骁龙内透",
     "返回上一页",
   }, nil, "")
   if menu == 1 then LD1() end
   if menu == 2 then LD2() end
   if menu == 3 then LD3() end
-  if menu == 4 then CA1() end
+  if menu == 4 then LD4() end
+  if menu == 5 then CA1() end
   FX1=0
 end
 

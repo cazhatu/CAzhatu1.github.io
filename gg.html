@@ -76,11 +76,11 @@ function CA1()
     "开始炸图",
     "退出炸图",
     "前往官网",
-  }, nil, "版本号:12.7.4\n官方交流群:672827254|CA")
+  }, nil, "版本号:12.7.5\n官方交流群:672827254|CA")
   if menu == 1 then CAZY() end
   if menu == 2 then close() end
   if menu == 3 then M3() end
-  FX1=0
+  CCP=0
 end
 
 function close()
@@ -193,7 +193,7 @@ function aly1()
   FX1=0
 end
 ------创造
-function CZCA()
+function alya1()
   SN = gg.multiChoice({
     "召唤虚空幻影1",
     "召唤虚空幻影2",
@@ -349,7 +349,7 @@ function alya3()
 end
 -----创造
 -----生存
-function SCCA()
+function alya2()
   menu = gg.choice({
     "玩法改创造",
     "狙击枪改子弹",
@@ -778,7 +778,7 @@ function ud()
 end
 
 function Updates()
-  gg.alert("CA炸图辅助版本号:12.7.4\n更新日期:8.12\n更新日志:\n更新人物隐身、骁龙内透、人物追敌(幻梦)、超广角、美国进口大狙、云服飞天、联机飞天、人物旋转、召唤坐骑")
+  gg.alert("CA炸图辅助版本号:12.7.5\n更新日期:8.19\n更新日志:\n修复问题")
 end
 
 function carry()
@@ -835,10 +835,10 @@ end
 while true do
   sj = os.date("\n%c")
   if gg.isVisible(true) then
-    FX1 = nil
+    CCP = nil
     gg.setVisible(false)
   end
-  if FX1 == nil then
+  if CCP == nil then
     CA1()
   end
 end

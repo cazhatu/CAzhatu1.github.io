@@ -36,7 +36,8 @@
 	</head>
 	
 	<body>
-	
+	<body onload="countdown(year,month,day,hour,minute)">
+
 		<header class="top-header">
 			<div class="container">
 				<div class="row">
@@ -196,7 +197,28 @@ overflow: hidden;
             <img src="page3.png" alt="">
         </div>
     </div>
-
+                        <p class="main-header">距离CA炸图辅助三周年</p>
+	                    
+                        <div class="row">
+							<div class="col-md-12">
+								<div class="numbers" id="count2"></div>
+							</div>
+							<div class="col-md-12 counter1 text-center" id="spacer1">
+								<div class="col-md-4 col-xs-3 col-sm-4 day numbers" id="dday"></div>
+								<div class="col-md-2 col-xs-3 col-sm-2 hr numbers" id="dhour"></div>
+								<div class="col-md-2 col-xs-3 col-sm-2 min numbers" id="dmin"></div>
+								<div class="col-md-4 col-xs-3 col-sm-4 sec numbers" id="dsec"></div>
+							</div>
+							<div class="col-md-12 counter2 text-center" id="spacer2">
+								<div class="col-md-4 col-xs-3 col-sm-4 day title" id="days">天</div>
+								<div class="col-md-2 col-xs-3 col-sm-2 hr title" id="hours">时</div>
+								<div class="col-md-2 col-xs-3 col-sm-2 min title" id="minutes">分</div>
+								<div class="col-md-4 col-xs-3 col-sm-4 sec title" id="seconds">秒</div>
+							</div>
+						</div>
+						<!--  end of counter -->
+					</div> <!--  end of .container  -->
+				</div><!-- end of .header-wrapper  -->
 
 
 			<!-- About us -->
@@ -215,9 +237,10 @@ overflow: hidden;
 	                    <div class="col-md-4 text-center">
 	                    <div align="center">
 	                    <p class="main-header">CA炸图辅助</p>
+	                    
 	                        <div class="aboutus-item">
 	                            <h4 class="aboutus-title">安全的</h4>
-	                            <p class="aboutus-desc">我们承诺不会侵犯用户隐私权利</p>
+	                            <p class="aboutus-desc">您的数据将以加密形式上传至服务器存储</p>
 	                        </div>
 	                    </div>
 	                    <div class="col-md-4 text-center">
@@ -226,12 +249,7 @@ overflow: hidden;
 	                            <p class="aboutus-desc">无需框架即可使用</p>
 	                        </div>
 	                    </div>
-	                    <div class="col-md-4 text-center">
-	                        <div class="aboutus-item">
-	                          <h4 class="aboutus-title">云数据存储</h4>
-	                            <p class="aboutus-desc">您累计使用时间,卡密验证等都会通过上海节点上传至CA美国芝加哥服务器</p>
-	                        </div>
-	                    </div>
+	                    
 	                    <div class="col-md-4 text-center">
 	                        <div class="aboutus-item">
 	                            <h4 class="aboutus-title">高频次更新</h4>
@@ -242,6 +260,12 @@ overflow: hidden;
 	                        <div class="aboutus-item">
 		                            <h4 class="aboutus-title">简易的</h4>
 	                            <p class="aboutus-desc">功能页简单明了更易上手</p>
+	                        </div>
+	                    </div>
+	                    <div class="col-md-4 text-center">
+	                        <div class="aboutus-item">
+		                            <h4 class="aboutus-title">两种选择</h4>
+	                            <p class="aboutus-desc">您可以选择免费的Lite版进行体验但功能会有所缺失或者你可以选择付费的完整版。</p>
 	                        </div>
 	                    </div>
 	                </div>
@@ -262,7 +286,7 @@ overflow: hidden;
 									<li class="address-sub"><i class="fa fa-envelope-o"></i>邮箱</li>
 										<p>
 											<a href="mailto:info@domain.com">ca@zhatu1.top</a><br>
-											<a href="http://wwa.zhatu.fun/">wwa.zhatu.fun</a>
+											<a href="http://www.zhatu.fun/">www.zhatu.fun</a>
 										</p>
 										
 											<li class="address-sub"><i class="fa fa-envelope-o"></i>抖音</li>
@@ -300,6 +324,7 @@ overflow: hidden;
 		<script src="assets/js/contact.js"></script>
 		<script src="assets/js/script.js"></script>
 		<script src="assets/js/smoothscroll.js"></script>
+        <script type="text/javascript" src="assets/js/timer.js"></script>
 		<script type="text/javascript">
 		jQuery(document).ready(function($){
 

@@ -67,7 +67,7 @@ function CA1()
     "开始炸图",
     "退出炸图",
     "前往官网",
-  }, nil, "版本号:12.9.5\nCA client 2020-2023")
+  }, nil, "版本号:13.0.0\nCA client 2020-2023")
   if menu == 1 then CAZY() end
   if menu == 2 then close() end
   if menu == 3 then M3() end
@@ -457,6 +457,7 @@ function aly2()
     "人物高跳",
     "无限连跳",
     "人物滑翔",
+    "人物头部旋转",
     "返回上一页",
   }, nil, "部分功能已修复并重新添加.")
   if SN == nil then else
@@ -466,7 +467,8 @@ function aly2()
     if SN[4]==true then PVP4() end
     if SN[5]==true then PVP5() end
     if SN[6]==true then PVP6() end
-    if SN[7]==true then CA1() end end
+    if SN[7]==true then PVP7() end
+    if SN[8]==true then CA1() end end
   FX1=0 end
 
 function PVP1()
@@ -522,17 +524,17 @@ function PVP3()
 end
 
 function PVP4()
-  gg.alert("开启后如果想恢复，退出房间重新进即可")
-  gg.clearResults()
-  gg.setRanges(gg.REGION_C_ALLOC)
-  gg.searchNumber("-1;10;-1;945804460D", gg.TYPE_FLOAT, false, gg.SIGN_EQUAL, 0, -1)
-  gg.searchNumber("-1", gg.TYPE_FLOAT, false, gg.SIGN_EQUAL, 0, -1)
-  gg.getResults(20)
-  gg.toast("nil")
-  gg.getResults(100)
-  v = gg.prompt({i='输入跳跃倍数(60等于2.3倍，自己算)，0～1000   默认150'}, {i='150'})--这个就是弹出一个输入框
-  gg.editAll(v['i'], 16)
-  gg.toast("开启成功")
+  qmnb = {
+    {["memory"] = 4},
+    {["name"] = "人物高跳"},
+    {["value"] = 1028443341, ["type"] = 4},
+    {["lv"] = 1000593162, ["offset"] = -4, ["type"] = 4},
+    {["lv"] = 10.0, ["offset"] = -68, ["type"] = 16},
+  }
+  qmxg = {
+    {["value"] = 600, ["offset"] = -240, ["type"] = 4},
+  }
+  xqmnb(qmnb)
   CA1()
 end
 
@@ -558,6 +560,28 @@ function PVP6()
   xqmnb(qmnb)
   CA1()
 end
+
+function PVP7()
+F=gg.colorAlert("<font color='#70f3ff'>CA炸图辅助</font>","<font color='#FFFF00'>是否开启人物头部旋转？</font>","开启","关闭")
+if F ~= 1 and F ~= 2 then
+ else
+end
+if F==1 then
+  local t = {"liblibGameApp.so:bss", "Cb"}
+  local tt = {0x986440, 0x3E0, 0xB64}
+  local ttt = S_Pointer(t, tt, true)
+  gg.setValues({{address = ttt, flags = 16, value = 50}})
+ CA1()
+ if F==2 then
+ local t = {"liblibGameApp.so:bss", "Cb"}
+  local tt = {0x986440, 0x3E0, 0xB64}
+  local ttt = S_Pointer(t, tt, true)
+  gg.setValues({{address = ttt, flags = 16, value = -180}})
+ CA1()
+end
+end
+end
+
 
 function aly3()
   menu = gg.choice({
@@ -663,7 +687,7 @@ function ud()
 end
 
 function Updates()
-  gg.alert("CA炸图辅助版本号:12.9.5\n更新日期:10.21\n更新日志:\n修复已知问题")
+  gg.alert("CA炸图辅助版本号:13.0.0\n更新日期:10.21\n更新日志:\n修复已知问题")
 end
 
 
@@ -672,7 +696,7 @@ function qq()
     "CA战地交流群(1)",
     "返回上一页",
   }, nil, "")
-  if menu == 1 then gg.QQgroup("702269058") end
+  if menu == 1 then gg.QQgroup("324683085") end
   if menu == 2 then CA1() end
   FX1=0
 end

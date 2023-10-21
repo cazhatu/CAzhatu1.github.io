@@ -67,7 +67,7 @@ function CA1()
     "开始炸图",
     "退出炸图",
     "前往官网",
-  }, nil, "版本号:12.9.0\n|CA client 2020-2023")
+  }, nil, "版本号:12.9.5\nCA client 2020-2023")
   if menu == 1 then CAZY() end
   if menu == 2 then close() end
   if menu == 3 then M3() end
@@ -150,7 +150,7 @@ end
 function e1()
   qmnb = {
     {["memory"] = 4},
-    {["name"] = "[测试性功能]编辑器填充物改炸弹优化"},
+    {["name"] = "编辑器填充物改炸弹优化"},
     {["value"] = 65489862656, ["type"] = 32},
     {["lv"] = 15, ["offset"] = 4, ["type"] = 4},
     {["lv"] = 100, ["offset"] = 8, ["type"] = 4},
@@ -383,40 +383,39 @@ end
 
 
 function SC4()
+    qmnb = {
+    {["memory"] = 4},
+    {["name"] = "编辑器填充物改炸弹优化"},
+    {["value"] = 65489862656, ["type"] = 32},
+    {["lv"] = 15, ["offset"] = 4, ["type"] = 4},
+    {["lv"] = 100, ["offset"] = 8, ["type"] = 4},
+    {["lv"] = 439, ["offset"] = -48, ["type"] = 4},
+  }
+  qmxg = {
+    {["value"] = 835, ["offset"] = -48, ["type"] = 4},
+  }
+  xqmnb(qmnb)
   gg.clearResults()
-  gg.setRanges(gg.REGION_C_ALLOC)
-  gg.searchNumber("439;1;1,065,353,216;15;100", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
-  gg.searchNumber("439", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
-  gg.getResults(100)
-  gg.editAll("835",gg.TYPE_DWORD)
-  gg.toast("编辑器物品改炸弹开启成功")
   CA1()
 end
 
 function SC5()
+    qmnb = {
+    {["memory"] = 4},
+    {["name"] = "编辑器填充物改炸弹优化"},
+    {["value"] = 65489862656, ["type"] = 32},
+    {["lv"] = 15, ["offset"] = 4, ["type"] = 4},
+    {["lv"] = 100, ["offset"] = 8, ["type"] = 4},
+    {["lv"] = 439, ["offset"] = -48, ["type"] = 4},
+  }
+  qmxg = {
+    {["value"] = 1049, ["offset"] = -48, ["type"] = 4},
+  }
+  xqmnb(qmnb)
   gg.clearResults()
-  gg.setRanges(gg.REGION_C_ALLOC)
-  gg.searchNumber("439;1;1,065,353,216;15;100", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0, -1)
-  gg.searchNumber("439", gg.TYPE_DWORD,false,gg.SIGN_EQUAL,0,-1)
-  gg.getResults(100)
-  gg.editAll("1049",gg.TYPE_DWORD)
-  gg.toast("编辑器物品改污染核心开启成功")
   CA1()
 end
 
-function SC6()
-  local t = {"libAppPlayJNI.so", "Cd"}
-  local tt = {0x6E5C8, 0x10, 0x18}
-  local ttt = S_Pointer(t, tt, true)
-  gg.addListItems({{address = ttt, flags = 4, value = 50, freeze = true}})
-
-  local t = {"libAppPlayJNI.so:bss", "Cb"}
-  local tt = {0x49E20, 0xA0, 0xE8, 0xC}
-  local ttt = S_Pointer(t, tt, true)
-  gg.addListItems({{address = ttt, flags = 4, value = 50, freeze = true}})
-  gg.toast("超级编辑器开启成功")
-  CA1()
-end
 
 function SC7()
   qmnb = {
@@ -452,15 +451,12 @@ end
 
 function aly2()
   SN = gg.multiChoice({
-    "人物飞天",
-    "平飞",
+    "添加飞行按钮",
+    "平行飞行",
     "人物加速",
-    "高跳",
-    "视角透视",
-    "吸人",
+    "人物高跳",
     "无限连跳",
-    "滑翔",
-    "人物隐身",
+    "人物滑翔",
     "返回上一页",
   }, nil, "部分功能已修复并重新添加.")
   if SN == nil then else
@@ -470,10 +466,7 @@ function aly2()
     if SN[4]==true then PVP4() end
     if SN[5]==true then PVP5() end
     if SN[6]==true then PVP6() end
-    if SN[7]==true then PVP7() end
-    if SN[8]==true then PVP8() end
-    if SN[9]==true then PVP9() end
-    if SN[10]==true then CA1() end end
+    if SN[7]==true then CA1() end end
   FX1=0 end
 
 function PVP1()
@@ -482,33 +475,42 @@ if F ~= 1 and F ~= 2 then
  else
 end
 if F==1 then
-local t = {"liblibGameApp.so:bss", "Cb"}
-local tt = {0xA3560, 0x55C}
-local ttt = S_Pointer(t, tt, true)
-gg.addListItems({{address = ttt, flags = 4, value = 8, freeze = true}})
-CA1()
-else
+qmnb = {
+    {["memory"] = 4},
+    {["name"] = "添加飞行按钮"},
+    {["value"] = -10200022304, ["type"] = 4},
+    {["lv"] = -1046478848, ["offset"] = -4, ["type"] = 4},
+  }
+  qmxg = {
+    {["value"] = 257, ["offset"] = 0x38, ["type"] = 4,},
+  }
+  xqmnb(qmnb)
+  CA1()
 if F==2 then
-local t = {"liblibGameApp.so:bss", "Cb"}
-local tt = {0xA3560, 0x55C}
-local ttt = S_Pointer(t, tt, true)
-gg.addListItems({{address = ttt, flags = 4, value = 0, freeze = true}})
-CA1()
+qmnb = {
+    {["memory"] = 4},
+    {["name"] = "添加飞行按钮"},
+    {["value"] = -10200022304, ["type"] = 4},
+    {["lv"] = -1046478848, ["offset"] = -4, ["type"] = 4},
+  }
+  qmxg = {
+    {["value"] = 256, ["offset"] = 0x38, ["type"] = 4,},
+  }
+  xqmnb(qmnb)
+  CA1()
 end
 end
 end
 
 function PVP2()
   qmnb = {
-    {["memory"] = 4},
+    {["memory"] = 16384},
     {["name"] = "平飞"},
-    {["value"] = 515396075740, ["type"] = 32},
-    {["lv"] = 60, ["offset"] = -16, ["type"] = 4},
-    {["lv"] = 180, ["offset"] = -12, ["type"] = 4},
-    {["lv"] = 120, ["offset"] = -4, ["type"] = 4},
+    {["value"] = 3000, ["type"] = 4},
+    {["lv"] = -3000, ["offset"] = -4, ["type"] = 4},
   }
   qmxg = {
-    {["value"] = 1, ["offset"] = 64, ["type"] = 4, ["freeze"] = true},
+    {["value"] = 0, ["offset"] = 112, ["type"] = 4, ["freeze"] = true},
   }
   xqmnb(qmnb)
   CA1()
@@ -535,55 +537,6 @@ function PVP4()
 end
 
 function PVP5()
-  qmnb = {
-    {["memory"] = 4},
-    {["name"] = "平飞"},
-    {["value"] = 515396075740, ["type"] = 32},
-    {["lv"] = 60, ["offset"] = -16, ["type"] = 4},
-    {["lv"] = 180, ["offset"] = -12, ["type"] = 4},
-    {["lv"] = 120, ["offset"] = -4, ["type"] = 4},
-  }
-  qmxg = {
-    {["value"] = 2, ["offset"] = 64, ["type"] = 4, ["freeze"] = true},
-  }
-  xqmnb(qmnb)
-  CA1()
-end
-
-function PVP6()
-  qmnb = {
-    {["memory"] = 4},
-    {["name"] = "视角透视"},
-    {["value"] = 1189765120, ["type"] = 4},
-    {["lv"] = 1065353216, ["offset"] = -28, ["type"] = 4},
-    {["lv"] = 10.0, ["offset"] = -4, ["type"] = 16}}
-  qmxg = {
-    {["value"] = 99999, ["offset"] = 0, ["type"] = 4}}
-  xqmnb(qmnb)
-  CA1()
-end
-
-function PVP6()
-  qmnb = {
-    {["memory"] = 4},
-    {["name"] = "吸人"},
-    {["value"] = 220, ["type"] = 4},
-    {["lv"] = 60, ["offset"] = -16, ["type"] = 4},
-    {["lv"] = 180, ["offset"] = -12, ["type"] = 4},
-    {["lv"] = 120, ["offset"] = -4, ["type"] = 4},
-    {["lv"] = 120, ["offset"] = 4, ["type"] = 4},
-  }
-  qmxg = {
-    {["value"] = 0, ["offset"] = 8, ["type"] = 4, ["freeze"] = true},
-    {["value"] = 0, ["offset"] = 16, ["type"] = 4, ["freeze"] = true},
-
-  }
-  xqmnb(qmnb)
-  gg.clearResults()
-  CA1()
-end
-
-function PVP7()
   local t = {"liblibGameApp.so:bss", "Cb"}
   local tt = {0x8C950, 0x5A0, 0x94}
   local ttt = S_Pointer(t, tt, true)
@@ -591,7 +544,8 @@ function PVP7()
   CA1()
 end
 
-function PVP8()
+
+function PVP6()
   qmnb = {
     {["memory"] = 16384},
     {["name"] = "滑翔"},
@@ -604,18 +558,6 @@ function PVP8()
   xqmnb(qmnb)
   CA1()
 end
-
-function PVP9()
-local t = {"liblibGameApp.so:bss", "Cb"}
-local tt = {0xA3560, 0x630}
-local ttt = S_Pointer(t, tt, true)
-gg.setValues({{address = ttt, flags = 16, value = -70}})
-gg.toast("人物隐身开启成功，请配合强行飞天然后往上飞即可")
-CA1()
-end
-
-
-
 
 function aly3()
   menu = gg.choice({
@@ -687,19 +629,19 @@ function aly5()
 end
 
 function LD1()
-  local t = {"liblibGameApp.so:bss", "Cb"}
-  local tt = {0xE9AB0, 0x880}
-  local ttt = S_Pointer(t, tt, true)
-  gg.setValues({{address = ttt, flags = 4, value = 2}})
-  CA1()
+local t = {"liblibGameApp.so:bss", "Cb"}
+local tt = {0xD3060, 0x880}
+local ttt = S_Pointer(t, tt, true)
+gg.setValues({{address = ttt, flags = 4, value = 2}})
+CA1()
 end
 
 function LD2()
-  local t = {"liblibGameApp.so:bss", "Cb"}
-  local tt = {0xE9AB0, 0x880}
-  local ttt = S_Pointer(t, tt, true)
-  gg.setValues({{address = ttt, flags = 4, value = 3}})
-  CA1()
+local t = {"liblibGameApp.so:bss", "Cb"}
+local tt = {0xD3060, 0x880}
+local ttt = S_Pointer(t, tt, true)
+gg.setValues({{address = ttt, flags = 4, value = 3}})
+CA1()
 end
 
 function LD3()
@@ -711,36 +653,27 @@ end
 function ud()
   menu = gg.choice({
     "更新与公告",
-    "辅助搬运功能一览",
     "加入Q群",
     "返回上一页",
   }, nil, "")
-  if menu == 1 then Updates() end
-  if menu == 2 then carry() end
-  if menu == 3 then qq() end
-  if menu == 4 then CA1() end
+  if menu == 1 then Updates() en
+  if menu == 2 then qq() end
+  if menu == 3 then CA1() end
   FX1=0
 end
 
 function Updates()
-  gg.alert("CA炸图辅助版本号:13.0.3\n更新日期:9.17\n更新日志:\n修复已知问题")
+  gg.alert("CA炸图辅助版本号:12.9.5\n更新日期:10.21\n更新日志:\n修复已知问题")
 end
 
-function carry()
-  gg.alert("人物追敌---幻梦")
-end
 
 function qq()
   menu = gg.choice({
     "CA战地交流群(1)",
-    "CA战地交流群(2)",
-    "CA战地交流群(3)",
     "返回上一页",
   }, nil, "")
   if menu == 1 then gg.QQgroup("324683085") end
-  if menu == 2 then gg.QQgroup("324683085") end
-  if menu == 3 then gg.QQgroup("324683085") end
-  if menu == 4 then CA1() end
+  if menu == 2 then CA1() end
   FX1=0
 end
 

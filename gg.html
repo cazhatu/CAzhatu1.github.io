@@ -69,7 +69,7 @@ function CA1()
     "开始炸图",
     "退出炸图",
     "前往官网",
-  }, nil, "版本号:13.5.0\nCA client 2020-2023")
+  }, nil, "版本号:13.5.1\nCA client 2020-2023")
   if menu == 1 then CAZY() end
   if menu == 2 then close() end
   if menu == 3 then M3() end
@@ -643,17 +643,19 @@ end
 
 function aly3()
   menu = gg.choice({
-    "狙击枪无后座连发",
+    "狙击连发备用",
     "秒换子弹",
-    "狙击枪无后座连发(没效果开这个)",
+    "狙击连发",
     "狙击准心",
+    "狙击连发(安卓12-14适配)",
     "返回上一页",
   }, nil, "")
   if menu == 1 then V1() end
   if menu == 2 then V2() end
   if menu == 3 then V3() end
   if menu == 4 then V4() end
-  if menu == 5 then CA1() end
+  if menu == 5 then V5() end
+  if menu == 6 then CA1() end
   FX1=0
 end
 
@@ -666,7 +668,7 @@ function V2()
     {["memory"] = 4},
     {["name"] = "秒换子弹"},
     {["value"] =15003 , ["type"] = 4},
-    {["lv"] = 15004, ["offset"] = -136, ["type"] = 4},
+    {["lv"] = 15510, ["offset"] = -136, ["type"] = 4},
   }
   qmxg = {
     {["value"] = 0, ["offset"] = -24,["type"] = 16},
@@ -678,7 +680,7 @@ end
 function V3()
   qmnb =
   {{["memory"] = 4},
-    {["name"] = "狙击枪改子弹"},
+    {["name"] = "狙击连发"},
     {["value"] = 1155186688, ["type"] = 4},
     {["lv"] = 1152319488, ["offset"] = 4, ["type"] = 4},
     {["lv"] = 1137836032, ["offset"] = 8, ["type"] = 4},}
@@ -690,6 +692,23 @@ function V3()
   xqmnb(qmnb)
   CA1()
 end
+
+function V5()
+  qmnb =
+  {{["memory"] = -2080896},
+    {["name"] = "狙击连发Android12"},
+    {["value"] = 1155186688, ["type"] = 4},
+    {["lv"] = 1152319488, ["offset"] = 4, ["type"] = 4},
+    {["lv"] = 1137836032, ["offset"] = 8, ["type"] = 4},}
+  qmxg =
+  {{["value"] = 15510, ["offset"] = 24, ["type"] = 4},
+    {["value"] = 1, ["offset"] = 20, ["type"] = 4},
+    {["value"] = 0, ["offset"] = -28, ["type"] = 16},
+    {["value"] = 0, ["offset"] = -44, ["type"] = 16},}
+  xqmnb(qmnb)
+  CA1()
+end
+
 
 function V4()
   gg.toast(so({"狙击准星",15003,4,4},{{40,-32,4}},{{1,-28,4}}))
@@ -745,7 +764,7 @@ function ud()
 end
 
 function Updates()
-  gg.alert("CA炸图辅助版本号:13.5.0\n更新日期:10.22")
+  gg.alert("CA炸图辅助版本号:13.5.1\n更新日期:10.22")
 end
 
 

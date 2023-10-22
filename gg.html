@@ -45,7 +45,7 @@ if F ~= 1 and F ~= 2 then
  else
 end
 if F==1 then
-  local t = {"libtersafe2.so", "Cd"}
+local t = {"libtersafe2.so", "Cd"}
 local tt = {0x4E960}
 local ttt = S_Pointer(t, tt, true)
 gg.addListItems({{address = ttt, flags = 4, value = 0, freeze = true}})
@@ -53,7 +53,7 @@ local t = {"libtersafe2.so", "Cd"}
 local tt = {0x4EE48}
 local ttt = S_Pointer(t, tt, true)
 gg.getValues({{address = ttt, flags = 4, value = 0}})
-  gg.toast("开启成功")
+gg.toast("防闪退开启成功")
  elseif F==2 then
  elseif F==3 then
  gg.setProcessX()
@@ -69,7 +69,7 @@ function CA1()
     "开始炸图",
     "退出炸图",
     "前往官网",
-  }, nil, "版本号:13.0.0\nCA client 2020-2023")
+  }, nil, "版本号:13.5.0\nCA client 2020-2023")
   if menu == 1 then CAZY() end
   if menu == 2 then close() end
   if menu == 3 then M3() end
@@ -109,11 +109,13 @@ function aly4()
   menu = gg.choice({
     "人物滑翔自定义",
     "人物加速自定义",
+    "人物高跳自定义",
     "返回上一页",
   }, nil, "")
   if menu == 1 then d1() end
   if menu == 2 then d2() end
-  if menu == 3 then CA1() end
+  if menu == 3 then d3() end
+  if menu == 4 then CA1() end
   FX1=0
 end
 
@@ -137,6 +139,23 @@ qmnb = {
   xqmnb(qmnb)
   CA1()
 end
+
+function d3()
+D3E = gg.prompt({"请输入跳跃值，推荐600,-1恢复"},{[1]=""},{[1]="number"})[1]
+qmnb = {
+    {["memory"] = 4},
+    {["name"] = "人物高跳"},
+    {["value"] = 1028443341, ["type"] = 4},
+    {["lv"] = 1000593162, ["offset"] = -4, ["type"] = 4},
+    {["lv"] = 10.0, ["offset"] = -68, ["type"] = 16},
+  }
+  qmxg = {
+    {["value"] = D3E, ["offset"] = -240, ["type"] = 4},
+  }
+  xqmnb(qmnb)
+  CA1()
+end
+
 function aly6()
   menu = gg.choice({
     "编辑器物品改炸弹优化",
@@ -346,6 +365,7 @@ function alya2()
     "编辑器填充物改污染核心",
     "无限星星",
     "编辑器填充物改自定义物品",
+    "修改模式",
     "返回上一页",
   }, nil, "")
   if menu == 1 then SC1() end
@@ -354,8 +374,44 @@ function alya2()
   if menu == 4 then SC5() end
   if menu == 5 then SC7() end
   if menu == 6 then SC8() end
-  if menu == 7 then CA1() end
+  if menu == 7 then SC9() end
+  if menu == 8 then CA1() end
   FX1=0
+end
+
+function SC9()
+F=gg.colorAlert("<font color='#70f3ff'>CA炸图辅助</font>","<font color='#FFFF00'>修改模式</font>","玩法","编辑","冒险","创造")
+if F ~= 1 and F ~= 2 and F ~= 3 and F ~= 4 then
+ else
+end
+if F==1 then
+  local t = {"liblibGameApp.so:bss", "Cb"}
+  local tt = {0x2B0, 0xB0}
+  local ttt = S_Pointer(t, tt, true)
+  gg.addListItems({{address = ttt, flags = 4, value = 5}})
+  aly1()
+ if F==2 then
+ local t = {"liblibGameApp.so:bss", "Cb"}
+  local tt = {0x2B0, 0xB0}
+  local ttt = S_Pointer(t, tt, true)
+  gg.addListItems({{address = ttt, flags = 4, value = 4}})
+  aly1()
+ if F==3 then
+ local t = {"liblibGameApp.so:bss", "Cb"}
+  local tt = {0x2B0, 0xB0}
+  local ttt = S_Pointer(t, tt, true)
+  gg.addListItems({{address = ttt, flags = 4, value = 1}})
+  aly1()
+ if F==4 then
+ local t = {"liblibGameApp.so:bss", "Cb"}
+  local tt = {0x2B0, 0xB0}
+  local ttt = S_Pointer(t, tt, true)
+  gg.addListItems({{address = ttt, flags = 4, value = 2}})
+  aly1()
+ end
+ end
+end
+end
 end
 
 function SC1()
@@ -363,7 +419,7 @@ function SC1()
   local tt = {0x2B0, 0xB0}
   local ttt = S_Pointer(t, tt, true)
   gg.addListItems({{address = ttt, flags = 4, value = 4}})
-  CAZY()
+  aly1()
 end
 
 function SC2()
@@ -689,7 +745,7 @@ function ud()
 end
 
 function Updates()
-  gg.alert("CA炸图辅助版本号:13.0.0\n更新日期:10.21\n更新日志:\n修复已知问题")
+  gg.alert("CA炸图辅助版本号:13.5.0\n更新日期:10.22")
 end
 
 
@@ -698,7 +754,7 @@ function qq()
     "CA战地交流群(1)",
     "返回上一页",
   }, nil, "")
-  if menu == 1 then gg.QQgroup("324683085") end
+  if menu == 1 then gg.QQgroup("702269058") end
   if menu == 2 then CA1() end
   FX1=0
 end

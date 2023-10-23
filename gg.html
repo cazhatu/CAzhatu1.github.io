@@ -45,6 +45,12 @@ if F ~= 1 and F ~= 2 then
  else
 end
 if F==1 then
+XGBase({gg.getRangesList("libtersafe2.so")[3].start},
+{{"0",4,0x4E960,false},})
+XGBase({gg.getRangesList("libtersafe2.so")[3].start},
+{{"0",4,0x4EE4C,false},})
+XGBase({gg.getRangesList("libtersafe2.so:bss")[1].start},
+{{"0",4,0x1380,false},})
 local t = {"libtersafe2.so", "Cd"}
 local tt = {0x4E960}
 local ttt = S_Pointer(t, tt, true)
@@ -69,7 +75,7 @@ function CA1()
     "开始炸图",
     "退出炸图",
     "前往官网",
-  }, nil, "版本号:13.5.1\nCA client 2020-2023")
+  }, nil, "版本号:13.5.1.100\nCA client 2020-2023")
   if menu == 1 then CAZY() end
   if menu == 2 then close() end
   if menu == 3 then M3() end

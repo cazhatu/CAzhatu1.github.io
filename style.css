@@ -44,7 +44,17 @@
 	10. Media Queries
 
    //////////////////////////*/
-
+    /* 设置数字显示的样式 */
+    .counter {
+	font-weight:700;
+      font-size: 36px;
+      color: #333;
+    }
+     .counter2 {
+	font-weight:700;
+      font-size: 36px;
+      color: #333;
+    }
 
 body {
 	font-family: 'Roboto', sans-serif;

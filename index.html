@@ -31,11 +31,10 @@
       <div class="container">
         <ul class="navbar-nav ml-auto nav-right" data-easing="easeInOutExpo" data-speed="1250" data-offset="65">
           <li class="nav-item nav-custom-link">
-            <a class="nav-link" href="http://client.zhatu.fun">CA炸图辅助社区<i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
-            <a class="nav-link" href="https://ks-cazhatu.lanzouc.com/s/caclient">历史版本下载<i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
-            
+            <a class="nav-link" href="http://bbs.caclient.fun">前往论坛<i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
+            <a class="nav-link" href="https://aiyun.yimfk.com/links/F98F7391">购买秘钥<i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
+            <a class="nav-link" href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=cx0Qfo3peE2RYo8WbrIPkI15ayeSsL5F&authKey=jzqKiZF1EmTR5nbpuV9gwEMfViUFBP0okLqvNKDAX8NWUEVing%2BJWzv0Rc2fovg2&noverify=0&group_code=702269058">加入Q群<i class="icon ion-ios-arrow-forward icon-mobile"></i></a>
           </li>
-
         </ul>
       </div>
     </div>
@@ -50,9 +49,8 @@
         <div class="col-md-7 content-box hero-content">
           <span>▪CA炸图辅助</span>
           <h1><b>让每个人都能享受科技的乐趣</b></h1>
-          <p>我们致力于打造先进的实惠的辅助，同时我们也会定期免费。</p>
+          <p>提供免费辅助使用。</p>
           <a href="download.html" class="btn btn-regular">立即下载</a>
-          <a href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=cx0Qfo3peE2RYo8WbrIPkI15ayeSsL5F&authKey=jzqKiZF1EmTR5nbpuV9gwEMfViUFBP0okLqvNKDAX8NWUEVing%2BJWzv0Rc2fovg2&noverify=0&group_code=702269058" class="btn btn-regular">加入Q群</a>
         </div>
       </div>
     </div>
@@ -64,12 +62,19 @@
     <div class="container">
       <div class="row">
         <div class="col-md-5">
-          <div class="content-box">
+          <div class="content-box">        
+          <h2>CA炸图辅助</h2>
+          <h6>累计下载量(2023.3-2023.10)</h6>
+          <div class="counter"><h2>0</h2></div>
+          <h6><br/>累计使用量(2023.5-2023.10)</h6>
+          <div class="counter2">0</div>
+          </div> 
+          <div class="content-box">          
             <span>▪CA炸图辅助</span>
-            <h2>不加入凑数功能</h2>
-            <p>我们保证我们不会加入房主类功能，并保证每一个功能都可以在联机房间使用</p>
+            <h2>提供免费版本使用</h2>
+            <p>我们分别提供了免费版和付费版供您使用</p>
             <a href="download.html" class="btn btn-regular">立即下载</a>
-          </div>
+          </div>      
           <div class="content-box">
             <span>▪CA炸图辅助</span>
             <h2>支持免框架使用</h2>
@@ -100,6 +105,7 @@
             <div class="divider-light"></div>
             <ul>
               <li><i class="icon ion-md-checkmark-circle-outline"></i>免费使用</li>
+              <li><i class="icon ion-md-checkmark-circle-outline"></i>全新UI</li>
             </ul>
             <div class="text-center">
               <a href="download.html" class="btn btn-demo">立即下载</a>
@@ -110,11 +116,11 @@
           <div class="pricing-box">
             <h3>CA炸图辅助</h3>
             <h6>11¥</h6>
-            <small>永久性使用</small>
+            <small>永久使用</small>
             <div class="divider-light"></div>
             <ul>
-              <li><i class="icon ion-md-checkmark-circle-outline"></i>近战范围  <span>独家功能!</span></li>
-              <li><i class="icon ion-md-checkmark-circle-outline"></i>人物追敌(联机)</li>
+              <li><i class="icon ion-md-checkmark-circle-outline"></i>近战范围</li>
+              <li><i class="icon ion-md-checkmark-circle-outline"></i>人物追敌</li>
             </ul>
             <div class="text-center">
               <a href="https://aiyun.yimfk.com/links/F98F7391" class="btn btn-buy">前往选购</a>
@@ -142,6 +148,44 @@
 
     <!-- External JavaScripts -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+      <script>
+    const targetNumber = 153800; // 指定的目标数字
+    const targetNumber2 = 779060;
+    const duration = 5000; // 动画持续时间，单位为毫秒
+
+    const counterElement = document.querySelector('.counter'); // 获取数字显示的元素
+    const counter2Element = document.querySelector('.counter2'); // 获取数字显示的元素
+
+    let startTime = null; // 动画开始时间
+
+    function step(timestamp) {
+	console.log(timestamp)
+      if (!startTime) startTime = timestamp; // 记录动画开始时间
+
+      const progress = timestamp - startTime; // 计算动画进度
+	  console.log(progress,timestamp,startTime)
+      // 根据动画进度计算当前数字的值
+      const currentNumber = Math.round(targetNumber * (progress / duration));
+	  const currentNumber2 = Math.round(targetNumber2 * (progress / duration));
+
+      counterElement.textContent = currentNumber; // 更新数字显示
+      counter2Element.textContent = currentNumber2; // 更新数字显示
+
+
+      if (progress < duration) {
+        // 继续下一帧动画
+        requestAnimationFrame(step);//60FPS执行一次，延时器//60FPS = 一帧
+      } else {
+        // 动画结束，显示最终数字
+        counterElement.textContent = targetNumber;
+        counter2Element.textContent = targetNumber2;
+
+      }
+    }
+
+    // 启动动画
+    requestAnimationFrame(step);
+  </script>
     <script src="https://cdn.staticfile.org/jquery/3.3.1/jquery.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.staticfile.org/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
